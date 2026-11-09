@@ -1,0 +1,79 @@
+{# Custom information page, overrides default theme/default/template/information/information.twig
+   What changes:
+   • Drop the duplicate <h1>{{ heading_title }}</h1>, the description HTML already
+     contains its own top heading.
+   • Wrap the description in <article class="mi-prose"> so the typography rules
+     in stylesheet.css apply (max-width, paragraph spacing, heading hierarchy).
+   • Cleaner breadcrumb structure.
+   • Add a final CTA block at the bottom of every info page that links to WhatsApp
+     and the contact page, keeps the support funnel visible without being pushy.
+#}
+{{ header }}
+
+<div id="information-information" class="container">
+
+  <ul class="breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+      <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+    {% endfor %}
+  </ul>
+
+  <div class="row">
+    {{ column_left }}
+    {% if column_left and column_right %}
+      {% set class = 'col-sm-6' %}
+    {% elseif column_left or column_right %}
+      {% set class = 'col-sm-9' %}
+    {% else %}
+      {% set class = 'col-sm-12' %}
+    {% endif %}
+    <div id="content" class="{{ class }}">
+      {{ content_top }}
+
+      <article class="mi-prose">
+        {# Heading comes from the description HTML (which usually starts with <h2>Title</h2>).
+           If the description does NOT start with an H1/H2 heading, OpenCart's <h1> would
+           normally be the only one. Most info pages we wrote DO have a heading inside the
+           description, so we skip the auto-H1 entirely. #}
+        {{ description|raw }}
+      </article>
+
+      {# ── Soft CTA at the bottom of every info page ─────────────────────── #}
+      <section class="mi-info-cta">
+        <div class="mi-info-cta__text">
+          <h3>Still have questions?</h3>
+          <p>Our team is on WhatsApp 7 days a week. Quotes, bulk pricing, custom shipping. Message us directly.</p>
+        </div>
+        <div class="mi-info-cta__actions">
+          <a href="https://wa.me/16173008178" class="mi-btn mi-btn--whatsapp" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:18px;height:18px;margin-right:8px;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.074-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413"/></svg>
+            Chat on WhatsApp
+          </a>
+          <a href="index.php?route=information/contact" class="mi-btn mi-btn--secondary">Send a message</a>
+        </div>
+      </section>
+
+      {# ── Contact/About socials (Phase 7.3 Step 2) ── #}
+      {% if social_locations.contact_about is defined and social_locations.contact_about|length > 0 %}
+      <section class="mi-social-section">
+        <p class="mi-socials-heading">Or message us on:</p>
+        <div class="mi-socials mi-socials--large">
+          {% for s in social_locations.contact_about %}
+          <a class="mi-social mi-social--{{ s.platform }}"
+             {% if s.has_qr or s.platform == 'wechat' %}href="#" data-mi-qr="{{ s.id }}"{% else %}href="{{ s.url }}" target="_blank" rel="noopener noreferrer"{% endif %}
+             aria-label="{{ s.name }}">
+            <span class="mi-social-ico"></span>
+            <span class="mi-social-label">{{ s.name }}</span>
+          </a>
+          {% endfor %}
+        </div>
+      </section>
+      {% endif %}
+
+      {{ content_bottom }}
+    </div>
+    {{ column_right }}
+  </div>
+</div>
+
+{{ footer }}

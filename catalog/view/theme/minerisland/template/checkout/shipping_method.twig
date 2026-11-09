@@ -1,0 +1,85 @@
+{% if error_warning %}
+  <div class="mi-alert mi-alert--error alert alert-warning alert-dismissible">{{ error_warning }}</div>
+{% endif %}
+
+{% if shipping_methods %}
+  <p class="mi-checkout-step__lead">{{ text_shipping_method }}</p>
+
+  <div class="mi-ship-methods">
+    {% for shipping_method in shipping_methods %}
+      <div class="mi-ship-method-group">
+        <h4 class="mi-ship-method-group__title">{{ shipping_method.title }}</h4>
+
+        {% if not shipping_method.error %}
+          {% for quote in shipping_method.quote %}
+            {% set is_free = quote.text matches '/(free|0\\.00|\\$0(\\s|$))/i' or quote.code matches '/free/i' %}
+            <label class="mi-pay-method{% if is_free %} mi-pay-method--free{% endif %}">
+              {% if quote.code == code or not code %}
+                {% set code = quote.code %}
+                <input type="radio" name="shipping_method" value="{{ quote.code }}" checked="checked" class="mi-pay-method__radio">
+              {% else %}
+                <input type="radio" name="shipping_method" value="{{ quote.code }}" class="mi-pay-method__radio">
+              {% endif %}
+              <span class="mi-pay-method__indicator" aria-hidden="true"></span>
+              <span class="mi-pay-method__body">
+                <span class="mi-pay-method__title">
+                  {{ quote.title }}
+                  {% if is_free %}<span class="mi-pay-method__badge mi-pay-method__badge--ddp">DDP-paid</span>{% endif %}
+                </span>
+                <span class="mi-pay-method__terms">{{ quote.text }}</span>
+                {% if is_free %}
+                  <span class="mi-pay-method__crypto-note">Duties, taxes, and customs paid before delivery. From our Hong Kong warehouse, no surprise import bills.</span>
+                {% endif %}
+              </span>
+            </label>
+          {% endfor %}
+        {% else %}
+          <div class="mi-alert mi-alert--error alert alert-danger alert-dismissible">{{ shipping_method.error }}</div>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<div class="mi-checkout-step__field">
+  <label for="comment-shipping" class="mi-checkout-step__label">{{ text_comments }}</label>
+  <textarea name="comment" id="comment-shipping" rows="4" class="form-control mi-input" placeholder="Delivery instructions, preferred carrier, gate codes. Anything we should know.">{{ comment }}</textarea>
+</div>
+
+<div class="mi-checkout-step__footer">
+  <input type="button" value="{{ button_continue }}" id="button-shipping-method" data-loading-text="{{ text_loading }}" class="btn btn-primary mi-btn mi-btn--primary mi-btn--lg">
+</div>
+
+<script>
+(function() {
+  function syncSelected() {
+    document.querySelectorAll('.mi-pay-method').forEach(el => {
+      const radio = el.querySelector('.mi-pay-method__radio');
+      el.classList.toggle('mi-pay-method--selected', !!(radio && radio.checked));
+    });
+  }
+  document.querySelectorAll('.mi-pay-method__radio').forEach(r => {
+    r.addEventListener('change', syncSelected);
+  });
+  syncSelected();
+})();
+</script>
+
+{# S19 ANALYTICS: GA4 add_shipping_info on step continue #}
+<script>
+(function(){
+  var btn = document.getElementById('button-shipping-method');
+  if (btn && !btn._miTracked) {
+    btn._miTracked = true;
+    btn.addEventListener('click', function(){
+      var sel = document.querySelector('input[name="shipping_method"]:checked');
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ecommerce: null});
+      window.dataLayer.push({
+        event: 'add_shipping_info',
+        ecommerce: { currency: 'USD', shipping_tier: sel ? sel.value : 'unknown' }
+      });
+    }, false);
+  }
+})();
+</script>

@@ -1,0 +1,156 @@
+{{ header }}
+
+<div class="mi-container mi-section">
+  <div style="max-width: 780px; margin: 0 auto;">
+
+    {# ── Step indicator (matches your Plisio white-label flow) ── #}
+    <div class="mi-plisio-steps">
+      <div class="mi-plisio-steps__step mi-plisio-steps__step--done">
+        <div class="mi-plisio-steps__num">✓</div>
+        <div class="mi-plisio-steps__lbl">Order confirmed</div>
+      </div>
+      <div class="mi-plisio-steps__connector"></div>
+      <div class="mi-plisio-steps__step mi-plisio-steps__step--active">
+        <div class="mi-plisio-steps__num">2</div>
+        <div class="mi-plisio-steps__lbl">Choose protection</div>
+      </div>
+      <div class="mi-plisio-steps__connector"></div>
+      <div class="mi-plisio-steps__step">
+        <div class="mi-plisio-steps__num">3</div>
+        <div class="mi-plisio-steps__lbl">Pay with crypto</div>
+      </div>
+      <div class="mi-plisio-steps__connector"></div>
+      <div class="mi-plisio-steps__step">
+        <div class="mi-plisio-steps__num">4</div>
+        <div class="mi-plisio-steps__lbl">Complete</div>
+      </div>
+    </div>
+
+    {# ── Heading ── #}
+    <div style="text-align: center; margin: 32px 0 8px;">
+      <h1 class="mi-h2">How do you want to pay?</h1>
+      <p style="color: var(--mi-text-secondary); font-size: var(--mi-fs-md); max-width: 560px; margin: 10px auto 0;">
+        Every order is settled in cryptocurrency. Choose standard direct payment, or add 20-day escrow protection so your funds are only released when you confirm delivery.
+      </p>
+    </div>
+
+    {# ── Order summary card ── #}
+    <div style="background: var(--mi-bg-card); border: 1px solid var(--mi-border-subtle); border-radius: var(--mi-radius-xl); box-shadow: var(--mi-shadow-sm); margin: 28px 0 20px; padding: 18px 24px;">
+      <div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: var(--mi-fs-sm);">
+        <span style="color: var(--mi-text-secondary);">Order number</span>
+        <span style="font-weight: var(--mi-fw-bold); color: var(--mi-text-headline);" class="mi-mono">#{{ order_id }}</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: var(--mi-fs-sm);">
+        <span style="color: var(--mi-text-secondary);">Shipping</span>
+        <span style="font-weight: var(--mi-fw-bold); color: var(--mi-text-headline);">DDP duties &amp; taxes included</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; padding: 12px 0 6px; border-top: 1px solid var(--mi-border-subtle); margin-top: 8px;">
+        <span style="color: var(--mi-text-secondary); font-size: var(--mi-fs-sm);">Total due</span>
+        <span style="font-weight: var(--mi-fw-extra); font-size: var(--mi-fs-xl); color: var(--mi-color-primary);">
+          {{ total }}
+          <span style="display: inline-block; background: var(--mi-color-orange); color: #fff; font-size: 11px; font-weight: var(--mi-fw-bold); border-radius: var(--mi-radius-full); padding: 2px 9px; margin-left: 8px; vertical-align: middle;">−3% if paid in BTC</span>
+        </span>
+      </div>
+    </div>
+
+    {# ── Selection form ── #}
+    <form action="{{ action_choose }}" method="post" id="mi-escrow-select-form">
+      <div style="display: flex; flex-direction: column; gap: 16px; margin: 6px 0 22px;">
+
+        {# Direct payment option #}
+        <label class="mi-escrow-opt" style="position: relative; display: block; background: var(--mi-bg-card); border: 2px solid var(--mi-border-subtle); border-radius: var(--mi-radius-xl); padding: 22px; cursor: pointer; transition: all .18s ease; box-shadow: var(--mi-shadow-sm);">
+          <input type="radio" name="escrow_type" value="direct" style="position: absolute; opacity: 0;">
+          <div style="display: flex; align-items: flex-start; gap: 14px;">
+            <span class="mi-escrow-radio" style="flex-shrink: 0; width: 22px; height: 22px; border: 2px solid var(--mi-border-defined); border-radius: 50%; margin-top: 2px;"></span>
+            <span style="flex-shrink: 0; width: 46px; height: 46px; border-radius: var(--mi-radius-md); background: var(--mi-bg-muted); color: var(--mi-text-secondary); display: flex; align-items: center; justify-content: center;">
+              <svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" stroke-width="2"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </span>
+            <span style="flex: 1;">
+              <span style="display: block; font-size: var(--mi-fs-lg); font-weight: var(--mi-fw-extra); color: var(--mi-text-headline);">Direct payment</span>
+              <span style="display: block; color: var(--mi-text-body); font-size: var(--mi-fs-sm); margin-top: 6px;">Standard crypto settlement. Your order is locked and prepared the moment payment confirms on-chain.</span>
+              <span style="display: flex; flex-direction: column; gap: 7px; margin-top: 12px;">
+                <span style="display: flex; gap: 8px; font-size: 13px; color: var(--mi-text-secondary); align-items: flex-start;">
+                  <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="var(--mi-color-success)" stroke-width="2.5" style="flex-shrink:0; margin-top:2px;"><polyline points="20 6 9 17 4 12"/></svg>
+                  Fastest processing dispatch in 24–72 hours
+                </span>
+                <span style="display: flex; gap: 8px; font-size: 13px; color: var(--mi-text-secondary); align-items: flex-start;">
+                  <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="var(--mi-color-success)" stroke-width="2.5" style="flex-shrink:0; margin-top:2px;"><polyline points="20 6 9 17 4 12"/></svg>
+                  60-day replacement warranty included
+                </span>
+                <span style="display: flex; gap: 8px; font-size: 13px; color: var(--mi-text-secondary); align-items: flex-start;">
+                  <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="var(--mi-color-warning)" stroke-width="2" style="flex-shrink:0; margin-top:2px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  Payment is final once confirmed on-chain
+                </span>
+              </span>
+            </span>
+          </div>
+        </label>
+
+        {# 15-Day Escrow option #}
+        <label class="mi-escrow-opt" style="position: relative; display: block; background: var(--mi-bg-card); border: 2px solid var(--mi-border-subtle); border-radius: var(--mi-radius-xl); padding: 22px; cursor: pointer; transition: all .18s ease; box-shadow: var(--mi-shadow-sm);">
+          <input type="radio" name="escrow_type" value="escrow_15day" checked style="position: absolute; opacity: 0;">
+          <span style="position: absolute; top: -12px; right: 18px; background: var(--mi-color-success); color: #fff; font-size: 11px; font-weight: var(--mi-fw-bold); letter-spacing: .04em; text-transform: uppercase; border-radius: var(--mi-radius-full); padding: 4px 12px;">Recommended</span>
+          <div style="display: flex; align-items: flex-start; gap: 14px;">
+            <span class="mi-escrow-radio" style="flex-shrink: 0; width: 22px; height: 22px; border: 2px solid var(--mi-border-defined); border-radius: 50%; margin-top: 2px;"></span>
+            <span style="flex-shrink: 0; width: 46px; height: 46px; border-radius: var(--mi-radius-md); background: var(--mi-color-success-soft); color: var(--mi-color-success); display: flex; align-items: center; justify-content: center;">
+              <svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </span>
+            <span style="flex: 1;">
+              <span style="display: block; font-size: var(--mi-fs-lg); font-weight: var(--mi-fw-extra); color: var(--mi-text-headline);">20-Day On-Chain Escrow Protection</span>
+              <span style="display: block; color: var(--mi-text-body); font-size: var(--mi-fs-sm); margin-top: 6px;">Your payment is held in onchain smart contract escrow which is not controlled by The Miner Island and lives on blockchain with strict rules mentioned below and is <strong>not released to us</strong> until you confirm delivery or automatically after 20 days. You stay protected if your order doesn't arrive as described.</span>
+              <span style="display: flex; flex-direction: column; gap: 7px; margin-top: 12px;">
+                <span style="display: flex; gap: 8px; font-size: 13px; color: var(--mi-text-secondary); align-items: flex-start;">
+                  <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="var(--mi-color-success)" stroke-width="2.5" style="flex-shrink:0; margin-top:2px;"><polyline points="20 6 9 17 4 12"/></svg>
+                  <span><strong>Funds held 20 days</strong>  released only on your confirmation</span>
+                </span>
+                <span style="display: flex; gap: 8px; font-size: 13px; color: var(--mi-text-secondary); align-items: flex-start;">
+                  <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="var(--mi-color-success)" stroke-width="2.5" style="flex-shrink:0; margin-top:2px;"><polyline points="20 6 9 17 4 12"/></svg>
+                  Full protection for non-delivery or not-as-described
+                </span>
+                <span style="display: flex; gap: 8px; font-size: 13px; color: var(--mi-text-secondary); align-items: flex-start;">
+                  <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="var(--mi-color-success)" stroke-width="2.5" style="flex-shrink:0; margin-top:2px;"><polyline points="20 6 9 17 4 12"/></svg>
+                  Order still dispatches in 24–72 hours escrow doesn't slow shipping
+                </span>
+                <span style="display: flex; gap: 8px; font-size: 13px; color: var(--mi-text-secondary); align-items: flex-start;">
+                  <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="var(--mi-color-success)" stroke-width="2.5" style="flex-shrink:0; margin-top:2px;"><polyline points="20 6 9 17 4 12"/></svg>
+                  3% BTC discount still applies
+                </span>
+              </span>
+            </span>
+          </div>
+        </label>
+
+      </div>
+
+      <button type="submit" class="mi-btn mi-btn--primary mi-btn--lg" style="width: 100%;">
+        Continue to secure payment
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: 8px;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg>
+      </button>
+    </form>
+
+    <p style="text-align: center; font-size: var(--mi-fs-sm); color: var(--mi-text-secondary); margin-top: 12px;">
+      You can change your protection choice any time before paying. Questions? <a href="https://wa.me/16173008178" style="color: var(--mi-color-primary); font-weight: var(--mi-fw-semibold); text-decoration: none;" target="_blank" rel="noopener">WhatsApp +1 617 300 8178</a>
+    </p>
+
+    {# ── Trust strip ── #}
+    <div class="mi-trust-strip" style="margin-top: 26px;">
+      <div class="mi-trust-strip__item"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="var(--mi-color-success)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Verified U.S. LLC</div>
+      <div class="mi-trust-strip__item"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="var(--mi-color-success)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> DDP shipping worldwide</div>
+      <div class="mi-trust-strip__item"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="var(--mi-color-success)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> 60-day warranty</div>
+      <div class="mi-trust-strip__item"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="var(--mi-color-success)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Crypto-only checkout</div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+.mi-escrow-opt:hover { border-color: var(--mi-border-defined); box-shadow: var(--mi-shadow-md); transform: translateY(-1px); }
+.mi-escrow-opt:has(input:checked) { border-color: var(--mi-color-primary); box-shadow: 0 0 0 3px var(--mi-color-primary-soft), var(--mi-shadow-md); }
+.mi-escrow-opt:has(input:checked) .mi-escrow-radio { border-color: var(--mi-color-primary); position: relative; }
+.mi-escrow-opt:has(input:checked) .mi-escrow-radio::after { content: ""; position: absolute; inset: 4px; border-radius: 50%; background: var(--mi-color-primary); }
+@media (max-width: 600px) {
+  .mi-plisio-steps__lbl { font-size: 10px; }
+}
+</style>
+
+{{ footer }}

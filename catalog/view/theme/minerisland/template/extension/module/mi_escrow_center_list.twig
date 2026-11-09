@@ -1,0 +1,62 @@
+{{ header }}
+
+<div class="mi-container mi-section">
+  <div style="max-width: 900px; margin: 0 auto;">
+
+    <ul class="breadcrumb">
+      {% for breadcrumb in breadcrumbs %}
+      <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+      {% endfor %}
+    </ul>
+
+    <div style="padding: 24px 0 12px;">
+      <h1 class="mi-h2">Escrow Center</h1>
+      <p style="color: var(--mi-text-secondary); font-size: var(--mi-fs-md);">Manage your escrow-protected orders</p>
+    </div>
+
+    {% if escrow_orders %}
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        {% for order in escrow_orders %}
+          <a href="{{ order.href }}" style="display: flex; justify-content: space-between; align-items: center; background: var(--mi-bg-card); border: 1px solid var(--mi-border-subtle); border-radius: var(--mi-radius-lg); padding: 18px 22px; text-decoration: none; transition: box-shadow .15s ease, border-color .15s ease; box-shadow: var(--mi-shadow-sm);"
+             onmouseover="this.style.boxShadow='var(--mi-shadow-md)'; this.style.borderColor='var(--mi-border-defined)'"
+             onmouseout="this.style.boxShadow='var(--mi-shadow-sm)'; this.style.borderColor='var(--mi-border-subtle)'">
+            <div>
+              <div style="font-weight: var(--mi-fw-bold); color: var(--mi-text-headline); font-size: var(--mi-fs-sm);">Order #{{ order.order_id }}</div>
+              <div style="color: var(--mi-text-secondary); font-size: 13px; margin-top: 2px;">{{ order.date_added }} ¡¤ {{ order.escrow_type == 'escrow_15day' ? '20-Day Escrow' : 'Direct' }}</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span style="font-weight: var(--mi-fw-bold); color: var(--mi-text-headline);">{{ order.total }}</span>
+              <span class="mi-pill
+                {% if order.status == 'released' %}mi-pill--success
+                {% elseif order.status == 'disputed' %}mi-pill--warning
+                {% elseif order.status == 'partial' %}mi-pill--warning
+                {% elseif order.status == 'pending' %}mi-pill--warning
+                {% else %}mi-pill--primary{% endif %}">
+                {% if order.status == 'released' %}Released
+                {% elseif order.status == 'disputed' %}Disputed
+                {% elseif order.status == 'partial' %}Partially Paid
+                {% elseif order.status == 'pending' %}Awaiting Payment
+                {% else %}Active{% endif %}
+              </span>
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div style="text-align: center; padding: 40px 20px; color: var(--mi-text-secondary);">
+        <p style="font-size: var(--mi-fs-md); margin-bottom: 12px;">You don't have any escrow orders yet.</p>
+        <a href="index.php?route=product/home" class="mi-btn mi-btn--primary">Browse products</a>
+      </div>
+    {% endif %}
+
+  </div>
+</div>
+
+<style>
+.mi-pill { display: inline-block; font-size: 12px; font-weight: var(--mi-fw-bold); border-radius: var(--mi-radius-full); padding: 4px 12px; }
+.mi-pill--primary { background: var(--mi-color-primary-soft); color: var(--mi-color-primary); }
+.mi-pill--success { background: var(--mi-color-success-soft); color: var(--mi-color-success); }
+.mi-pill--warning { background: var(--mi-color-warning-soft); color: var(--mi-color-warning); }
+</style>
+
+{{ footer }}

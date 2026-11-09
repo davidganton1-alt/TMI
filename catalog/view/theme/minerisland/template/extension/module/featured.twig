@@ -1,0 +1,58 @@
+{# ══════════════════════════════════════════════════════════════════════════
+   Featured module, MinerIsland override
+   Replaces catalog/view/theme/default/template/extension/module/featured.twig
+   when this theme is active. Uses .mi-product-card markup so cards on the
+   homepage match the category page. Wishlist + Compare are intentionally
+   removed (not in our buyer flow).
+
+   The cart button has a count badge that increments on click.
+══════════════════════════════════════════════════════════════════════════ #}
+
+<div class="mi-product-grid mi-product-grid--featured">
+  {% for product in products %}
+    <article class="mi-product-card">
+
+      <a class="mi-product-card__image" href="{{ product.href }}" aria-label="{{ product.name }}">
+        {% if product.thumb %}
+          <img src="{{ product.thumb }}" alt="{{ product.name }}" loading="lazy">
+        {% else %}
+          <span class="mi-product-card__placeholder" aria-hidden="true">⛏</span>
+        {% endif %}
+        {% if product.special %}
+          <span class="mi-product-card__badge">Sale</span>
+        {% endif %}
+      </a>
+
+      <div class="mi-product-card__body">
+        <h3 class="mi-product-card__title">
+          <a href="{{ product.href }}">{{ product.name }}</a>
+        </h3>
+
+        {% if product.price %}
+          <div class="mi-product-card__price">
+            {% if product.special %}
+              <span class="mi-product-card__price-new">{{ product.special }}</span>
+              <span class="mi-product-card__price-old">{{ product.price }}</span>
+            {% else %}
+              <span class="mi-product-card__price-new">{{ product.price }}</span>
+            {% endif %}
+          </div>
+          <p class="mi-product-card__btc">Pay in BTC, save 3%</p>
+        {% endif %}
+
+        <div class="mi-product-card__actions">
+          <button type="button"
+                  class="mi-btn mi-btn--primary mi-btn--sm mi-product-card__cart"
+                  data-mi-card-add="{{ product.product_id }}"
+                  onclick="cart.add('{{ product.product_id }}');"
+                  aria-label="Add {{ product.name }} to cart">
+            <span class="mi-product-card__cart-label">Add to cart</span>
+            <span class="mi-product-card__cart-count" data-mi-card-count="0" hidden>0</span>
+          </button>
+          <a href="{{ product.href }}" class="mi-btn mi-btn--ghost mi-btn--sm">Details</a>
+        </div>
+      </div>
+
+    </article>
+  {% endfor %}
+</div>

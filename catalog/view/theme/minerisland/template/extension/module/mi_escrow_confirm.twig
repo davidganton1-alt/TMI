@@ -1,0 +1,83 @@
+{{ header }}
+
+<div class="mi-container mi-section">
+  <div style="max-width: 720px; margin: 0 auto;">
+
+    {# ── Success seal + heading ── #}
+    <div style="text-align: center; padding: 32px 0 20px;">
+      <div style="width: 84px; height: 84px; margin: 0 auto 18px; border-radius: 50%; background: var(--mi-color-success-soft); display: flex; align-items: center; justify-content: center; border: 2px solid var(--mi-color-success);">
+        <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="var(--mi-color-success)" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+      </div>
+      <h1 class="mi-h2">Your payment is secured in escrow</h1>
+      <p style="color: var(--mi-text-secondary); font-size: var(--mi-fs-md); max-width: 500px; margin: 10px auto 0;">
+        We've received your payment. It is held in escrow and will not be released to us until you confirm delivery or the 20-day protection period ends.
+      </p>
+    </div>
+
+    {# ── Escrow details card ── #}
+    <div style="background: var(--mi-bg-card); border: 1px solid var(--mi-border-subtle); border-radius: var(--mi-radius-xl); box-shadow: var(--mi-shadow-sm); padding: 24px; margin: 22px 0;">
+      <h2 style="font-size: var(--mi-fs-sm); font-weight: var(--mi-fw-extra); color: var(--mi-text-headline); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 14px;">Escrow details</h2>
+
+      <div style="display: flex; justify-content: space-between; font-size: var(--mi-fs-sm); padding: 7px 0; border-bottom: 1px solid var(--mi-border-subtle);">
+        <span style="color: var(--mi-text-secondary);">Order number</span>
+        <span style="font-weight: var(--mi-fw-bold); color: var(--mi-text-headline);" class="mi-mono">#{{ order_id }}</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; font-size: var(--mi-fs-sm); padding: 7px 0; border-bottom: 1px solid var(--mi-border-subtle);">
+        <span style="color: var(--mi-text-secondary);">Amount held</span>
+        <span style="font-weight: var(--mi-fw-bold); color: var(--mi-text-headline);">{{ total }}</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; font-size: var(--mi-fs-sm); padding: 7px 0; border-bottom: 1px solid var(--mi-border-subtle);">
+        <span style="color: var(--mi-text-secondary);">Protection ends</span>
+        <span style="font-weight: var(--mi-fw-bold); color: var(--mi-text-headline);">
+          {{ release_date }}
+          <span style="display: inline-block; background: var(--mi-color-warning-soft); color: var(--mi-color-warning); font-size: 12px; font-weight: var(--mi-fw-bold); border-radius: var(--mi-radius-full); padding: 3px 10px; margin-left: 6px;">20 days</span>
+        </span>
+      </div>
+      <div style="display: flex; justify-content: space-between; font-size: var(--mi-fs-sm); padding: 7px 0;">
+        <span style="color: var(--mi-text-secondary);">Status</span>
+        <span style="display: inline-block; background: var(--mi-color-primary-soft); color: var(--mi-color-primary); font-size: 12px; font-weight: var(--mi-fw-bold); border-radius: var(--mi-radius-full); padding: 4px 12px;">Held in escrow</span>
+      </div>
+    </div>
+
+    {# ── Timeline ── #}
+    <div style="background: var(--mi-bg-card); border: 1px solid var(--mi-border-subtle); border-radius: var(--mi-radius-xl); box-shadow: var(--mi-shadow-sm); padding: 24px; margin: 22px 0;">
+      <h2 style="font-size: var(--mi-fs-sm); font-weight: var(--mi-fw-extra); color: var(--mi-text-headline); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 18px;">How your escrow progresses</h2>
+      <div style="position: relative; padding-left: 26px;">
+        <div style="position: absolute; left: 8px; top: 6px; bottom: 6px; width: 2px; background: var(--mi-border-subtle);"></div>
+
+        <div style="position: relative; padding-bottom: 20px;">
+          <span style="position: absolute; left: -24px; top: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--mi-color-success); border: 2px solid var(--mi-color-success);"></span>
+          <div style="font-weight: var(--mi-fw-extra); color: var(--mi-text-headline); font-size: var(--mi-fs-sm);">Payment received</div>
+          <div style="color: var(--mi-text-secondary); font-size: 13px; margin-top: 2px;">Confirmed on-chain and placed in escrow.</div>
+        </div>
+
+        <div style="position: relative; padding-bottom: 20px;">
+          <span style="position: absolute; left: -24px; top: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--mi-color-primary); border: 2px solid var(--mi-color-primary); box-shadow: 0 0 0 4px var(--mi-color-primary-soft);"></span>
+          <div style="font-weight: var(--mi-fw-extra); color: var(--mi-text-headline); font-size: var(--mi-fs-sm);">Order preparation</div>
+          <div style="color: var(--mi-text-secondary); font-size: 13px; margin-top: 2px;">We bench-test and pack your unit (24–72 hours).</div>
+        </div>
+
+        <div style="position: relative; padding-bottom: 20px;">
+          <span style="position: absolute; left: -24px; top: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--mi-bg-card); border: 2px solid var(--mi-border-defined);"></span>
+          <div style="font-weight: var(--mi-fw-extra); color: var(--mi-text-headline); font-size: var(--mi-fs-sm);">Shipped DDP</div>
+          <div style="color: var(--mi-text-secondary); font-size: 13px; margin-top: 2px;">Tracking sent to your email. Duties handled by us.</div>
+        </div>
+
+        <div style="position: relative;">
+          <span style="position: absolute; left: -24px; top: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--mi-bg-card); border: 2px solid var(--mi-border-defined);"></span>
+          <div style="font-weight: var(--mi-fw-extra); color: var(--mi-text-headline); font-size: var(--mi-fs-sm);">Funds released</div>
+          <div style="color: var(--mi-text-secondary); font-size: 13px; margin-top: 2px;">On your delivery confirmation, or automatically after 20 days.</div>
+        </div>
+      </div>
+    </div>
+
+    {# ── Actions ── #}
+    <div style="display: flex; gap: 12px; flex-wrap: wrap; margin: 8px 0 30px;">
+      <a href="{{ account_order }}" class="mi-btn mi-btn--primary" style="flex: 1; min-width: 200px; text-align: center;">Manage my escrow</a>
+      <a href="https://wa.me/16173008178" class="mi-btn mi-btn--whatsapp" style="flex: 1; min-width: 200px; text-align: center;" target="_blank" rel="noopener">WhatsApp support</a>
+    </div>
+
+  </div>
+</div>
+
+{{ footer }}

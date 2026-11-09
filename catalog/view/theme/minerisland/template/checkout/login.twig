@@ -1,0 +1,67 @@
+{# The Miner Island, Session 17: theme override of the Step 1 checkout login.
+   Uses its own classes and embedded layout styles so it does not depend on the
+   external stylesheet (cache-proof) and does not collide with the .row /
+   .col-sm-6 rules. All functional ids and input names are preserved exactly so
+   the checkout JS (button-account, button-login, name=account/email/password)
+   keeps working. #}
+<style>
+.mi-co-login { display: grid; grid-template-columns: 1fr; gap: 28px; margin: 0; }
+@media (min-width: 720px) {
+  .mi-co-login { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; column-gap: 40px; }
+}
+.mi-co-login__col { min-width: 0; }
+.mi-co-login__col > h2 { margin: 0 0 6px; }
+.mi-co-login__col > p { margin: 0 0 14px; }
+.mi-co-login__radios { margin: 0 0 14px; }
+.mi-co-login__radio {
+  display: flex; align-items: center; gap: 10px;
+  padding: 0; margin: 0 0 10px; cursor: pointer; font-weight: 400;
+}
+.mi-co-login__radio input[type="radio"] {
+  width: 18px; height: 18px; margin: 0; flex-shrink: 0; accent-color: #0437F2; cursor: pointer;
+}
+</style>
+
+<div class="mi-co-login">
+  <div class="mi-co-login__col">
+    <h2>{{ text_new_customer }}</h2>
+    <p>{{ text_checkout }}</p>
+    <div class="mi-co-login__radios">
+      <label class="mi-co-login__radio">
+        {% if account == 'register' %}
+        <input type="radio" name="account" value="register" checked="checked" />
+        {% else %}
+        <input type="radio" name="account" value="register" />
+        {% endif %}
+        <span>{{ text_register }}</span>
+      </label>
+      {% if checkout_guest %}
+      <label class="mi-co-login__radio">
+        {% if account == 'guest' %}
+        <input type="radio" name="account" value="guest" checked="checked" />
+        {% else %}
+        <input type="radio" name="account" value="guest" />
+        {% endif %}
+        <span>{{ text_guest }}</span>
+      </label>
+      {% endif %}
+    </div>
+    <p>{{ text_register_account }}</p>
+    <input type="button" value="{{ button_continue }}" id="button-account" data-loading-text="{{ text_loading }}" class="btn btn-primary" />
+  </div>
+
+  <div class="mi-co-login__col">
+    <h2>{{ text_returning_customer }}</h2>
+    <p>{{ text_i_am_returning_customer }}</p>
+    <div class="form-group">
+      <label class="control-label" for="input-email">{{ entry_email }}</label>
+      <input type="text" name="email" value="" placeholder="{{ entry_email }}" id="input-email" class="form-control" />
+    </div>
+    <div class="form-group">
+      <label class="control-label" for="input-password">{{ entry_password }}</label>
+      <input type="password" name="password" value="" placeholder="{{ entry_password }}" id="input-password" class="form-control" />
+      <a href="{{ forgotten }}">{{ text_forgotten }}</a>
+    </div>
+    <input type="button" value="{{ button_login }}" id="button-login" data-loading-text="{{ text_loading }}" class="btn btn-primary" />
+  </div>
+</div>

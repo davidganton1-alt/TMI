@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html dir="{{ direction }}" lang="{{ lang }}">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0437F2" />
+
+{# ═══ S19 ANALYTICS: Consent Mode v2 + Google Tag Manager (GTM-TGRG9RL8) ═════
+   Consent defaults MUST run before GTM loads. EEA, UK, and Switzerland start
+   denied (banner in footer.twig grants); everywhere else starts granted.
+   A stored choice in the mi_consent cookie is replayed on every page view.
+   ══════════════════════════════════════════════════════════════════════════ #}
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('consent', 'default', {
+  'ad_storage': 'denied',
+  'ad_user_data': 'denied',
+  'ad_personalization': 'denied',
+  'analytics_storage': 'denied',
+  'wait_for_update': 500,
+  'region': ['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE','IS','LI','NO','GB','CH']
+});
+gtag('consent', 'default', {
+  'ad_storage': 'granted',
+  'ad_user_data': 'granted',
+  'ad_personalization': 'granted',
+  'analytics_storage': 'granted'
+});
+(function(){
+  var m = document.cookie.match(/(?:^|;\s*)mi_consent=(granted|denied)/);
+  if (m) {
+    var v = m[1];
+    gtag('consent', 'update', {
+      'ad_storage': v, 'ad_user_data': v, 'ad_personalization': v, 'analytics_storage': v
+    });
+  }
+})();
+</script>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-TGRG9RL8');</script>
+<!-- End Google Tag Manager -->
+
+<title>{{ title }}</title>
+<base href="{{ base }}" />
+{% if description %}<meta name="description" content="{{ description }}" />{% endif %}
+{% if keywords %}<meta name="keywords" content="{{ keywords }}" />{% endif %}
+
+{# -- OpenCart core dependencies, required for cart dropdown, AJAX, modules -- #}
+<script src="catalog/view/javascript/jquery/jquery-2.1.1.min.js" type="text/javascript"></script>
+<link href="catalog/view/javascript/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+<script src="catalog/view/javascript/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<link href="catalog/view/javascript/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+{# -- The Miner Island theme stylesheet (loads AFTER Bootstrap so it can override) -- #}
+<link href="catalog/view/theme/minerisland/stylesheet/stylesheet.css?v=s25e" rel="stylesheet" />
+
+{# -- Per-page styles, scripts, and analytics injected by OpenCart controllers / modules -- #}
+{% for style in styles %}
+<link href="{{ style.href }}" type="text/css" rel="{{ style.rel }}" media="{{ style.media }}" />
+{% endfor %}
+{% for script in scripts %}
+<script src="{{ script }}" type="text/javascript"></script>
+{% endfor %}
+<script src="catalog/view/javascript/common.js" type="text/javascript"></script>
+{% for link in links %}
+<link href="{{ link.href }}" rel="{{ link.rel }}" />
+{% endfor %}
+{% for analytic in analytics %}
+{{ analytic }}
+{% endfor %}
+
+{# -- Favicons (place files into catalog/view/theme/minerisland/image/favicon/ when ready) -- #}
+<link rel="icon" type="image/png" sizes="32x32" href="catalog/view/theme/minerisland/image/favicon/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="catalog/view/theme/minerisland/image/favicon/favicon-16x16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="catalog/view/theme/minerisland/image/favicon/apple-touch-icon.png" />
+</head>
+<body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TGRG9RL8"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+{# ═══ PROMO BAR ════════════════════════════════════════════════════════════ #}
+<div class="mi-promo">
+  <div class="mi-container">
+    <div class="mi-promo__inner">
+      <span class="mi-promo__diamond">💎</span>
+      <span>Pay with Bitcoin and save <strong>3%</strong> on your entire order</span>
+      <span class="mi-promo__sep">·</span>
+      <span>Free DDP shipping on orders over $5,000</span>
+      <a href="bitcoin-miners-shop" class="mi-promo__cta">Shop now →</a>
+    </div>
+  </div>
+</div>
+
+{# ═══ LIVE CRYPTO TICKER (sitewide, populated by JS via CoinGecko API) ════ #}
+<div class="mi-ticker" id="mi-ticker" aria-label="Live cryptocurrency prices" hidden>
+  <div class="mi-ticker__track" id="mi-ticker-track" role="marquee" aria-live="off">
+    {# Initial skeleton, replaced by JS once prices load #}
+    <span class="mi-ticker__item mi-ticker__skeleton">Loading prices…</span>
+  </div>
+</div>
+
+{# ═══ TOP UTILITY BAR (desktop only) ══════════════════════════════════════ #}
+<div class="mi-utility">
+  <div class="mi-container">
+    <div class="mi-utility__inner">
+      <div class="mi-utility__left">
+        <a href="https://wa.me/16173008178" class="mi-utility__item mi-utility__item--whatsapp" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.074-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413"/></svg>
+          <span>WhatsApp&nbsp;·&nbsp;+1 617 300 8178</span>
+        </a>
+        <a href="tel:+16173008178" class="mi-utility__item mi-utility__item--tel" data-mi-tel="1">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <span>Call&nbsp;·&nbsp;+1 617 300 8178</span>
+        </a>
+        <a href="mailto:sales@theminerisland.com" class="mi-utility__item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <span>sales@theminerisland.com</span>
+        </a>
+        <span class="mi-utility__item" aria-label="Shipping origin">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          <span>DDP-paid · ships worldwide from our Hong Kong warehouse</span>
+        </span>
+      </div>
+      <div class="mi-utility__right">
+        {# ── Top-bar socials (Phase 7.3 Step 2) ── #}
+        {% if social_locations.header_top is defined and social_locations.header_top|length > 0 %}
+        <div class="mi-socials mi-socials--compact" style="margin-right:8px;">
+          {% for s in social_locations.header_top %}
+          <a class="mi-social mi-social--{{ s.platform }}"
+             {% if s.has_qr or s.platform == 'wechat' %}href="#" data-mi-qr="{{ s.id }}"{% else %}href="{{ s.url }}" target="_blank" rel="noopener noreferrer"{% endif %}
+             aria-label="{{ s.name }}">
+            <span class="mi-social-ico"></span>
+            <span class="mi-social-label">{{ s.name }}</span>
+          </a>
+          {% endfor %}
+        </div>
+        {% endif %}
+        {% if logged %}
+          <a href="{{ account }}" class="mi-utility__item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>{{ text_account }}</span>
+          </a>
+          <a href="{{ logout }}" class="mi-utility__item">{{ text_logout }}</a>
+        {% else %}
+          <a href="{{ login }}" class="mi-utility__item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+            <span>{{ text_login }}</span>
+          </a>
+          <a href="{{ register }}" class="mi-utility__item">{{ text_register }}</a>
+        {% endif %}
+        <a href="{{ contact }}" class="mi-utility__item">{{ text_contact|default('Contact') }}</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{# ═══ MAIN HEADER (sticky) ════════════════════════════════════════════════ #}
+<header class="mi-header">
+  <div class="mi-container">
+    <div class="mi-header__inner">
+
+      {# -- Mobile menu toggle (visible <1024px) -- #}
+      <button type="button" class="mi-icon-btn mi-d-inline-flex mi-d-lg-none" id="mi-menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mi-mobile-drawer" onclick="miDrawerToggle()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+
+      {# -- Logo -- #}
+      <a href="{{ home }}" class="mi-logo" aria-label="{{ name }} Home">
+        <img src="catalog/view/theme/minerisland/image/logo.png" alt="{{ name }}" />
+      </a>
+
+      {# -- Search (rendered from common/search.twig) -- #}
+      {{ search }}
+
+      {# -- Right-side actions -- #}
+      <div class="mi-header__actions">
+
+        {# Mobile search trigger (visible <768px) #}
+        <button type="button" class="mi-icon-btn mi-d-inline-flex mi-d-md-none" id="mi-search-toggle" aria-label="Open search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </button>
+
+        {# Account icon (desktop visible, utility bar duplicates it but this is the visual anchor) #}
+        <a href="{{ account }}" class="mi-icon-btn mi-d-none mi-d-lg-inline-flex" title="{{ text_account }}" aria-label="{{ text_account }}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </a>
+
+        {# Wishlist #}
+        <a href="{{ wishlist }}" class="mi-icon-btn" id="wishlist-total" title="{{ text_wishlist }}" aria-label="{{ text_wishlist }}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </a>
+
+        {# Cart, opens dropdown from common/cart.twig #}
+        {{ cart }}
+      </div>
+
+    </div>
+  </div>
+</header>
+
+{# ═══ MAIN NAVIGATION (category menu, from common/menu.twig) ══════════════ #}
+{{ menu }}
+
+{# ═══ MOBILE DRAWER (hidden by default, toggled by hamburger) ═════════════ #}
+<div class="mi-mobile-drawer" id="mi-mobile-drawer" aria-hidden="true">
+    <div class="mi-mobile-drawer__overlay" data-mi-drawer-close onclick="miDrawerClose()"></div>
+  <aside class="mi-mobile-drawer__panel" role="dialog" aria-label="Site navigation">
+    <div class="mi-mobile-drawer__head">
+      <a href="{{ home }}" class="mi-logo"><img src="catalog/view/theme/minerisland/image/logo.png" alt="{{ name }}" /></a>
+            <button type="button" class="mi-icon-btn" data-mi-drawer-close aria-label="Close menu" onclick="miDrawerClose()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <nav class="mi-mobile-drawer__nav">
+      {% if categories %}
+        <ul class="mi-mobile-drawer__list">
+          {% for category in categories %}
+            <li>
+              <a href="{{ category.href }}">{{ category.name }}</a>
+              {% if category.children %}
+                <ul class="mi-mobile-drawer__sublist">
+                  {% for child in category.children %}
+                    <li><a href="{{ child.href }}">{{ child.name }}</a></li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+      <ul class="mi-mobile-drawer__list mi-mobile-drawer__list--secondary">
+        {# ═══ MinerIsland Phase 7: Company links in mobile drawer ═══ #}
+        <li><a href="our-team">Our Team</a></li>
+        <li><a href="factory-updates">Blog Updates</a></li>
+        <li><a href="our-story">About Us</a></li>
+        <li><a href="business-credentials">Corporate Verification</a></li>
+        <li><a href="staff-verification">Staff Verification</a></li>
+        {# ═══ END Phase 7 Company section ═════════════════════════════ #}
+        {% if logged %}
+          <li><a href="{{ account }}">{{ text_account }}</a></li>
+          <li><a href="{{ order }}">{{ text_order }}</a></li>
+          <li><a href="{{ logout }}">{{ text_logout }}</a></li>
+        {% else %}
+          <li><a href="{{ login }}">{{ text_login }}</a></li>
+          <li><a href="{{ register }}">{{ text_register }}</a></li>
+        {% endif %}
+        <li><a href="{{ contact }}">{{ text_contact|default('Contact') }}</a></li>
+      </ul>
+      <div class="mi-mobile-drawer__contact">
+        <a href="https://wa.me/16173008178" class="mi-btn mi-btn--whatsapp mi-btn--block" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:18px;height:18px;margin-right:8px;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.074-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413"/></svg>
+          Chat on WhatsApp
+        </a>
+        <a href="tel:+16173008178" class="mi-btn mi-btn--tel mi-btn--block" data-mi-tel="1" style="margin-top:8px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:18px;height:18px;margin-right:8px;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          Call +1 617 300 8178
+        </a>
+        <a href="mailto:sales@theminerisland.com" class="mi-footer__link">sales@theminerisland.com</a>
+        {# ── Mobile drawer socials (Phase 7.3 Step 2) ── #}
+        {% if social_locations.mobile_drawer is defined and social_locations.mobile_drawer|length > 0 %}
+        <div class="mi-social-section" style="margin-top:16px;">
+          <p class="mi-socials-heading">Or message us on:</p>
+          <div class="mi-socials">
+            {% for s in social_locations.mobile_drawer %}
+            <a class="mi-social mi-social--{{ s.platform }}"
+               {% if s.has_qr or s.platform == 'wechat' %}href="#" data-mi-qr="{{ s.id }}"{% else %}href="{{ s.url }}" target="_blank" rel="noopener noreferrer"{% endif %}
+               aria-label="{{ s.name }}">
+              <span class="mi-social-ico"></span>
+              <span class="mi-social-label">{{ s.name }}</span>
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </nav>
+  </aside>
+</div>
+
+<script>
+/* ═══ s25f — MOBILE DRAWER: inline-onclick architecture ═══════════════════
+   Why: addEventListener bindings on the hamburger were being duplicated
+   or killed by earlier script versions / node clones (two listeners on
+   one click = open+close = looks like nothing happens). Inline onclick
+   attributes can't double-bind and survive cloning. On window.load we
+   clone the hamburger ONCE to wipe any stale addEventListener handlers
+   left by older script versions.
+   ═════════════════════════════════════════════════════════════════════ */
+(function () {
+  'use strict';
+
+  function drawerEl() { return document.getElementById('mi-mobile-drawer'); }
+
+  window.miDrawerOpen = function () {
+    var d = drawerEl(); if (!d) return;
+    d.classList.add('is-open');
+    d.setAttribute('aria-hidden', 'false');
+    var t = document.getElementById('mi-menu-toggle');
+    if (t) t.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+    console.log('[mi] drawer OPEN');
+  };
+
+  window.miDrawerClose = function () {
+    var d = drawerEl(); if (!d) return;
+    d.classList.remove('is-open');
+    d.setAttribute('aria-hidden', 'true');
+    var t = document.getElementById('mi-menu-toggle');
+    if (t) t.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+    console.log('[mi] drawer CLOSE');
+  };
+
+  window.miDrawerToggle = function () {
+    var d = drawerEl();
+    if (!d) { console.log('[mi] drawer element MISSING'); return; }
+    if (d.classList.contains('is-open')) { window.miDrawerClose(); } else { window.miDrawerOpen(); }
+  };
+
+  /* Kill stale addEventListener handlers on the hamburger.
+     The inline onclick attribute survives this clone. */
+  window.addEventListener('load', function () {
+    var t = document.getElementById('mi-menu-toggle');
+    if (t && !t.hasAttribute('data-mi-cloned')) {
+      var c = t.cloneNode(true);
+      c.setAttribute('data-mi-cloned', '1');
+      t.parentNode.replaceChild(c, t);
+    }
+  });
+
+  /* ── Search (unchanged — this already works, don't touch) ── */
+  var searchToggle = document.getElementById('mi-search-toggle');
+  var searchForm = document.querySelector('.mi-search') || document.getElementById('search');
+
+  if (searchToggle && !searchToggle.hasAttribute('data-mi-bound')) {
+    searchToggle.setAttribute('data-mi-bound', '1');
+    searchToggle.addEventListener('click', function (e) {
+      e.preventDefault();
+      if (!searchForm) return;
+      searchForm.classList.toggle('is-open');
+      if (searchForm.classList.contains('is-open')) {
+        var input = searchForm.querySelector('input[type="text"], input[name="search"]');
+        if (input) setTimeout(function () { input.focus(); }, 100);
+      }
+    });
+  }
+
+  document.addEventListener('click', function (e) {
+    if (searchForm && searchForm.classList.contains('is-open')) {
+      var st = document.getElementById('mi-search-toggle');
+      if (!searchForm.contains(e.target) && e.target !== st && !(st && st.contains(e.target))) {
+        searchForm.classList.remove('is-open');
+      }
+    }
+  });
+
+  /* ── Escape closes both ── */
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' || e.keyCode === 27) {
+      window.miDrawerClose();
+      if (searchForm) searchForm.classList.remove('is-open');
+    }
+  });
+})();
+</script>

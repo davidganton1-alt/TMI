@@ -1,0 +1,83 @@
+{{ header }}
+
+<div class="mi-404-page" id="error-not-found">
+  <div class="mi-container">
+
+    {# Breadcrumb #}
+    <nav class="mi-breadcrumb" aria-label="Breadcrumb">
+      <ol>
+        {% for breadcrumb in breadcrumbs %}
+          <li>
+            <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a>
+            {% if not loop.last %}<span aria-hidden="true">›</span>{% endif %}
+          </li>
+        {% endfor %}
+      </ol>
+    </nav>
+
+    <div class="mi-404">
+      <div class="mi-404__art" aria-hidden="true">
+        <span class="mi-404__digit">4</span>
+        <span class="mi-404__icon">⛏</span>
+        <span class="mi-404__digit">4</span>
+      </div>
+
+      <h1 class="mi-404__title">{{ heading_title }}</h1>
+      <p class="mi-404__text">{{ text_error }}</p>
+
+      <p class="mi-404__sub">Try one of these instead:</p>
+
+      <div class="mi-404__links">
+        <a href="{{ continue }}" class="mi-btn mi-btn--primary mi-btn--lg">Back to home</a>
+      </div>
+
+      <div class="mi-404__grid">
+        <a href="/bitcoin-miners-shop" class="mi-404__tile">
+          <span class="mi-404__tile-icon" aria-hidden="true">₿</span>
+          <span class="mi-404__tile-label">
+            <strong>Bitcoin miners</strong>
+            <small>Antminer, WhatsMiner, Avalon</small>
+          </span>
+        </a>
+        <a href="/altcoin-mining-rigs" class="mi-404__tile">
+          <span class="mi-404__tile-icon" aria-hidden="true">Ξ</span>
+          <span class="mi-404__tile-label">
+            <strong>Altcoin rigs</strong>
+            <small>Kaspa, LTC, ZEC, XMR</small>
+          </span>
+        </a>
+        <a href="/refurbished-asics" class="mi-404__tile">
+          <span class="mi-404__tile-icon" aria-hidden="true">♻</span>
+          <span class="mi-404__tile-label">
+            <strong>Refurbished</strong>
+            <small>Tested, warranty included</small>
+          </span>
+        </a>
+        <a href="https://wa.me/16173008178" class="mi-404__tile mi-404__tile--whatsapp" target="_blank" rel="noopener">
+          <span class="mi-404__tile-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path d="M17.5 14.4c-.3-.1-1.8-.9-2.1-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.4.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5 0-.1-.7-1.7-1-2.3-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4 0 1.4 1 2.8 1.1 3 .1.2 2 3 4.8 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.6-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.1-.3-.2-.6-.3zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.2-1.3c1.5.8 3.1 1.2 4.8 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2z"/>
+            </svg>
+          </span>
+          <span class="mi-404__tile-label">
+            <strong>Ask on WhatsApp</strong>
+            <small>We reply in minutes</small>
+          </span>
+        </a>
+        <a href="tel:+16173008178" class="mi-404__tile mi-404__tile--tel" data-mi-tel="1">
+          <span class="mi-404__tile-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          </span>
+          <span class="mi-404__tile-label">
+            <strong>Call us</strong>
+            <small>+1 617 300 8178</small>
+          </span>
+        </a>
+      </div>
+    </div>
+
+    {{ content_bottom }}
+  </div>
+</div>
+
+{{ footer }}

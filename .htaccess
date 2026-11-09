@@ -1,0 +1,50 @@
+# OpenCart .htaccess: LiteSpeed-compatible version
+# Excludes /admin/ from the SEO URL rewrite so admin loads directly.
+
+Options +FollowSymlinks
+Options -Indexes
+
+# Block sensitive plain-text files (.tpl/.ini/.log and most .txt) from being
+# served directly. The stacked negative lookbehinds (?<!robots)(?<!llms) are
+# the allow-list: robots.txt and llms.txt ARE served; every other .txt is
+# denied. To serve another root .txt later, add another (?<!name) lookbehind.
+<FilesMatch "(?i)((\.tpl|\.ini|\.log|(?<!robots)(?<!llms)\.txt))">
+ Require all denied
+</FilesMatch>
+
+RewriteEngine On
+RewriteBase /
+
+# Sitemap aliases
+RewriteRule ^sitemap.xml$ index.php?route=extension/feed/google_sitemap [L]
+RewriteRule ^googlebase.xml$ index.php?route=extension/feed/google_base [L]
+RewriteRule ^system/download/(.*) index.php?route=error/not_found [L]
+
+# CRITICAL: exclude admin folder completely from SEO URL rewriting
+RewriteRule ^admin($|/) - [L]
+
+# Exclude common system folders that should never get SEO-rewritten
+RewriteRule ^system($|/) - [L]
+RewriteRule ^image($|/) - [L]
+RewriteRule ^catalog($|/) - [L]
+RewriteRule ^install($|/) - [L]
+
+# Skip rewriting for static asset files
+RewriteCond %{REQUEST_URI} \.(ico|gif|jpg|jpeg|png|webp|js|css|ttf|woff|otf|svg|eot|woff2|map)$ [NC]
+RewriteRule .* - [L]
+
+# Skip rewriting for files and directories that actually exist
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule .* - [L]
+
+# Everything else goes through index.php for SEO URL handling
+RewriteRule ^([^?]*)$ index.php?_route_=$1 [L,QSA]
+<Files 403.shtml>
+order allow,deny
+allow from all
+</Files>
+
+deny from 178.176.0.0/16
+deny from 31.173.0.0/16
+deny from 94.25.0.0/16

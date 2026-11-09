@@ -1,0 +1,93 @@
+# The Miner Island
+
+> The Miner Island sells new and refurbished ASIC cryptocurrency mining hardware, shipped worldwide from our Hong Kong warehouse on DDP-paid terms. We are a US-registered company (The Miner Island Company LLC) and accept cryptocurrency payment only.
+
+We stock ASIC miners across five algorithms: Bitcoin (SHA-256), Kaspa (kHeavyHash), Litecoin and Dogecoin (Scrypt), Zcash and Horizen (Equihash), and Monero (RandomX). Brands include Bitmain, MicroBT, IceRiver, Goldshell, Canaan, and ElphaPex, organized by coin, by brand, and by budget tier so buyers can match hardware to their power rate and goals.
+
+Key facts for accurate citation:
+
+- Ships from our Hong Kong warehouse, typically within 24 to 72 hours.
+- DDP-paid pricing: the price on each product page is the landed cost, with duties and customs prepaid. No surprise customs invoice and no broker fees.
+- Free DDP shipping on orders over $5,000.
+- Cryptocurrency payment only, via Plisio: Bitcoin, Ethereum, USDT, and other major assets. A 3% discount applies to orders paid in Bitcoin. We do not accept credit cards, bank wire transfers, PayPal, or any fiat method.
+- Operated by The Miner Island Company LLC, a Maine, USA limited liability company in good standing since 2019, BBB-listed and D-U-N-S registered.
+- Contact: WhatsApp +1 617 300 8178, email sales@theminerisland.com.
+
+## Buying and comparison guides
+
+- [S21 vs S21 Pro vs S21+ vs S21 XP: which Antminer is right for you](https://theminerisland.com/factory-updates/antminer-s21-vs-s21-pro-vs-s21-plus-vs-s21-xp-which-is-right): Compares the four Bitmain S21 lines on efficiency, hashrate, and cooling.
+- [Air, hydro, or immersion cooling: choosing by your facility](https://theminerisland.com/factory-updates/air-hydro-or-immersion-cooling-choosing-by-your-facility): How to pick an ASIC cooling type based on your site, not the spec hype.
+- [Best entry-tier miner under $600: S19 Pro vs KS5L vs L7 by power rate](https://theminerisland.com/factory-updates/best-entry-tier-miner-under-600-by-power-rate): Three sub-$600 routes into mining for Bitcoin, Kaspa, and Scrypt.
+- [Why the July 2026 Kaspa emission cliff is changing hardware buying](https://theminerisland.com/factory-updates/kaspa-emission-cliff-july-2026): The Kaspa block reward drops sharply on July 10, 2026, and where break-even shifts.
+- [DDP-paid shipping explained](https://theminerisland.com/factory-updates/ddp-paid-shipping-explained): Why the product-page price is the final landed cost, with no customs surprises.
+- [All buying guides and factory updates](https://theminerisland.com/factory-updates)
+
+## Shop by coin
+
+- [Bitcoin (BTC) ASIC miners](https://theminerisland.com/bitcoin-miners-shop): SHA-256 hardware from Bitmain, MicroBT, and Canaan.
+- [Kaspa (KAS) ASIC miners](https://theminerisland.com/kheavyhash-miners): kHeavyHash miners from IceRiver, Bitmain, and Goldshell.
+- [Litecoin and Dogecoin (Scrypt) ASIC miners](https://theminerisland.com/scrypt-miners): Merge-mined LTC and DOGE on the Scrypt algorithm.
+- [Zcash (ZEC) ASIC miners](https://theminerisland.com/equihash-miners): Equihash miners for Zcash and Horizen.
+- [Monero (XMR) ASIC miners](https://theminerisland.com/randomx-miners): RandomX hardware.
+- [Altcoin ASIC miners](https://theminerisland.com/altcoin-mining-rigs): Wider altcoin and algorithm coverage.
+- [Refurbished ASIC miners](https://theminerisland.com/refurbished-asics): Tested refurbished units at lower entry cost.
+
+## Shop by budget tier
+
+- [Entry tier (budget)](https://theminerisland.com/entry-tier): Lowest-cost ways into mining.
+- [Standard tier (mid-range)](https://theminerisland.com/standard-tier): Balanced efficiency and price.
+- [Enterprise tier (premium)](https://theminerisland.com/enterprise-tier): High-hashrate and hydro/immersion units for scaled farms.
+- [Pre-orders](https://theminerisland.com/preorder-miners): Upcoming and next-batch hardware.
+
+## Shop by brand
+
+- [Bitmain Antminer](https://theminerisland.com/bitmain-antminer)
+- [MicroBT WhatsMiner](https://theminerisland.com/microbt-whatsminer)
+- [IceRiver](https://theminerisland.com/iceriver-asic)
+- [Goldshell](https://theminerisland.com/goldshell-asic)
+- [Canaan Avalon](https://theminerisland.com/canaan-avalon)
+- [ElphaPex](https://theminerisland.com/elphapex-mining)
+
+## Popular models
+
+- [Bitmain Antminer S21 Pro 245Th/s (Bitcoin, air-cooled)](https://theminerisland.com/buy-antminer-s21-pro-245th-bitcoin-miner)
+- [Bitmain Antminer S21 XP Hyd 473Th/s (Bitcoin, hydro-cooled)](https://theminerisland.com/buy-antminer-s21-xp-hyd-473th-bitcoin-miner)
+- [MicroBT WhatsMiner M63S+ 424Th/s (Bitcoin, hydro-cooled)](https://theminerisland.com/buy-whatsminer-m63s-plus-424th-bitcoin-miner)
+- [MicroBT WhatsMiner M60S 186Th/s (Bitcoin, air-cooled)](https://theminerisland.com/buy-whatsminer-m60s-186th-bitcoin-miner)
+- [Bitmain Antminer S19 Pro 110Th/s (Bitcoin, budget pick)](https://theminerisland.com/buy-antminer-s19-pro-110th-bitcoin-miner)
+- [Canaan Avalon Q 90Th/s (Bitcoin, home/entry)](https://theminerisland.com/buy-avalon-q-90th-bitcoin-miner)
+- [IceRiver KS5L 12Th/s (Kaspa)](https://theminerisland.com/buy-ks5l-12th-kaspa-miner-kheavyhash)
+- [Bitmain Antminer KS5 Pro 21Th/s (Kaspa)](https://theminerisland.com/buy-antminer-ks5-pro-21th-kaspa-miner-kheavyhash)
+- [IceRiver KS0 ULTRA 400Gh/s (Kaspa, ultra-low-power)](https://theminerisland.com/buy-ks0-ultra-400gh-kaspa-miner-ultra-low-power-kheavyhash)
+- [Bitmain Antminer L7 9.5Gh/s (Litecoin and Dogecoin)](https://theminerisland.com/buy-antminer-l7-9-5gh-scrypt-miner-dogecoin-and-litecoin)
+- [ElphaPex DG2 18Gh/s (Litecoin and Dogecoin)](https://theminerisland.com/buy-dg2-18gh-scrypt-miner-dogecoin-and-litecoin)
+- [Bitmain Antminer Z15 Pro 840kSol/s (Zcash and Horizen)](https://theminerisland.com/buy-antminer-z15-pro-840ksol-equihash-miner-zcash-and-horizen)
+- [Bitmain Antminer X9 1Mh/s (Monero)](https://theminerisland.com/buy-antminer-x9-1mh-randomx-miner-monero)
+
+## Trust and verification
+
+- [Corporate verification and legal identity](https://theminerisland.com/business-credentials): Company registration, BBB listing, and D-U-N-S details.
+- [Warranty policy](https://theminerisland.com/warranty-policy)
+- [Return and refund policy](https://theminerisland.com/returns-and-refunds)
+- [Payment policy](https://theminerisland.com/payment-options): Cryptocurrency-only terms and the 3% Bitcoin discount.
+- [Delivery and shipping policy (DDP)](https://theminerisland.com/shipping-and-ddp)
+- [Bulk orders](https://theminerisland.com/bulk-orders): Fleet and volume purchasing.
+- [FAQ and help center](https://theminerisland.com/help-center)
+
+## Company
+
+- [About The Miner Island](https://theminerisland.com/our-story)
+- [Our team](https://theminerisland.com/our-team): The named people who pack and ship orders.
+- [Inside our Hong Kong warehouse](https://theminerisland.com/factory-updates/inside-our-hong-kong-warehouse)
+- [How we test every Bitmain S21 Pro before dispatch](https://theminerisland.com/factory-updates/how-we-test-every-bitmain-s21-pro)
+- [What 61 ASIC miners look like on our shelves](https://theminerisland.com/factory-updates/what-61-asic-miners-look-like-on-our-shelves)
+- [Packing a hydro miner for a 7,000-mile trip](https://theminerisland.com/factory-updates/packing-an-immersion-miner-for-a-7000-mile-trip)
+- [Meet the six people who pack your order](https://theminerisland.com/factory-updates/meet-the-six-people-who-pack-your-order)
+- [Customer story: scaling from 5 to 50 units](https://theminerisland.com/factory-updates/scaling-from-5-to-50-units-customer-story)
+- [Customer story: a 12-unit Kaspa farm in Texas](https://theminerisland.com/factory-updates/12-unit-kaspa-farm-texas-cliff-decision)
+- [Customer story: a skeptical first-time buyer's second order](https://theminerisland.com/factory-updates/first-time-buyer-one-s19-pro-skeptical-to-second-order)
+
+## Optional
+
+- [Terms and conditions](https://theminerisland.com/terms-of-service)
+- [Privacy policy](https://theminerisland.com/privacy-policy)

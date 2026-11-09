@@ -1,0 +1,744 @@
+{# Session 11 (May 30, 2026): top trust strip removed (duplicate of hero strip,
+   also contained crypto-only contradiction). Sweep applied for em/en-dashes. #}
+
+{# ═══ MAIN FOOTER ═════════════════════════════════════════════════════════ #}
+<footer class="mi-footer" role="contentinfo">
+  <div class="mi-container">
+
+    {# 6-column grid: brand / shop / information / customer service / account / contact
+       (Phase 7) Customer Service column added ,  houses Bulk Procurement,
+       Payment Policy, Shipping, Returns, Warranty, FAQ, Corporate Verification.
+       The Information auto-loop now only renders Privacy / About / Terms
+       (info IDs whose bottom=1 flag was kept; the rest were flipped to 0
+       in 04_phase7_step4.sql to prevent double-listing). #}
+    <div class="mi-footer__grid">
+
+      {# ── Column 1: Brand + tagline + WhatsApp CTA (wider, 1.5fr) ── #}
+      <div>
+        <a href="{{ home }}" class="mi-logo" style="margin-bottom: var(--mi-sp-4);">
+          <img src="catalog/view/theme/minerisland/image/logo.png" alt="{{ name }}" />
+        </a>
+        <p style="color:#CBD5E1;font-size:var(--mi-fs-sm);line-height:var(--mi-lh-relaxed);margin-bottom:var(--mi-sp-5);">
+          Crypto mining hardware delivered DDP-paid from our Hong Kong warehouse to your door. Verified U.S. LLC, transparent pricing, no third-party brokers.
+        </p>
+        <a href="https://wa.me/16173008178" class="mi-btn mi-btn--whatsapp" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:18px;height:18px;margin-right:8px;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.074-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413"/></svg>
+          Message us on WhatsApp
+        </a>
+      </div>
+
+      {# ── Column 2: Shop ── #}
+      <div>
+        <h5 class="mi-footer__heading">Shop</h5>
+        <ul>
+          <li><a href="{{ manufacturer }}" class="mi-footer__link">All Brands</a></li>
+          <li><a href="{{ special }}" class="mi-footer__link">Specials</a></li>
+          <li><a href="factory-updates" class="mi-footer__link">Factory Updates</a></li>
+          <li><a href="our-team" class="mi-footer__link">Our Team</a></li>
+          <li><a href="staff-verification" class="mi-footer__link">Staff Verification</a></li>
+        </ul>
+      </div>
+
+      {# ── Column 3: Information (Privacy / About / Terms ,  auto-rendered) ── #}
+      <div>
+        <h5 class="mi-footer__heading">{{ text_information }}</h5>
+        <ul>
+          {% if informations %}
+            {% for information in informations %}
+              <li><a href="{{ information.href }}" class="mi-footer__link">{{ information.title }}</a></li>
+            {% endfor %}
+          {% endif %}
+          <li><a href="{{ sitemap }}" class="mi-footer__link">{{ text_sitemap }}</a></li>
+        </ul>
+      </div>
+
+      {# ── Column 4: Customer Service (Phase 7) ──────────────────────────
+         Hardcoded links ,  the underlying info pages have bottom=0 (set in
+         04_phase7_step4.sql) so they don't double-render in the Information
+         column above. URLs are SEO slugs verified against oc_seo_url. #}
+      <div>
+        <h5 class="mi-footer__heading">Customer Service</h5>
+        <ul>
+          <li><a href="bulk-orders" class="mi-footer__link">Bulk Procurement Process</a></li>
+          <li><a href="payment-options" class="mi-footer__link">Payment Policy</a></li>
+          <li><a href="shipping-and-ddp" class="mi-footer__link">Shipping &amp; DDP Policy</a></li>
+          <li><a href="returns-and-refunds" class="mi-footer__link">Returns &amp; Refunds</a></li>
+          <li><a href="warranty-policy" class="mi-footer__link">Warranty Policy</a></li>
+          <li><a href="help-center" class="mi-footer__link">FAQ / Help Center</a></li>
+          <li><a href="business-credentials" class="mi-footer__link">Corporate Verification</a></li>
+          <li><a href="{{ contact }}" class="mi-footer__link">{{ text_contact|default('Contact Us') }}</a></li>
+        </ul>
+      </div>
+
+      {# ── Column 5: Account ── #}
+      <div>
+        <h5 class="mi-footer__heading">{{ text_account }}</h5>
+        <ul>
+          <li><a href="{{ account }}" class="mi-footer__link">{{ text_account }}</a></li>
+          <li><a href="{{ order }}" class="mi-footer__link">{{ text_order }}</a></li>
+          <li><a href="{{ wishlist }}" class="mi-footer__link">{{ text_wishlist }}</a></li>
+          <li><a href="{{ newsletter }}" class="mi-footer__link">{{ text_newsletter }}</a></li>
+        </ul>
+      </div>
+
+      {# ── Column 6: Contact ── #}
+      <div>
+        <h5 class="mi-footer__heading">Get in touch</h5>
+        <div class="mi-footer__contact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <div>
+            <a href="tel:+16173008178" data-mi-tel="1" style="color:#FFFFFF;font-weight:var(--mi-fw-semibold);">+1 617 300 8178</a>
+            <div style="color:#94A3B8;font-size:var(--mi-fs-xs);">
+              <a href="tel:+16173008178" data-mi-tel="1" style="color:#94A3B8;">Call</a>
+              <span aria-hidden="true"> · </span>
+              <a href="https://wa.me/16173008178" target="_blank" rel="noopener" style="color:#94A3B8;">WhatsApp</a>
+              <span> · 7 days/week</span>
+            </div>
+          </div>
+        </div>
+        <div class="mi-footer__contact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <div>
+            <a href="mailto:sales@theminerisland.com" style="color:#FFFFFF;">sales@theminerisland.com</a>
+            <div style="color:#94A3B8;font-size:var(--mi-fs-xs);">Sales &amp; quotes</div>
+          </div>
+        </div>
+        <div class="mi-footer__contact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <div>
+            <span style="color:#FFFFFF;">2 Hemlock Road</span>
+            <div style="color:#94A3B8;font-size:var(--mi-fs-xs);">Cambridge, MA 02138, USA</div>
+          </div>
+        </div>
+        {# ── Social icons (Phase 7.3 Step 2) ── #}
+        {% if social_locations.footer is defined and social_locations.footer|length > 0 %}
+        <div class="mi-social-section">
+          <p class="mi-socials-heading" style="color:#94A3B8;">Connect with us</p>
+          <div class="mi-socials mi-socials--on-dark">
+            {% for s in social_locations.footer %}
+            <a class="mi-social mi-social--{{ s.platform }}"
+               {% if s.has_qr or s.platform == 'wechat' %}href="#" data-mi-qr="{{ s.id }}"{% else %}href="{{ s.url }}" target="_blank" rel="noopener noreferrer"{% endif %}
+               aria-label="{{ s.name }}">
+              <span class="mi-social-ico"></span>
+              <span class="mi-social-label">{{ s.name }}</span>
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+      </div>
+
+    </div>
+
+    {# ═══ FOOTER BOTTOM ═══════════════════════════════════════════════════ #}
+    <div class="mi-footer__bottom">
+      <div>
+        <div>© {{ "now"|date("Y") }} The Miner Island Company LLC. All rights reserved.</div>
+        <div style="font-size:var(--mi-fs-xs);color:#64748B;margin-top:4px;">
+          Maine LLC · Charter #20197812DC · A Project of The Miner Island Company LLC
+        </div>
+      </div>
+      <div class="mi-footer__pay">
+        <span style="color:#64748B;font-size:var(--mi-fs-xs);margin-right:var(--mi-sp-2);">We accept:</span>
+        <span style="color:#F7931A;font-weight:var(--mi-fw-bold);font-size:var(--mi-fs-xs);letter-spacing:var(--mi-letter-wider);text-transform:uppercase;">Bitcoin</span>
+        <span style="color:#627EEA;font-weight:var(--mi-fw-bold);font-size:var(--mi-fs-xs);letter-spacing:var(--mi-letter-wider);text-transform:uppercase;">Ethereum</span>
+        <span style="color:#26A17B;font-weight:var(--mi-fw-bold);font-size:var(--mi-fs-xs);letter-spacing:var(--mi-letter-wider);text-transform:uppercase;">USDT</span>
+      </div>
+    </div>
+
+    {# ── Checkout-only social strip (Phase 7.3 Step 2) ── #}
+    {% if current_route is defined and current_route == 'checkout/checkout' and social_locations.checkout is defined and social_locations.checkout|length > 0 %}
+    <div class="mi-social-section mi-social-section--checkout" style="color:#94A3B8;">
+      <p class="mi-socials-heading" style="color:#94A3B8;margin-bottom:8px;">Questions? Reach us on:</p>
+      <div class="mi-socials mi-socials--compact mi-socials--centered mi-socials--on-dark" style="display:inline-flex;">
+        {% for s in social_locations.checkout %}
+        <a class="mi-social mi-social--{{ s.platform }}"
+           {% if s.has_qr or s.platform == 'wechat' %}href="#" data-mi-qr="{{ s.id }}"{% else %}href="{{ s.url }}" target="_blank" rel="noopener noreferrer"{% endif %}
+           aria-label="{{ s.name }}">
+          <span class="mi-social-ico"></span>
+          <span class="mi-social-label">{{ s.name }}</span>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+</footer>
+
+{# ═══ FLOATING WHATSAPP BUTTON (appears on every page) ════════════════════ #}
+{% include 'common/whatsapp.twig' ignore missing %}
+
+{# ═══ OPENCART-INJECTED PER-PAGE TAIL STYLES/SCRIPTS (do not remove) ═════ #}
+{% for style in styles %}
+<link href="{{ style.href }}" type="text/css" rel="{{ style.rel }}" media="{{ style.media }}" />
+{% endfor %}
+{% for script in scripts %}
+<script src="{{ script }}" type="text/javascript"></script>
+{% endfor %}
+
+{# ═══ THEME JAVASCRIPT (mobile drawer + cart icon shim) ════════════════════ #}
+<script>
+/* ── Mobile drawer toggle ───────────────────────────────────────────── */
+(function () {
+  var toggle = document.getElementById('mi-menu-toggle');
+  var drawer = document.getElementById('mi-mobile-drawer');
+  if (!toggle || !drawer) return;
+
+  function openDrawer() {
+    drawer.classList.add('is-open');
+    drawer.setAttribute('aria-hidden', 'false');
+    toggle.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDrawer() {
+    drawer.classList.remove('is-open');
+    drawer.setAttribute('aria-hidden', 'true');
+    toggle.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  toggle.addEventListener('click', function () {
+    if (drawer.classList.contains('is-open')) closeDrawer(); else openDrawer();
+  });
+
+  drawer.querySelectorAll('[data-mi-drawer-close]').forEach(function (el) {
+    el.addEventListener('click', closeDrawer);
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && drawer.classList.contains('is-open')) closeDrawer();
+  });
+})();
+
+/* ── Live crypto ticker (CoinGecko + 60s localStorage cache) ────────────
+   Populates #mi-ticker-track with rolling BTC/ETH/LTC/DOGE/KAS/XMR/ZEC.
+   • Caches the API response in localStorage for 60 seconds so navigating
+     between pages doesn't hammer the API.
+   • If the API fails or rate-limits, the ticker stays hidden (graceful).
+   ───────────────────────────────────────────────────────────────────── */
+(function () {
+  var TICKER     = document.getElementById('mi-ticker');
+  var TRACK      = document.getElementById('mi-ticker-track');
+  if (!TICKER || !TRACK) return;
+
+  var CACHE_KEY  = 'mi-ticker-cache-v1';
+  var CACHE_TTL  = 60 * 1000;  // 60 seconds
+  var API_URL    = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,litecoin,dogecoin,kaspa,monero,zcash&vs_currencies=usd&include_24hr_change=true';
+
+  var COINS = [
+    { id: 'bitcoin',  symbol: 'BTC', name: 'Bitcoin'  },
+    { id: 'ethereum', symbol: 'ETH', name: 'Ethereum' },
+    { id: 'litecoin', symbol: 'LTC', name: 'Litecoin' },
+    { id: 'dogecoin', symbol: 'DOGE', name: 'Dogecoin' },
+    { id: 'kaspa',    symbol: 'KAS', name: 'Kaspa'    },
+    { id: 'monero',   symbol: 'XMR', name: 'Monero'   },
+    { id: 'zcash',    symbol: 'ZEC', name: 'Zcash'    }
+  ];
+
+  function fmtPrice(p) {
+    if (p == null) return '-';
+    if (p >= 1000) return '$' + p.toLocaleString('en-US', { maximumFractionDigits: 0 });
+    if (p >= 1)    return '$' + p.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    if (p >= 0.01) return '$' + p.toLocaleString('en-US', { minimumFractionDigits: 4, maximumFractionDigits: 4 });
+    return '$' + p.toFixed(6);
+  }
+
+  function fmtChange(c) {
+    if (c == null || isNaN(c)) return '';
+    var sign = c >= 0 ? '+' : '';
+    return sign + c.toFixed(2) + '%';
+  }
+
+  function build(prices) {
+    if (!prices) return false;
+    // Render two copies of the items inside the track so the marquee
+    // animation loops seamlessly when the first copy scrolls out.
+    function renderCoin(c) {
+      var data = prices[c.id];
+      if (!data) return '';
+      var price = data.usd;
+      var change24h = data.usd_24h_change;
+      var changeClass = change24h >= 0 ? 'mi-ticker__change--up' : 'mi-ticker__change--down';
+      var arrow = change24h >= 0 ? '▲' : '▼';
+      return '<span class="mi-ticker__item">'
+        + '<span class="mi-ticker__symbol">' + c.symbol + '</span>'
+        + '<span class="mi-ticker__price">' + fmtPrice(price) + '</span>'
+        + '<span class="mi-ticker__change ' + changeClass + '">' + arrow + ' ' + fmtChange(change24h) + '</span>'
+        + '</span>';
+    }
+    var html = '';
+    var anyRendered = false;
+    for (var i = 0; i < COINS.length; i++) {
+      var row = renderCoin(COINS[i]);
+      if (row) { html += row; anyRendered = true; }
+    }
+    if (!anyRendered) return false;
+    // Duplicate for seamless loop
+    TRACK.innerHTML = html + html;
+    return true;
+  }
+
+  function readCache() {
+    try {
+      var raw = localStorage.getItem(CACHE_KEY);
+      if (!raw) return null;
+      var parsed = JSON.parse(raw);
+      if (!parsed || !parsed.ts || !parsed.data) return null;
+      if (Date.now() - parsed.ts > CACHE_TTL) return null;
+      return parsed.data;
+    } catch (e) { return null; }
+  }
+
+  function writeCache(data) {
+    try { localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data: data })); } catch (e) {}
+  }
+
+  function reveal() { TICKER.hidden = false; }
+
+  // 1) Try cache first ,  instant render if fresh
+  var cached = readCache();
+  if (cached && build(cached)) reveal();
+
+  // 2) Fetch fresh in background (unless cached AND fresh, but we still
+  //    refresh in the background to keep it current for subsequent pages)
+  if (!('fetch' in window)) return;
+  fetch(API_URL, { method: 'GET', cache: 'no-store' })
+    .then(function (r) { if (!r.ok) throw new Error('API ' + r.status); return r.json(); })
+    .then(function (data) {
+      if (build(data)) { reveal(); writeCache(data); }
+    })
+    .catch(function () { /* fail silently ,  ticker stays hidden if no cache */ });
+})();
+
+/* ── Cart-icon shim + per-card badge ─────────────────────────────────────
+   OpenCart's common.js overwrites `#cart > button`'s innerHTML on every
+   add/edit/remove with `<span id="cart-total"><i class="fa fa-shopping-cart">
+   </i> X item(s)</span>`. That blows away our SVG icon and badge layout.
+   We watch for those mutations and put our icon + badge structure back.
+
+   We also keep a count on each product card's cart button ,  clicking
+   .mi-product-card__cart increments its own badge so the buyer gets local
+   feedback (the global badge in the header updates separately via the
+   common.js path).
+   ───────────────────────────────────────────────────────────────────── */
+(function () {
+  if (typeof MutationObserver === 'undefined') return;
+
+  var btn = document.querySelector('#cart > button');
+  if (!btn) return;
+
+  var ICON_HTML = '<span class="mi-cart__icon" aria-hidden="true">' +
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+      '<circle cx="9" cy="21" r="1"/>' +
+      '<circle cx="20" cy="21" r="1"/>' +
+      '<path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>' +
+    '</svg></span>';
+
+  var rebuilding = false; // re-entry guard ,  our own DOM writes trigger the observer
+
+  function rebuild() {
+    if (rebuilding) return;
+    var inner = document.getElementById('cart-total');
+    if (!inner) return; // common.js may not have run yet
+
+    rebuilding = true;
+    try {
+      // 1. Strip any <i class="fa..."> that common.js dumped inside #cart-total
+      var fa = inner.querySelector('i.fa-shopping-cart, i.fa');
+      if (fa) fa.parentNode.removeChild(fa);
+
+      // 2. Reduce the badge text to JUST the count digits.
+      //    json['total'] is "N item(s) - $X.XX" ,  we want "N". Falls back to
+      //    text content if no digit found (e.g. localized "0 item(s)" still works).
+      var raw = (inner.textContent || '').trim();
+      var m = raw.match(/(\d+)/);
+      var clean = m ? m[1] : raw;
+      if (inner.textContent !== clean) {
+        inner.textContent = clean;
+      }
+      inner.classList.add('mi-icon-btn__badge');
+
+      // 3. Make sure our SVG icon is the first child of the button.
+      if (!btn.querySelector('.mi-cart__icon')) {
+        btn.insertAdjacentHTML('afterbegin', ICON_HTML);
+      }
+    } finally {
+      rebuilding = false;
+    }
+  }
+
+  // Run once after DOM ready in case common.js already ran
+  if (document.readyState !== 'loading') rebuild();
+  else document.addEventListener('DOMContentLoaded', rebuild);
+
+  // Watch for future overwrites by common.js ,  including text-content changes
+  // inside #cart-total which is where add-to-cart updates land.
+  new MutationObserver(rebuild).observe(btn, {
+    childList: true,
+    subtree: true,
+    characterData: true
+  });
+
+  // Also handle our custom mi-cart-refresh event (fired by product.twig)
+  btn.addEventListener('mi-cart-refresh', rebuild);
+})();
+
+/* ── Per-card cart count badge ─────────────────────────────────────────
+   Each .mi-product-card__cart button has its own counter span that
+   increments when the user clicks Add to cart. Pure visual feedback ,  the
+   actual cart total lives in the header badge.
+   ───────────────────────────────────────────────────────────────────── */
+(function () {
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest && e.target.closest('.mi-product-card__cart');
+    if (!btn) return;
+    var counter = btn.querySelector('.mi-product-card__cart-count');
+    if (!counter) return;
+    var current = parseInt(counter.getAttribute('data-mi-card-count'), 10) || 0;
+    current += 1;
+    counter.setAttribute('data-mi-card-count', String(current));
+    counter.textContent = current > 99 ? '99+' : String(current);
+    counter.hidden = false;
+    // Brief pop animation
+    counter.classList.remove('mi-product-card__cart-count--pop');
+    // Force reflow so the class can be re-added and the animation re-fires
+    void counter.offsetWidth;
+    counter.classList.add('mi-product-card__cart-count--pop');
+  }, false);
+})();
+</script>
+
+{# ═══ WECHAT / QR LIGHTBOX (Phase 7.3 Step 2) ════════════════════════════ #}
+<div class="mi-qr-overlay" id="mi-qr-overlay" role="dialog" aria-modal="true" aria-labelledby="mi-qr-title" aria-hidden="true">
+  <div class="mi-qr-modal" role="document">
+    <button type="button" class="mi-qr-modal__close" aria-label="Close" data-mi-qr-close>&times;</button>
+    <h3 class="mi-qr-modal__title" id="mi-qr-title">Connect</h3>
+    <p class="mi-qr-modal__sub" id="mi-qr-sub"></p>
+    <img class="mi-qr-modal__img" id="mi-qr-img" src="" alt="" hidden />
+    <div class="mi-qr-modal__id" id="mi-qr-id-wrap" hidden>
+      <span class="mi-qr-modal__id-label">ID:</span>
+      <span class="mi-qr-modal__id-value" id="mi-qr-id-value"></span>
+      <button type="button" class="mi-qr-modal__copy" data-mi-qr-copy>Copy</button>
+    </div>
+  </div>
+</div>
+<div class="mi-qr-toast" id="mi-qr-toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  'use strict';
+  var overlay = document.getElementById('mi-qr-overlay');
+  if (!overlay) return;
+  var titleEl = document.getElementById('mi-qr-title');
+  var subEl   = document.getElementById('mi-qr-sub');
+  var imgEl   = document.getElementById('mi-qr-img');
+  var idWrap  = document.getElementById('mi-qr-id-wrap');
+  var idVal   = document.getElementById('mi-qr-id-value');
+  var toast   = document.getElementById('mi-qr-toast');
+
+  function showToast(msg){
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.classList.add('is-visible');
+    setTimeout(function(){ toast.classList.remove('is-visible'); }, 1800);
+  }
+  function open(data){
+    titleEl.textContent = data.name || 'Connect';
+    subEl.textContent = data.platform === 'wechat'
+      ? 'Scan with WeChat or copy our ID below'
+      : 'Scan the code to connect';
+    if (data.has_qr && data.qr_image) {
+      imgEl.src = data.qr_image;
+      imgEl.alt = data.name + ' QR';
+      imgEl.hidden = false;
+    } else {
+      imgEl.hidden = true;
+    }
+    if (data.url) {
+      idVal.textContent = data.url;
+      idWrap.hidden = false;
+    } else {
+      idWrap.hidden = true;
+    }
+    overlay.classList.add('is-open');
+    overlay.setAttribute('aria-hidden', 'false');
+  }
+  function close(){
+    overlay.classList.remove('is-open');
+    overlay.setAttribute('aria-hidden', 'true');
+    imgEl.src = '';
+  }
+
+  // Delegated click: any .mi-social with data-mi-qr opens the lightbox
+  document.addEventListener('click', function(ev){
+    var trigger = ev.target.closest('[data-mi-qr]');
+    if (trigger) {
+      ev.preventDefault();
+      var id = trigger.getAttribute('data-mi-qr');
+      fetch('index.php?route=extension/module/social_links/lightbox&id=' + encodeURIComponent(id))
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+          if (data && data.ok) {
+            open(data);
+          } else {
+            // Fallback: just show the URL field if available
+            showToast('Could not load info, try again later');
+          }
+        })
+        .catch(function(){
+          showToast('Network error');
+        });
+      return;
+    }
+    if (ev.target.closest('[data-mi-qr-close]') || ev.target === overlay) {
+      close();
+      return;
+    }
+    if (ev.target.closest('[data-mi-qr-copy]')) {
+      var v = idVal.textContent;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(v).then(function(){ showToast('Copied: ' + v); });
+      } else {
+        // Fallback for older browsers
+        var ta = document.createElement('textarea');
+        ta.value = v;
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); showToast('Copied: ' + v); } catch(e){}
+        document.body.removeChild(ta);
+      }
+    }
+  }, false);
+  document.addEventListener('keydown', function(ev){
+    if (ev.key === 'Escape' && overlay.classList.contains('is-open')) close();
+  }, false);
+})();
+</script>
+
+{# ═══ S19 ANALYTICS: consent banner + cart event tracking ═══════════════════
+   Banner shows only when no mi_consent cookie exists AND the visitor's
+   timezone is European (heuristic matching the EEA/UK/CH consent regions in
+   header.twig). Accept or Decline stores the choice for 365 days and updates
+   Consent Mode live. Cart wrappers push GA4 add_to_cart / remove_from_cart
+   for the AJAX cart used on category cards and the cart page; the product
+   page pushes its own richer add_to_cart from its inline handler.
+   ══════════════════════════════════════════════════════════════════════════ #}
+<script>
+(function(){
+  'use strict';
+  window.dataLayer = window.dataLayer || [];
+
+  /* ── Consent banner ── */
+  function setConsentCookie(v){
+    var d = new Date(); d.setTime(d.getTime() + 365*24*60*60*1000);
+    document.cookie = 'mi_consent=' + v + '; expires=' + d.toUTCString() + '; path=/; SameSite=Lax; Secure';
+  }
+  function applyConsent(v){
+    if (typeof gtag === 'function') {
+      gtag('consent', 'update', {
+        'ad_storage': v, 'ad_user_data': v, 'ad_personalization': v, 'analytics_storage': v
+      });
+    }
+  }
+  var hasChoice = /(?:^|;\s*)mi_consent=(granted|denied)/.test(document.cookie);
+  var tz = '';
+  try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch(e){}
+  var isEuro = tz.indexOf('Europe/') === 0;
+  if (!hasChoice && isEuro) {
+    var bar = document.createElement('div');
+    bar.id = 'mi-consent-bar';
+    bar.setAttribute('role', 'dialog');
+    bar.setAttribute('aria-label', 'Cookie consent');
+    bar.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:99999;background:#0B1220;color:#fff;padding:14px 16px;font-size:14px;line-height:1.5;box-shadow:0 -4px 16px rgba(0,0,0,.25);';
+    bar.innerHTML = '<div style="max-width:1080px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:12px;justify-content:center;">'
+      + '<span style="flex:1 1 420px;min-width:260px;">We use cookies for analytics and to measure our ads. You can accept or decline; the store works either way.</span>'
+      + '<span style="display:flex;gap:10px;">'
+      + '<button type="button" id="mi-consent-accept" style="background:#0437F2;color:#fff;border:0;border-radius:8px;padding:10px 18px;font-weight:600;cursor:pointer;">Accept</button>'
+      + '<button type="button" id="mi-consent-decline" style="background:transparent;color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:8px;padding:10px 18px;font-weight:600;cursor:pointer;">Decline</button>'
+      + '</span></div>';
+    document.body.appendChild(bar);
+    document.getElementById('mi-consent-accept').addEventListener('click', function(){
+      setConsentCookie('granted'); applyConsent('granted'); bar.remove();
+      window.dataLayer.push({event: 'mi_consent_granted'});
+    });
+    document.getElementById('mi-consent-decline').addEventListener('click', function(){
+      setConsentCookie('denied'); applyConsent('denied'); bar.remove();
+    });
+  }
+
+  /* ── Cart wrappers (AJAX cart on category cards and cart page) ── */
+  function cardLookup(pid){
+    var out = {name: '', price: 0};
+    try {
+      var btn = document.querySelector('[data-mi-card-add="' + pid + '"]');
+      if (btn) {
+        var card = btn.closest('.mi-product-card');
+        if (card) {
+          var n = card.querySelector('.mi-product-card__title a, .mi-product-card__title');
+          if (n) out.name = (n.textContent || '').trim();
+          var p = card.querySelector('.mi-product-card__price-new');
+          if (p) out.price = parseFloat((p.textContent || '').replace(/[^0-9.]/g, '')) || 0;
+        }
+      }
+    } catch(e){}
+    return out;
+  }
+  function hookCart(){
+    if (!window.cart) return false;
+    if (typeof window.cart.add === 'function' && !window.cart._miWrapped) {
+      var _add = window.cart.add;
+      window.cart.add = function(pid, qty){
+        try {
+          var info = cardLookup(pid);
+          var item = {item_id: String(pid), quantity: parseInt(qty, 10) || 1};
+          if (info.name) item.item_name = info.name;
+          if (info.price) item.price = info.price;
+          window.dataLayer.push({ecommerce: null});
+          window.dataLayer.push({event: 'add_to_cart', ecommerce: {currency: 'USD', items: [item]}});
+        } catch(e){}
+        return _add.apply(this, arguments);
+      };
+      var _remove = window.cart.remove;
+      if (typeof _remove === 'function') {
+        window.cart.remove = function(key){
+          try {
+            window.dataLayer.push({ecommerce: null});
+            window.dataLayer.push({event: 'remove_from_cart', ecommerce: {currency: 'USD', items: [{item_id: String(key)}]}});
+          } catch(e){}
+          return _remove.apply(this, arguments);
+        };
+      }
+      window.cart._miWrapped = true;
+    }
+    return true;
+  }
+  if (!hookCart()) {
+    document.addEventListener('DOMContentLoaded', hookCart, false);
+  }
+})();
+</script>
+<script>
+/* s25a: fix same-page anchor links broken by the base href tag.
+   Applies to every "On this page" TOC and any other in-page anchor. */
+(function () {
+  function headerOffset() {
+    var h = document.querySelector('header');
+    return (h && h.offsetHeight ? h.offsetHeight : 80) + 16;
+  }
+  function scrollToId(id, push) {
+    var el = document.getElementById(id);
+    if (!el) { return false; }
+    var y = el.getBoundingClientRect().top + window.pageYOffset - headerOffset();
+    window.scrollTo({ top: y, behavior: 'smooth' });
+    if (push && window.history && window.history.replaceState) {
+      window.history.replaceState(null, '', window.location.pathname + window.location.search + '#' + id);
+    }
+    return true;
+  }
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest ? e.target.closest('a[href^="#"]') : null;
+    if (!a) { return; }
+    var id = a.getAttribute('href').slice(1);
+    if (!id) { return; }
+    if (scrollToId(id, true)) { e.preventDefault(); }
+  }, false);
+  if (window.location.hash.length > 1) {
+    window.addEventListener('load', function () {
+      setTimeout(function () { scrollToId(window.location.hash.slice(1), false); }, 60);
+    }, false);
+  }
+})();
+</script>
+
+{# ═══ s25b: CLICK-ID CAPTURE + WHATSAPP REFERENCE TAG ══════════════════════
+   Client-side only. Reads Google click identifiers from the URL, stores them
+   in a first-party cookie, stamps a short human-readable reference onto every
+   wa.me link, and pushes a whatsapp_click event to the dataLayer.
+   Touches no cart, checkout, order or payment code. Fails silently.
+   ════════════════════════════════════════════════════════════════════════ #}
+<script>
+(function () {
+  'use strict';
+  var COOKIE = 'mi_cid';
+  var DAYS   = 90;
+
+  function readCookie(n) {
+    try {
+      var parts = ('; ' + document.cookie).split('; ' + n + '=');
+      return parts.length === 2 ? decodeURIComponent(parts.pop().split(';').shift()) : '';
+    } catch (e) { return ''; }
+  }
+
+  function writeCookie(n, v) {
+    try {
+      var d = new Date();
+      d.setTime(d.getTime() + DAYS * 86400000);
+      document.cookie = n + '=' + encodeURIComponent(v) +
+        ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax' +
+        (location.protocol === 'https:' ? ';Secure' : '');
+    } catch (e) {}
+  }
+
+  function fromUrl() {
+    try {
+      var q = new URLSearchParams(window.location.search);
+      var keys = ['gclid', 'gbraid', 'wbraid'];
+      for (var i = 0; i < keys.length; i++) {
+        var v = q.get(keys[i]);
+        if (v && /^[A-Za-z0-9_.\-]{10,200}$/.test(v)) { return keys[i] + ':' + v; }
+      }
+    } catch (e) {}
+    return '';
+  }
+
+  var stored = readCookie(COOKIE);
+  var fresh  = fromUrl();
+  if (fresh) { writeCookie(COOKIE, fresh); stored = fresh; }
+  if (!stored) { return; }
+
+  var raw = stored.split(':')[1] || '';
+  if (!raw) { return; }
+  var ref = raw.replace(/[^A-Za-z0-9]/g, '').slice(-6).toUpperCase();
+  if (ref.length < 4) { return; }
+
+  window.miClickRef = ref;
+  window.miClickId  = raw;
+
+  function stampLinks() {
+    var links = document.querySelectorAll('a[href*="wa.me/16173008178"]');
+    for (var i = 0; i < links.length; i++) {
+      var a = links[i];
+      if (a.getAttribute('data-mi-ref') === '1') { continue; }
+      try {
+        var u = new URL(a.href, window.location.origin);
+        var t = u.searchParams.get('text') || '';
+        if (t.indexOf('Ref: ') === -1) {
+          u.searchParams.set('text', t ? (t + ' (Ref: ' + ref + ')') : ('Hi, I have a question. (Ref: ' + ref + ')'));
+          a.href = u.toString();
+        }
+        a.setAttribute('data-mi-ref', '1');
+      } catch (e) {}
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', stampLinks, false);
+  } else {
+    stampLinks();
+  }
+
+  document.addEventListener('click', function (e) {
+    var a = e.target && e.target.closest ? e.target.closest('a[href*="wa.me/16173008178"], a[data-mi-tel="1"]') : null;
+    if (!a) { return; }
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: a.getAttribute('data-mi-tel') === '1' ? 'tel_click' : 'whatsapp_click',
+      mi_click_ref: ref,
+      mi_click_id: raw
+    });
+  }, false);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+{{ header }}
+
+{# ═══ S19 ANALYTICS: GA4 purchase (fires once; controller only supplies the
+   payload on the first visit after checkout, never on reload) ═══ #}
+{% if mi_purchase %}
+<script>
+(function(){
+  var p = {{ mi_purchase|raw }};
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({ecommerce: null});
+  window.dataLayer.push({event: 'purchase', ecommerce: p});
+})();
+</script>
+{% endif %}
+
+{# ═══ ORDER SUCCESS PAGE (Phase 7.3 Step 2) ═══════════════════════════════════
+   Themed equivalent of default/template/common/success.twig. Same OpenCart
+   data contract ($heading_title, $text_message, $continue, $button_continue,
+   breadcrumbs, content_top/bottom), adds the brand chrome and the social
+   strip from social_locations.order_success.
+   ════════════════════════════════════════════════════════════════════════════ #}
+
+<div class="mi-container" style="padding-top:32px;padding-bottom:48px;">
+  <ul class="breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+    {% endfor %}
+  </ul>
+
+  <div id="common-success">
+    {{ column_left }}
+    {{ content_top }}
+
+    <div style="max-width:680px;margin:32px auto;text-align:center;">
+      <div style="font-size:64px;line-height:1;margin-bottom:16px;" aria-hidden="true">✓</div>
+      <h1 style="font-size:32px;font-weight:700;margin:0 0 12px;color:var(--mi-text-headline);">{{ heading_title }}</h1>
+      <div style="font-size:16px;line-height:1.6;color:var(--mi-text-secondary);margin:0 0 24px;">{{ text_message }}</div>
+
+      <div style="margin:32px 0;">
+        <a href="{{ continue }}" class="mi-btn mi-btn--primary mi-btn--lg">{{ button_continue }}</a>
+      </div>
+
+      {# ── Post-purchase socials (Phase 7.3 Step 2) ── #}
+      {% if social_locations.order_success is defined and social_locations.order_success|length > 0 %}
+      <div class="mi-social-section mi-social-section--success">
+        <p class="mi-socials-heading">Stay in the loop. Follow us on:</p>
+        <div class="mi-socials mi-socials--large mi-socials--centered">
+          {% for s in social_locations.order_success %}
+          <a class="mi-social mi-social--{{ s.platform }}"
+             {% if s.has_qr or s.platform == 'wechat' %}href="#" data-mi-qr="{{ s.id }}"{% else %}href="{{ s.url }}" target="_blank" rel="noopener noreferrer"{% endif %}
+             aria-label="{{ s.name }}">
+            <span class="mi-social-ico"></span>
+            <span class="mi-social-label">{{ s.name }}</span>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    {{ content_bottom }}
+    {{ column_right }}
+  </div>
+</div>
+
+{{ footer }}

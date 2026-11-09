@@ -1,0 +1,194 @@
+{# The Miner Island: Staff Verification page (fraud prevention).
+   Standalone storefront page, route extension/module/staff_auth,
+   pretty URL /staff-verification. Styled with mi-* tokens; all CSS scoped
+   under .mi-staff-auth so it is self-contained (no stylesheet.css edit needed).
+   STAFF-AUTH-v1 #}
+{{ header }}
+
+<div id="staff-auth" class="container">
+
+  <ul class="breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+      <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+    {% endfor %}
+  </ul>
+
+  <div class="row">
+    <div id="content" class="col-sm-12">
+
+      <section class="mi-staff-auth">
+        <header class="mi-staff-auth__head">
+          <h1 class="mi-staff-auth__title">{{ heading_title }}</h1>
+          <p class="mi-staff-auth__intro">{{ text_intro }}</p>
+        </header>
+
+        <div class="mi-staff-auth__grid">
+          {# ── Left: the verifier ── #}
+          <div class="mi-staff-auth__panel mi-staff-auth__panel--form">
+            <div class="mi-staff-auth__field">
+              <label for="mi-sa-platform" class="mi-staff-auth__label">{{ entry_platform }}</label>
+              <select id="mi-sa-platform" class="mi-staff-auth__select">
+                {% for p in platforms %}
+                <option value="{{ p.key }}">{{ p.label }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="mi-staff-auth__field">
+              <label for="mi-sa-account" class="mi-staff-auth__label">{{ entry_account }}</label>
+              <input type="text" id="mi-sa-account" class="mi-staff-auth__input" placeholder="{{ placeholder_account }}" autocomplete="off" />
+              <p class="mi-staff-auth__hint">{{ help_example }}</p>
+            </div>
+
+            <button type="button" id="mi-sa-verify" class="mi-btn mi-staff-auth__btn">
+              <span>{{ button_verify }}</span>
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </button>
+          </div>
+
+          {# ── Right: the result ── #}
+          <div class="mi-staff-auth__panel mi-staff-auth__panel--result" id="mi-sa-result" data-state="idle"
+               data-contact-url="{{ contact_url }}">
+            <div class="mi-staff-auth__result-inner">
+              <div class="mi-staff-auth__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <p class="mi-staff-auth__result-text">{{ text_result_idle }}</p>
+            </div>
+          </div>
+        </div>
+
+        {# ── Safety tips ── #}
+        <div class="mi-staff-auth__tips">
+          <h2 class="mi-staff-auth__tips-title">{{ text_safety_tips }}</h2>
+          <ul class="mi-staff-auth__tips-list">
+            <li>{{ tip_1 }}</li>
+            <li>{{ tip_2 }}</li>
+            <li>{{ tip_3 }}</li>
+            <li>{{ tip_4 }}</li>
+          </ul>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<style>
+/* STAFF-AUTH-v1: scoped page styles using mi-* tokens */
+.mi-staff-auth{max-width:var(--mi-container-wide);margin:0 auto;padding:8px 0 48px}
+.mi-staff-auth__head{margin-bottom:28px}
+.mi-staff-auth__title{font-family:var(--mi-font-display);color:var(--mi-text-headline);font-size:2.2rem;line-height:1.15;margin:0 0 12px}
+.mi-staff-auth__intro{color:var(--mi-text-secondary);font-size:1.02rem;line-height:1.6;max-width:80ch;margin:0}
+.mi-staff-auth__grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:stretch}
+.mi-staff-auth__panel{background:var(--mi-bg-card);border:1px solid var(--mi-border);border-radius:var(--mi-radius-xl);padding:28px;box-shadow:var(--mi-shadow-sm)}
+.mi-staff-auth__field{margin-bottom:20px}
+.mi-staff-auth__label{display:block;font-weight:600;color:var(--mi-text-headline);margin-bottom:8px;font-size:.95rem}
+.mi-staff-auth__select,.mi-staff-auth__input{box-sizing:border-box;width:100%;height:50px;padding:0 15px;line-height:normal;border:1px solid var(--mi-border-defined);border-radius:var(--mi-radius-md);font-size:1rem;font-family:var(--mi-font-body);color:var(--mi-text-body);background-color:var(--mi-bg-page);transition:border-color var(--mi-dur-fast) var(--mi-ease-out),box-shadow var(--mi-dur-fast) var(--mi-ease-out)}
+.mi-staff-auth__select{-webkit-appearance:none;-moz-appearance:none;appearance:none;padding-right:42px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 15px center}
+.mi-staff-auth__select:focus,.mi-staff-auth__input:focus{outline:none;border-color:var(--mi-color-primary);box-shadow:var(--mi-shadow-focus-ring)}
+.mi-staff-auth__hint{margin:8px 0 0;font-size:.85rem;color:var(--mi-text-muted)}
+.mi-staff-auth__btn{width:100%;justify-content:center;gap:8px;margin-top:4px;font-size:1.02rem}
+.mi-staff-auth__panel--result{display:flex;align-items:center;justify-content:center;text-align:center;background:var(--mi-bg-soft)}
+.mi-staff-auth__result-inner{width:100%}
+.mi-staff-auth__icon{color:var(--mi-text-tertiary);margin-bottom:14px;display:flex;justify-content:center}
+.mi-staff-auth__result-text{color:var(--mi-text-secondary);font-size:1rem;margin:0;line-height:1.55}
+.mi-staff-auth__result-name{font-family:var(--mi-font-display);font-size:1.25rem;color:var(--mi-text-headline);margin:0 0 4px;font-weight:700}
+.mi-staff-auth__result-role{color:var(--mi-text-muted);font-size:.92rem;margin:0 0 10px}
+.mi-staff-auth__result-head{font-weight:700;font-size:1.1rem;margin:0 0 8px}
+.mi-staff-auth__chip{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;font-weight:600;padding:4px 12px;border-radius:var(--mi-radius-full);margin-bottom:12px}
+/* verified state */
+.mi-staff-auth__panel--result[data-state="verified"]{background:var(--mi-color-success-soft);border-color:var(--mi-color-success)}
+.mi-staff-auth__panel--result[data-state="verified"] .mi-staff-auth__icon,
+.mi-staff-auth__panel--result[data-state="verified"] .mi-staff-auth__result-head{color:var(--mi-color-success)}
+.mi-staff-auth__panel--result[data-state="verified"] .mi-staff-auth__chip{background:var(--mi-color-success);color:#fff}
+/* unverified state */
+.mi-staff-auth__panel--result[data-state="unverified"]{background:var(--mi-color-error-soft);border-color:var(--mi-color-error)}
+.mi-staff-auth__panel--result[data-state="unverified"] .mi-staff-auth__icon,
+.mi-staff-auth__panel--result[data-state="unverified"] .mi-staff-auth__result-head{color:var(--mi-color-error)}
+.mi-staff-auth__panel--result[data-state="unverified"] .mi-staff-auth__chip{background:var(--mi-color-error);color:#fff}
+.mi-staff-auth__support{display:inline-block;margin-top:14px;font-weight:600;color:var(--mi-text-link);text-decoration:underline}
+.mi-staff-auth__support:hover{color:var(--mi-text-link-hover)}
+.mi-staff-auth__tips{margin-top:32px;background:var(--mi-bg-subtle);border:1px solid var(--mi-border-subtle);border-radius:var(--mi-radius-lg);padding:24px 26px}
+.mi-staff-auth__tips-title{font-family:var(--mi-font-display);font-size:1.15rem;color:var(--mi-text-headline);margin:0 0 14px}
+.mi-staff-auth__tips-list{margin:0;padding-left:20px;color:var(--mi-text-secondary)}
+.mi-staff-auth__tips-list li{margin-bottom:9px;line-height:1.55}
+.mi-staff-auth__tips-list li:last-child{margin-bottom:0}
+.mi-staff-auth--loading .mi-staff-auth__btn{opacity:.7;pointer-events:none}
+@media (max-width:767px){.mi-staff-auth__grid{grid-template-columns:1fr}.mi-staff-auth__title{font-size:1.7rem}}
+</style>
+
+<script>
+(function(){
+  var btn = document.getElementById('mi-sa-verify');
+  var platform = document.getElementById('mi-sa-platform');
+  var account = document.getElementById('mi-sa-account');
+  var result = document.getElementById('mi-sa-result');
+  var section = document.querySelector('.mi-staff-auth');
+  if(!btn || !result){return;}
+
+  var CHECK_URL = {{ check_url|json_encode|raw }};
+  var L = {
+    verifying: {{ text_verifying|json_encode|raw }},
+    idle: {{ text_result_idle|json_encode|raw }},
+    required: {{ text_input_required|json_encode|raw }}
+  };
+
+  function esc(s){var d=document.createElement('div');d.textContent=(s==null?'':s);return d.innerHTML;}
+
+  function render(state, html){
+    result.setAttribute('data-state', state);
+    result.querySelector('.mi-staff-auth__result-inner').innerHTML = html;
+  }
+
+  function verifying(){
+    section.classList.add('mi-staff-auth--loading');
+    render('idle', '<div class="mi-staff-auth__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><p class="mi-staff-auth__result-text">'+esc(L.verifying)+'</p>');
+  }
+
+  function showVerified(d){
+    var role = d.title ? '<p class="mi-staff-auth__result-role">'+esc(d.title)+'</p>' : '';
+    render('verified',
+      '<div class="mi-staff-auth__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg></div>'+
+      '<span class="mi-staff-auth__chip">'+esc(d.heading)+'</span>'+
+      '<p class="mi-staff-auth__result-name">'+esc(d.name)+'</p>'+role+
+      '<p class="mi-staff-auth__result-text">'+esc(d.message)+'</p>');
+  }
+
+  function showUnverified(d){
+    var link = d.contact_url ? '<a class="mi-staff-auth__support" href="'+esc(d.contact_url)+'">'+esc(d.contact_label)+'</a>' : '';
+    render('unverified',
+      '<div class="mi-staff-auth__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>'+
+      '<p class="mi-staff-auth__result-head">'+esc(d.heading)+'</p>'+
+      '<p class="mi-staff-auth__result-text">'+esc(d.message)+'</p>'+link);
+  }
+
+  function showError(msg){
+    render('idle', '<div class="mi-staff-auth__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><p class="mi-staff-auth__result-text">'+esc(msg)+'</p>');
+  }
+
+  function run(){
+    if(!account.value.trim()){ showError(L.required); return; }
+    verifying();
+    var body = 'platform='+encodeURIComponent(platform.value)+'&account='+encodeURIComponent(account.value);
+    fetch(CHECK_URL, {
+      method:'POST',
+      headers:{'Content-Type':'application/x-www-form-urlencoded','X-Requested-With':'XMLHttpRequest'},
+      body: body
+    }).then(function(r){return r.json();}).then(function(d){
+      section.classList.remove('mi-staff-auth--loading');
+      if(d.status === 'verified'){ showVerified(d); }
+      else if(d.status === 'unverified'){ showUnverified(d); }
+      else { showError(d.message || L.required); }
+    }).catch(function(){
+      section.classList.remove('mi-staff-auth--loading');
+      showError(L.required);
+    });
+  }
+
+  btn.addEventListener('click', run);
+  account.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ run(); } });
+})();
+</script>
+
+{{ footer }}

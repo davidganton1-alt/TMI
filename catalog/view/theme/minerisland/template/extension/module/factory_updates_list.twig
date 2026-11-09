@@ -1,0 +1,273 @@
+{#
+   Factory Updates listing template
+
+   Renders a paginated grid of published posts, newest first.
+   Built to match the existing minerisland theme: .mi-container, .mi-prose,
+   .mi-btn, design tokens already in stylesheet.css.
+
+   Inline <style> scoped to .mi-blog-list for the blog-specific tokens.
+   Step 5 will lift these into stylesheet.css alongside .mi-team-grid.
+   Until then, this self-contained CSS guarantees the page renders cleanly
+   the moment Step 2 deploys, without waiting on Step 5.
+
+   Variables expected from controller:
+     posts             : array of {title, excerpt, hero_image, date, author, href}
+     heading_title     : page H1
+     intro_text        : paragraph under H1
+     breadcrumbs       : array of {text, href}
+     page, total_pages : pagination state
+     prev_href, next_href : empty string if no prev/next
+     total             : total post count (used in copy)
+     jsonld            : pre-serialized JSON-LD string
+#}
+{{ header }}
+<!-- FACTORY-UPDATES-TEMPLATE WIDTHFIX-v4 2026-05-30 -->
+
+<style>
+.mi-blog-list { padding: var(--mi-sp-10) 0 var(--mi-sp-16); }
+.mi-blog-list__intro { margin-bottom: var(--mi-sp-10); max-width: none !important; width: 100% !important; }
+.mi-blog-list__intro h1 { font-size: var(--mi-fs-4xl); margin: 0 0 var(--mi-sp-3); line-height: 1.1; max-width: none !important; width: auto !important; }
+.mi-blog-list__intro p  { color: var(--mi-text-body); font-size: var(--mi-fs-md); line-height: var(--mi-lh-relaxed); margin: 0; max-width: none !important; }
+.mi-blog-list__meta { color: var(--mi-text-muted); font-size: var(--mi-fs-sm); margin-top: var(--mi-sp-4); }
+
+.mi-blog-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--mi-sp-8);
+}
+@media (max-width: 960px) { .mi-blog-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--mi-sp-6); } }
+@media (max-width: 640px) { .mi-blog-grid { grid-template-columns: 1fr; gap: var(--mi-sp-6); } }
+
+.mi-blog-card {
+  display: flex; flex-direction: column;
+  background: #FFFFFF;
+  border: 1px solid var(--mi-border-subtle);
+  border-radius: var(--mi-radius-lg);
+  overflow: hidden;
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  text-decoration: none; color: inherit;
+}
+.mi-blog-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--mi-border-defined);
+  box-shadow: 0 6px 24px rgba(15, 23, 42, 0.08);
+  text-decoration: none;
+}
+.mi-blog-card__img {
+  display: block; width: 100%; aspect-ratio: 16/9; object-fit: cover;
+  background: #F1F5F9;
+}
+.mi-blog-card__body { padding: var(--mi-sp-5) var(--mi-sp-5) var(--mi-sp-6); flex: 1; display: flex; flex-direction: column; }
+.mi-blog-card__date {
+  color: var(--mi-text-muted);
+  font-size: var(--mi-fs-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--mi-letter-wider);
+  font-weight: var(--mi-fw-semibold);
+  margin-bottom: var(--mi-sp-2);
+}
+.mi-blog-card__title {
+  font-size: var(--mi-fs-lg);
+  font-weight: var(--mi-fw-bold);
+  line-height: 1.3;
+  margin: 0 0 var(--mi-sp-3);
+  color: var(--mi-text-headline);
+}
+.mi-blog-card__excerpt {
+  font-size: var(--mi-fs-sm);
+  line-height: var(--mi-lh-relaxed);
+  color: var(--mi-text-body);
+  margin: 0 0 var(--mi-sp-4);
+  flex: 1;
+}
+.mi-blog-card__cta {
+  font-size: var(--mi-fs-sm);
+  font-weight: var(--mi-fw-semibold);
+  color: var(--mi-color-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.mi-blog-card:hover .mi-blog-card__cta { color: var(--mi-color-primary-dark); }
+
+/* Pagination */
+.mi-blog-pagination {
+  display: flex; justify-content: center; align-items: center;
+  gap: var(--mi-sp-3);
+  margin-top: var(--mi-sp-12);
+  padding-top: var(--mi-sp-6);
+  border-top: 1px solid var(--mi-border-subtle);
+}
+.mi-blog-pagination__info { color: var(--mi-text-muted); font-size: var(--mi-fs-sm); }
+.mi-blog-pagination__link {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 10px 16px;
+  border-radius: var(--mi-radius-md);
+  border: 1px solid var(--mi-border-defined);
+  background: #FFFFFF;
+  color: var(--mi-text-headline);
+  font-size: var(--mi-fs-sm);
+  font-weight: var(--mi-fw-semibold);
+  text-decoration: none;
+}
+.mi-blog-pagination__link:hover { border-color: var(--mi-color-primary); color: var(--mi-color-primary); text-decoration: none; }
+.mi-blog-pagination__link[aria-disabled="true"] {
+  opacity: 0.4; pointer-events: none; cursor: default;
+}
+
+/* Empty state */
+.mi-blog-empty {
+  padding: var(--mi-sp-12) var(--mi-sp-6);
+  text-align: center;
+  background: var(--mi-bg-soft);
+  border: 1px dashed var(--mi-border-defined);
+  border-radius: var(--mi-radius-lg);
+  color: var(--mi-text-muted);
+}
+
+/* Category filter bar */
+.mi-blog-filters {
+  display: flex; flex-wrap: wrap; gap: var(--mi-sp-2);
+  margin-bottom: var(--mi-sp-8);
+}
+.mi-blog-filter {
+  display: inline-flex; align-items: center;
+  padding: 7px 15px;
+  border-radius: 999px;
+  border: 1px solid var(--mi-border-defined);
+  background: #FFFFFF;
+  color: var(--mi-text-body);
+  font-size: var(--mi-fs-sm);
+  font-weight: var(--mi-fw-semibold);
+  text-decoration: none;
+  transition: border-color .15s ease, color .15s ease, background .15s ease;
+}
+.mi-blog-filter:hover { border-color: var(--mi-color-primary); color: var(--mi-color-primary); text-decoration: none; }
+.mi-blog-filter--active {
+  background: var(--mi-color-primary);
+  border-color: var(--mi-color-primary);
+  color: var(--mi-text-on-primary, #FFFFFF);
+}
+.mi-blog-filter--active:hover { color: var(--mi-text-on-primary, #FFFFFF); }
+
+/* What We Cover + Stay Updated */
+.mi-blog-cover { margin-top: var(--mi-sp-16); padding-top: var(--mi-sp-10); border-top: 1px solid var(--mi-border-subtle); }
+.mi-blog-cover h2, .mi-blog-stay h2 { font-size: var(--mi-fs-2xl); margin: 0 0 var(--mi-sp-6); }
+.mi-blog-cover__grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: var(--mi-sp-6) var(--mi-sp-8); }
+@media (max-width: 640px) { .mi-blog-cover__grid { grid-template-columns: 1fr; } }
+.mi-blog-cover__item h3 { font-size: var(--mi-fs-md); color: var(--mi-color-primary); margin: 0 0 var(--mi-sp-2); }
+.mi-blog-cover__item p { margin: 0; color: var(--mi-text-body); font-size: var(--mi-fs-sm); line-height: var(--mi-lh-relaxed); }
+.mi-blog-stay { margin-top: var(--mi-sp-12); padding: var(--mi-sp-8); background: var(--mi-bg-soft); border-radius: var(--mi-radius-lg); }
+.mi-blog-stay p { margin: 0 0 var(--mi-sp-5); color: var(--mi-text-body); max-width: 64ch; }
+.mi-blog-stay__actions { display: flex; flex-wrap: wrap; gap: var(--mi-sp-3); margin-bottom: var(--mi-sp-6); }
+.mi-blog-related { display: flex; flex-wrap: wrap; gap: var(--mi-sp-4); padding-top: var(--mi-sp-5); border-top: 1px solid var(--mi-border-subtle); }
+.mi-blog-related a { font-size: var(--mi-fs-sm); font-weight: var(--mi-fw-semibold); color: var(--mi-color-primary); text-decoration: none; }
+.mi-blog-related a:hover { text-decoration: underline; }
+</style>
+
+<div class="mi-container mi-blog-list">
+
+  {# ── Breadcrumbs ──────────────────────────────────────────────────── #}
+  <ul class="breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+      <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+    {% endfor %}
+  </ul>
+
+  {# ── Intro ───────────────────────────────────────────────────────── #}
+  <header class="mi-blog-list__intro">
+    <h1>{{ heading_title }}</h1>
+    <p>{{ intro_text }}</p>
+    {% if total > 0 %}
+      <div class="mi-blog-list__meta">
+        {{ total }} post{% if total != 1 %}s{% endif %}{% if total_pages > 1 %} &middot; Page {{ page }} of {{ total_pages }}{% endif %}
+      </div>
+    {% endif %}
+  </header>
+
+  {# ── Category filter bar ──────────────────────────────────────────── #}
+  {% if categories %}
+    <nav class="mi-blog-filters" aria-label="Filter by category">
+      {% for cat in categories %}
+        <a href="{{ cat.href }}" class="mi-blog-filter{% if cat.active %} mi-blog-filter--active{% endif %}">{{ cat.label }}</a>
+      {% endfor %}
+    </nav>
+  {% endif %}
+
+  {# ── Posts grid ──────────────────────────────────────────────────── #}
+  {% if posts %}
+    <div class="mi-blog-grid">
+      {% for post in posts %}
+        <a href="{{ post.href }}" class="mi-blog-card">
+          <img src="{{ post.hero_image }}" alt="{{ post.title }}" class="mi-blog-card__img" loading="lazy" />
+          <div class="mi-blog-card__body">
+            <div class="mi-blog-card__date">{{ post.date }}{% if post.category %} &middot; {{ post.category }}{% endif %}</div>
+            <h2 class="mi-blog-card__title">{{ post.title }}</h2>
+            <p class="mi-blog-card__excerpt">{{ post.excerpt }}</p>
+            <span class="mi-blog-card__cta">
+              Read more
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:14px;height:14px"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </span>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+
+    {# ── Pagination ──────────────────────────────────────────────── #}
+    {% if total_pages > 1 %}
+      <nav class="mi-blog-pagination" aria-label="Pagination">
+        <a href="{{ prev_href }}" class="mi-blog-pagination__link" {% if not prev_href %}aria-disabled="true"{% endif %} rel="prev">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:14px;height:14px"><polyline points="15 18 9 12 15 6"/></svg>
+          Newer
+        </a>
+        <span class="mi-blog-pagination__info">Page {{ page }} of {{ total_pages }}</span>
+        <a href="{{ next_href }}" class="mi-blog-pagination__link" {% if not next_href %}aria-disabled="true"{% endif %} rel="next">
+          Older
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:14px;height:14px"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </nav>
+    {% endif %}
+  {% else %}
+    <div class="mi-blog-empty">
+      <p>No updates have been published yet. Check back soon, or message us on WhatsApp for direct answers in the meantime.</p>
+    </div>
+  {% endif %}
+
+  {# ── What We Cover ────────────────────────────────────────────────── #}
+  {% if cover_sections %}
+    <section class="mi-blog-cover">
+      <h2>What We Cover</h2>
+      <div class="mi-blog-cover__grid">
+        {% for c in cover_sections %}
+          <div class="mi-blog-cover__item">
+            <h3>{{ c.title }}</h3>
+            <p>{{ c.body }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+
+  {# ── Stay Updated ─────────────────────────────────────────────────── #}
+  <section class="mi-blog-stay">
+    <h2>Stay Updated</h2>
+    <p>New posts are published weekly. Follow us on our social channels or message us on WhatsApp to be notified when new content goes live.</p>
+    <div class="mi-blog-stay__actions">
+      <a href="{{ whatsapp_url }}" class="mi-btn mi-btn--whatsapp" target="_blank" rel="noopener">WhatsApp +1 617 300 8178</a>
+      <a href="{{ email_url }}" class="mi-btn mi-btn--primary">Email sales@theminerisland.com</a>
+    </div>
+    {% if related_links %}
+      <div class="mi-blog-related">
+        {% for link in related_links %}
+          <a href="{{ link.href }}">{{ link.text }}</a>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </section>
+
+</div>
+
+{# ── JSON-LD structured data (Blog schema) ─────────────────────────── #}
+<script type="application/ld+json">{{ jsonld|raw }}</script>
+
+{{ footer }}

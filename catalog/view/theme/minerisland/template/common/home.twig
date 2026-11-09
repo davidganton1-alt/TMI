@@ -1,0 +1,708 @@
+{# Custom homepage template (overrides default theme/default/template/common/home.twig)
+   Session 11 changes (May 30, 2026):
+   - Hero rewritten for buy-intent SEO H1 + 4-item trust strip (added Crypto Payments)
+   - USP strip rewritten, fixes crypto-only contradiction in old cell #4
+   - NEW section: We only accept cryptocurrency payments (reuses Phase 8b pill styles)
+   - NEW section: Homepage FAQ + FAQPage JSON-LD + Organization JSON-LD schemas
+   - Category tiles, trust band, CTA copy refreshed to match new content draft
+   - All em-dashes and en-dashes stripped per project style rule
+   Earlier Phase 3.1 changes preserved:
+   - All hardcoded URLs swapped to clean SEO slugs (bitcoin-miners-shop, etc)
+   - Warehouse references locked to Hong Kong throughout
+   - Hero visual: video slot on top, stat card below
+#}
+{{ header }}
+
+<div id="common-home">
+
+  {# ═══ HERO ═════════════════════════════════════════════════════════════ #}
+  <section class="mi-hero">
+    <div class="mi-container">
+      <div class="mi-hero__inner">
+        <div class="mi-hero__copy">
+          <span class="mi-hero__eyebrow">
+            <span class="mi-hero__pulse"></span>
+            61 ASIC models in stock, ships worldwide from our Hong Kong warehouse
+          </span>
+          <h1 class="mi-hero__title">
+            Buy ASIC mining hardware with On-Chain Escrow and seamless crypto payments,<br>
+            <span class="mi-hero__title-accent">delivered DDP to your door.</span>
+          </h1>
+          <p class="mi-hero__sub">
+            Bitmain, MicroBT, IceRiver, Canaan, Goldshell and more. 61 ASIC models in stock,
+            shipping from our Hong Kong warehouse in 24 to 72 hours. We accept Bitcoin, USDT,
+            ETH and other major cryptocurrencies. <strong>Pay in BTC and save 3% on your entire order.</strong>
+          </p>
+          <div class="mi-hero__cta">
+            <a href="bitcoin-miners-shop" class="mi-btn mi-btn--orange mi-btn--lg">
+              Shop ASIC Miners
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:18px;height:18px;margin-left:8px;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+            <a href="https://wa.me/16173008178" class="mi-btn mi-btn--whatsapp mi-btn--lg" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:18px;height:18px;margin-right:8px;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.074-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413"/></svg>
+              WhatsApp Us
+            </a>
+          </div>
+          <div class="mi-hero__trust">
+            <div class="mi-hero__trust-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span><strong>Verified U.S. LLC</strong> &middot; Maine Charter #20197812DC, Good Standing</span>
+            </div>
+            <div class="mi-hero__trust-item">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+  <span><strong>On-Chain Escrow</strong> &middot; 20-day buyer protection on every order over $5,000</span>
+</div>
+            <div class="mi-hero__trust-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+              <span><strong>60-day replacement warranty</strong> &middot; on every unit, new or refurbished</span>
+            </div>
+            <div class="mi-hero__trust-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+              <span><strong>DDP-paid shipping</strong> &middot; free on orders over $5,000, customs handled end-to-end</span>
+            </div>
+            <div class="mi-hero__trust-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <span><strong>Crypto payments only</strong> &middot; BTC, ETH, USDT and more accepted</span>
+            </div>
+          </div>
+        </div>
+
+        {# ── Hero visual: video on top, stat card below (desktop only) ── #}
+        <div class="mi-hero__visual" aria-hidden="true">
+          <div class="mi-hero__video">
+            {# Self-hosted MP4 ,  upload your video to                         #}
+            {# catalog/view/theme/minerisland/image/hero-video.mp4 and        #}
+            {# optionally hero-video-poster.jpg for the still frame.          #}
+            {# Until both exist, the video tag shows the poster (if any) or  #}
+            {# the surrounding background gradient.                          #}
+            <video
+              autoplay muted loop playsinline preload="metadata"
+              poster="catalog/view/theme/minerisland/image/hero-video-poster.jpg"
+              class="mi-hero__video-el">
+              <source src="catalog/view/theme/minerisland/image/hero-video.mp4" type="video/mp4">
+            </video>
+            <div class="mi-hero__video-overlay"></div>
+          </div>
+
+          <div class="mi-hero__visual-card">
+            <div class="mi-hero__stat">
+              <div class="mi-hero__stat-num">61</div>
+              <div class="mi-hero__stat-lbl">ASIC models in stock</div>
+            </div>
+            <div class="mi-hero__stat">
+              <div class="mi-hero__stat-num">24-72h</div>
+              <div class="mi-hero__stat-lbl">Shipping from Hong Kong</div>
+            </div>
+            <div class="mi-hero__stat">
+              <div class="mi-hero__stat-num">3%</div>
+              <div class="mi-hero__stat-lbl">Off when you pay in BTC</div>
+            </div>
+            <div class="mi-hero__stat">
+              <div class="mi-hero__stat-num">7×</div>
+              <div class="mi-hero__stat-lbl">Manufacturer brands</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {# ═══ USP STRIP ,  Why The Miner Island ═══════════════════════════════════ #}
+  <section class="mi-section mi-section--sm" style="background: var(--mi-bg-soft); border-bottom: 1px solid var(--mi-border-subtle);">
+    <div class="mi-container">
+      <div class="mi-section-head">
+        <h2 class="mi-section-head__title">Why miners buy from The Miner Island</h2>
+        <p class="mi-section-head__sub">Most ASIC hardware vendors are brokers. They don't hold stock, they don't handle customs, and they disappear when something goes wrong. We operate differently.</p>
+      </div>
+      <div class="mi-usp" style="margin-top: var(--mi-sp-6);">
+        <div class="mi-usp__cell">
+          <div class="mi-usp__icon" style="background: var(--mi-color-primary-soft); color: var(--mi-color-primary);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+          </div>
+          <div class="mi-usp__title">No Third-Party Brokers</div>
+          <div class="mi-usp__desc">Every order ships directly from our Hong Kong warehouse. No middlemen, no markup chains, no delays caused by someone else's inventory problem.</div>
+        </div>
+        <div class="mi-usp__cell">
+          <div class="mi-usp__icon" style="background: rgba(247, 147, 26, 0.10); color: var(--mi-color-orange);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          </div>
+          <div class="mi-usp__title">Real Stock. Real Prices.</div>
+          <div class="mi-usp__desc">All 61 miners listed on our site are physically in our warehouse and ready to ship within 24 to 72 hours. What you see is what we have.</div>
+        </div>
+        <div class="mi-usp__cell">
+          <div class="mi-usp__icon" style="background: var(--mi-color-success-soft); color: var(--mi-color-success);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <div class="mi-usp__title">Direct OEM Relationships</div>
+          <div class="mi-usp__desc">We source directly from Bitmain, MicroBT, IceRiver, Canaan, Goldshell and ElphaPex. Faster access to new platforms, better pricing than distributors.</div>
+        </div>
+        <div class="mi-usp__cell">
+          <div class="mi-usp__icon" style="background: rgba(247, 147, 26, 0.10); color: #F7931A;">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11.767 19.089c4.924.868 6.14-6.025 1.216-6.894m-1.216 6.894L5.86 18.047m5.908 1.042-.347 1.97m1.563-8.864c4.924.869 6.14-6.025 1.215-6.893m-1.215 6.893-3.94-.694m5.155-6.2L8.29 4.26m5.908 1.042.348-1.97M7.48 20.364l3.126-17.727"/></svg>
+          </div>
+          <div class="mi-usp__title">Crypto-Native Business</div>
+          <div class="mi-usp__desc">Crypto-only operation. We accept Bitcoin, USDT, ETH and other major digital assets. No bank wires, no card fees, no fiat friction. Pay in BTC and save 3%.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+{# ═══════════════════════════════════════════════════════════════
+   NON-CUSTODIAL ESCROW PARTNERS STRIP
+   Paste directly BELOW the "Why miners buy from The Miner Island" section
+   ═══════════════════════════════════════════════════════════════ #}
+<section class="mi-escrow-strip">
+  <div class="mi-container">
+
+    {# ── Header row ── #}
+    <div class="mi-escrow-strip__head">
+      <div>
+        <div style="font-size: 12px; font-weight: var(--mi-fw-bold); letter-spacing: .08em; text-transform: uppercase; color: var(--mi-color-success); margin-bottom: 8px;">Non-Custodial Escrow</div>
+        <h2 class="mi-h2" style="margin: 0 0 10px;">Your crypto is held by code, not by us</h2>
+        <p style="color: var(--mi-text-secondary); font-size: var(--mi-fs-md); max-width: 62ch; margin: 0;">
+          Every escrow-protected order settles through independent, non-custodial escrow infrastructure.
+          Funds sit in a smart contract neither party can touch, and release only on the rules you agreed to at checkout.
+        </p>
+      </div>
+      <div style="flex-shrink: 0;">
+        <a href="factory-updates/non-custodial-on-chain-escrow-asic-miners" class="mi-btn mi-btn--primary">How escrow works</a>
+      </div>
+    </div>
+
+    {# ── Partner cards ── #}
+    <div class="mi-escrow-strip__grid">
+
+      <div class="mi-escrow-partner">
+        <div class="mi-escrow-partner__top">
+          <span class="mi-escrow-partner__mark" style="background: var(--mi-color-primary-soft); color: var(--mi-color-primary);">Z</span>
+          <div>
+            <div class="mi-escrow-partner__name">ZenLand</div>
+            <div class="mi-escrow-partner__domain">zen.land</div>
+          </div>
+          <span class="mi-escrow-partner__pill">Non-custodial</span>
+        </div>
+        <p class="mi-escrow-partner__desc">Independent non-custodial escrow for high-value crypto trades, with transparent on-chain state and clear, published dispute rules.</p>
+      </div>
+
+      <div class="mi-escrow-partner">
+        <div class="mi-escrow-partner__top">
+          <span class="mi-escrow-partner__mark" style="background: var(--mi-color-warning-soft); color: var(--mi-color-warning);">B</span>
+          <div>
+            <div class="mi-escrow-partner__name">BitEscrow</div>
+            <div class="mi-escrow-partner__domain">bitescrow</div>
+          </div>
+          <span class="mi-escrow-partner__pill">Non-custodial</span>
+        </div>
+        <p class="mi-escrow-partner__desc">Smart-contract escrow that commits the funds up front and releases only when the agreed delivery conditions are met. No human custody.</p>
+      </div>
+
+      <div class="mi-escrow-partner">
+        <div class="mi-escrow-partner__top">
+          <span class="mi-escrow-partner__mark" style="background: var(--mi-color-success-soft); color: var(--mi-color-success);">T</span>
+          <div>
+            <div class="mi-escrow-partner__name">Trustless.work</div>
+            <div class="mi-escrow-partner__domain">trustless.work</div>
+          </div>
+          <span class="mi-escrow-partner__pill">Non-custodial</span>
+        </div>
+        <p class="mi-escrow-partner__desc">Fully trustless settlement infrastructure. No middleman, no custody. The contract enforces every step on a fixed, public clock.</p>
+      </div>
+
+    </div>
+
+    {# ── Guarantee row ── #}
+    <div class="mi-escrow-strip__guarantees">
+      <div class="mi-escrow-guarantee">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <div>
+          <strong>We never custody funds</strong>
+          <span>Escrowed crypto sits in a contract we cannot withdraw from, freeze, or move.</span>
+        </div>
+      </div>
+      <div class="mi-escrow-guarantee">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <div>
+          <strong>20-day protection hold</strong>
+          <span>Funds release to us only after the hold ends, or earlier if you confirm delivery.</span>
+        </div>
+      </div>
+      <div class="mi-escrow-guarantee">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+        <div>
+          <strong>Auto-refund on dispute</strong>
+          <span>Open a dispute inside the window and unresolved funds return to your wallet automatically.</span>
+        </div>
+      </div>
+      <div class="mi-escrow-guarantee">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        <div>
+          <strong>Verifiable on-chain</strong>
+          <span>Every escrow state, from funding to release, is public and independently checkable.</span>
+        </div>
+      </div>
+    </div>
+
+    <p style="color: var(--mi-text-muted); font-size: var(--mi-fs-xs); margin: var(--mi-sp-8) 0 0; text-align: center;">
+      Escrow settlement is provided by independent third-party infrastructure. The Miner Island is never a custodian of escrowed funds. Available on orders above $5,000.
+    </p>
+
+  </div>
+</section>
+
+<style>
+.mi-escrow-strip { background: var(--mi-bg-soft); border-top: 1px solid var(--mi-border-subtle); border-bottom: 1px solid var(--mi-border-subtle); padding: var(--mi-sp-16) 0; }
+.mi-escrow-strip__head { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--mi-sp-8); flex-wrap: wrap; margin-bottom: var(--mi-sp-10); }
+.mi-escrow-strip__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--mi-sp-6); }
+.mi-escrow-partner { background: var(--mi-bg-card); border: 1px solid var(--mi-border-subtle); border-radius: var(--mi-radius-lg); padding: var(--mi-sp-6); box-shadow: var(--mi-shadow-sm); transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease; }
+.mi-escrow-partner:hover { transform: translateY(-2px); border-color: var(--mi-border-defined); box-shadow: var(--mi-shadow-md); }
+.mi-escrow-partner__top { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.mi-escrow-partner__mark { width: 40px; height: 40px; border-radius: var(--mi-radius-md); display: flex; align-items: center; justify-content: center; font-weight: var(--mi-fw-extra); font-size: var(--mi-fs-lg); flex-shrink: 0; }
+.mi-escrow-partner__name { font-weight: var(--mi-fw-bold); color: var(--mi-text-headline); font-size: var(--mi-fs-md); }
+.mi-escrow-partner__domain { color: var(--mi-text-muted); font-size: var(--mi-fs-xs); }
+.mi-escrow-partner__pill { margin-left: auto; font-size: 11px; font-weight: var(--mi-fw-bold); text-transform: uppercase; letter-spacing: .04em; color: var(--mi-color-success); background: var(--mi-color-success-soft); border-radius: var(--mi-radius-full); padding: 3px 10px; white-space: nowrap; }
+.mi-escrow-partner__desc { margin: 0; color: var(--mi-text-body); font-size: var(--mi-fs-sm); line-height: var(--mi-lh-relaxed); }
+.mi-escrow-strip__guarantees { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--mi-sp-6); margin-top: var(--mi-sp-10); padding-top: var(--mi-sp-8); border-top: 1px solid var(--mi-border-subtle); }
+.mi-escrow-guarantee { display: flex; gap: 10px; align-items: flex-start; }
+.mi-escrow-guarantee svg { flex-shrink: 0; margin-top: 2px; color: var(--mi-color-success); }
+.mi-escrow-guarantee strong { display: block; color: var(--mi-text-headline); font-size: var(--mi-fs-sm); margin-bottom: 2px; }
+.mi-escrow-guarantee span { color: var(--mi-text-secondary); font-size: 13px; line-height: 1.5; }
+@media (max-width: 900px) {
+  .mi-escrow-strip__grid { grid-template-columns: 1fr; }
+  .mi-escrow-strip__guarantees { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .mi-escrow-strip__guarantees { grid-template-columns: 1fr; }
+}
+</style>
+  {# ═══ TRUST PAIR (Phase 7 ,  Step 5.2 redesign) ═══════════════════════
+     Restructured from 2-column grid → full-width team card + horizontal
+     factory strip below. The previous 2-col grid forced both cards to
+     match height, which made the factory card look thin with empty space.
+     This layout gives team the room it needs and reframes factory updates
+     as a compact "latest post" announcement strip ,  the same pattern used
+     by Stripe / Linear / Vercel homepages for "what's new" callouts. #}
+  <section class="mi-section mi-trustpair">
+    <div class="mi-container">
+      <div class="mi-section-head">
+        <h2 class="mi-section-head__title">Real team. Real warehouse. Open book.</h2>
+        <p class="mi-section-head__sub">Most ASIC vendors hide who they are. We do the opposite. Meet the people who pack your order, and read this week's notes from the floor.</p>
+      </div>
+
+      {# ── Team card (full width) ──────────────────────────────────── #}
+      <a href="{{ team_url }}" class="mi-trustpair__card mi-trustpair__card--team mi-trustpair__card--wide">
+        <div class="mi-trustpair__card-content">
+          <div class="mi-trustpair__eyebrow">The people behind the orders</div>
+          <h3 class="mi-trustpair__title">Meet the team</h3>
+          <p class="mi-trustpair__text">Six people. One Hong Kong warehouse. Real names and real faces behind every order, not a brokerage chain you'll never see.</p>
+          <span class="mi-trustpair__cta">
+            See our team
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:14px;height:14px"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </span>
+        </div>
+        <div class="mi-trustpair__card-visual">
+          <div class="mi-trustpair__faces" aria-hidden="true">
+            <span class="mi-trustpair__face" style="background-image:url('https://theminerisland.com/image/team/lucy-lee.jpg');"></span>
+            <span class="mi-trustpair__face" style="background-image:url('https://theminerisland.com/image/team/linda-chan.jpg');"></span>
+            <span class="mi-trustpair__face" style="background-image:url('https://theminerisland.com/image/team/mary-lu.jpg');"></span>
+            <span class="mi-trustpair__face" style="background-image:url('https://theminerisland.com/image/team/zhou-anxin.jpg');"></span>
+            <span class="mi-trustpair__face mi-trustpair__face--more">+2</span>
+          </div>
+        </div>
+      </a>
+
+      {# ── Factory update strip (compact horizontal band) ──────────── #}
+      {% if latest_post %}
+        <a href="{{ latest_post.href }}" class="mi-trustpair__strip">
+          <div class="mi-trustpair__strip-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6z"/></svg>
+          </div>
+          <div class="mi-trustpair__strip-meta">
+            <span class="mi-trustpair__strip-label">Latest</span>
+            <span class="mi-trustpair__strip-sep">·</span>
+            <span class="mi-trustpair__strip-date">{{ latest_post.date }}</span>
+          </div>
+          <div class="mi-trustpair__strip-title">{{ latest_post.title }}</div>
+          <span class="mi-trustpair__strip-cta">
+            Read more
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:14px;height:14px"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </span>
+        </a>
+      {% else %}
+        {# Fallback strip if no posts published yet #}
+        <a href="{{ factory_updates_url }}" class="mi-trustpair__strip">
+          <div class="mi-trustpair__strip-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6z"/></svg>
+          </div>
+          <div class="mi-trustpair__strip-meta">
+            <span class="mi-trustpair__strip-label">Blog Updates</span>
+          </div>
+          <div class="mi-trustpair__strip-title">Weekly notes from our Hong Kong warehouse</div>
+          <span class="mi-trustpair__strip-cta">
+            See updates
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:14px;height:14px"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </span>
+        </a>
+      {% endif %}
+
+    </div>
+  </section>
+
+  {# ═══ FEATURED PRODUCTS ═════════════════════════════════════════════════ #}
+  <section class="mi-section">
+    <div class="mi-container">
+      <div class="mi-section-head">
+        <h2 class="mi-section-head__title">Featured Miners</h2>
+        <p class="mi-section-head__sub">Top picks across price points. The hardware our customers actually buy.</p>
+      </div>
+      <div id="mi-home-featured">
+        {{ content_top }}
+      </div>
+      <div style="text-align:center; margin-top: var(--mi-sp-8);">
+        <a href="bitcoin-miners-shop" class="mi-btn mi-btn--secondary mi-btn--lg">
+          View all 61 miners
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:16px;height:16px;margin-left:6px;vertical-align:-3px;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {# ═══ CRYPTO-ONLY PAYMENTS SECTION (NEW ,  Session 11) ════════════════════ #}
+  <section class="mi-section" style="background: var(--mi-bg-soft); border-block: 1px solid var(--mi-border-subtle);">
+    <div class="mi-container">
+      <div class="mi-section-head">
+        <h2 class="mi-section-head__title">We only accept cryptocurrency payments</h2>
+        <p class="mi-section-head__sub">The Miner Island is a fully crypto-native business. We do not accept bank wire transfers, credit cards, or fiat payment of any kind. All orders are settled in cryptocurrency through our secure payment processor.</p>
+      </div>
+
+      <div class="mi-home-pay" style="max-width: 960px; margin: var(--mi-sp-6) auto 0;">
+        <div class="mi-home-pay__pills" style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center;">
+          <span class="mi-pay-pill mi-pay-pill--btc"><span class="mi-pay-dot"></span>Bitcoin (BTC)<span class="mi-pay-pill__discount">-3%</span></span>
+          <span class="mi-pay-pill mi-pay-pill--usdt"><span class="mi-pay-dot"></span>USDT TRC20</span>
+          <span class="mi-pay-pill mi-pay-pill--usdt"><span class="mi-pay-dot"></span>USDT ERC20</span>
+          <span class="mi-pay-pill mi-pay-pill--usdc"><span class="mi-pay-dot"></span>USDC</span>
+          <span class="mi-pay-pill mi-pay-pill--eth"><span class="mi-pay-dot"></span>ETH</span>
+          <span class="mi-pay-pill mi-pay-pill--ltc"><span class="mi-pay-dot"></span>LTC</span>
+          <span class="mi-pay-pill mi-pay-pill--doge"><span class="mi-pay-dot"></span>DOGE</span>
+          <span class="mi-pay-pill mi-pay-pill--kas"><span class="mi-pay-dot"></span>KAS</span>
+        </div>
+
+        <div style="margin-top: var(--mi-sp-7);">
+          <h3 style="font-size: var(--mi-fs-lg); margin-bottom: var(--mi-sp-3);">Why crypto only?</h3>
+          <p style="color: var(--mi-text-body); margin-bottom: var(--mi-sp-3);">
+            We serve miners, mining farms, and institutional buyers across the globe. Crypto payments remove
+            cross-border banking friction, eliminate chargeback risk, and let us settle transactions faster
+            than any fiat method. It also keeps us aligned with how the mining community actually operates.
+          </p>
+          <p style="color: var(--mi-text-body);">
+            For bulk orders of 5 or more units, we support a 50/50 staged payment structure and on-chain
+            escrow on qualifying transactions. Message us on WhatsApp to discuss.
+          </p>
+          <div class="mi-cluster" style="margin-top: var(--mi-sp-5);">
+            <a href="payment-options" class="mi-btn mi-btn--primary">
+              View payment options
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:14px;height:14px;margin-left:6px;vertical-align:-2px;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {# ═══ SHOP BY CATEGORY ══════════════════════════════════════════════════ #}
+  <section class="mi-section" style="background: var(--mi-bg-soft); border-block: 1px solid var(--mi-border-subtle);">
+    <div class="mi-container">
+      <div class="mi-section-head">
+        <h2 class="mi-section-head__title">Shop by category</h2>
+        <p class="mi-section-head__sub">Bitcoin SHA-256, Kaspa kHeavyHash, Scrypt, Equihash, RandomX. We stock hardware across every major mineable algorithm.</p>
+      </div>
+      <div class="mi-cat-tiles">
+        <a href="bitcoin-miners-shop" class="mi-cat-tile mi-cat-tile--bitcoin">
+          <div class="mi-cat-tile__icon">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11.767 19.089c4.924.868 6.14-6.025 1.216-6.894m-1.216 6.894L5.86 18.047m5.908 1.042-.347 1.97m1.563-8.864c4.924.869 6.14-6.025 1.215-6.893m-1.215 6.893-3.94-.694m5.155-6.2L8.29 4.26m5.908 1.042.348-1.97M7.48 20.364l3.126-17.727"/></svg>
+          </div>
+          <div class="mi-cat-tile__body">
+            <h3>Bitcoin ASIC Miners</h3>
+            <p>Bitmain Antminer S-series, MicroBT WhatsMiner M-series, Canaan Avalon. Enterprise, Standard and Entry tiers. 34 models in stock.</p>
+            <span class="mi-cat-tile__cta">Browse Bitcoin miners &rarr;</span>
+          </div>
+        </a>
+        <a href="altcoin-mining-rigs" class="mi-cat-tile mi-cat-tile--altcoin">
+          <div class="mi-cat-tile__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v8m-4-4h8"/></svg>
+          </div>
+          <div class="mi-cat-tile__body">
+            <h3>Altcoin ASIC Miners</h3>
+            <p>Kaspa (KAS), Litecoin and Dogecoin (Scrypt), Zcash (Equihash), Monero (RandomX). 23 models in stock.</p>
+            <span class="mi-cat-tile__cta">Browse altcoin miners &rarr;</span>
+          </div>
+        </a>
+        <a href="refurbished-asics" class="mi-cat-tile mi-cat-tile--refurb">
+          <div class="mi-cat-tile__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          </div>
+          <div class="mi-cat-tile__body">
+            <h3>Refurbished ASIC Miners</h3>
+            <p>Tested, certified, and warrantied. Lower entry price point without the risk. 13 models available.</p>
+            <span class="mi-cat-tile__cta">Browse refurbished &rarr;</span>
+          </div>
+        </a>
+        <a href="preorder-miners" class="mi-cat-tile mi-cat-tile--preorder">
+          <div class="mi-cat-tile__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div class="mi-cat-tile__body">
+            <h3>Pre-Order Miners</h3>
+            <p>Next-generation hardware before general availability. Lock in your units before they ship.</p>
+            <span class="mi-cat-tile__cta">See pre-orders &rarr;</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {# ═══ TRUST BAND ,  Maine LLC verification ═══════════════════════════════ #}
+  <section class="mi-section">
+    <div class="mi-container">
+      <div class="mi-trust-band">
+        <div class="mi-trust-band__copy">
+          <span class="mi-eyebrow" style="color: var(--mi-color-primary);">Corporate Verification</span>
+          <h2 style="font-size: var(--mi-fs-3xl); margin-bottom: var(--mi-sp-3); line-height: 1.2;">
+            A real, U.S.-registered business. Not an offshore reseller.
+          </h2>
+          <p style="font-size: var(--mi-fs-md); color: var(--mi-text-body); margin-bottom: var(--mi-sp-5); max-width: 60ch;">
+            The Miner Island Company LLC is registered in the State of Maine, United States, and is currently in
+            Good Standing with the Maine Secretary of State. Our charter, filing date, and current status are
+            publicly verifiable on the Maine SoS corporate registry.
+          </p>
+          <div class="mi-trust-band__facts">
+            <div class="mi-trust-band__fact">
+              <div class="mi-trust-band__fact-label">Legal name</div>
+              <div class="mi-trust-band__fact-value">The Miner Island Company LLC</div>
+            </div>
+            <div class="mi-trust-band__fact">
+              <div class="mi-trust-band__fact-label">Charter #</div>
+              <div class="mi-trust-band__fact-value mi-mono">20197812DC</div>
+            </div>
+            <div class="mi-trust-band__fact">
+              <div class="mi-trust-band__fact-label">Jurisdiction</div>
+              <div class="mi-trust-band__fact-value">Maine, USA</div>
+            </div>
+            <div class="mi-trust-band__fact">
+              <div class="mi-trust-band__fact-label">Status</div>
+              <div class="mi-trust-band__fact-value" style="color: var(--mi-color-success);">● Good Standing</div>
+            </div>
+            <div class="mi-trust-band__fact">
+              <div class="mi-trust-band__fact-label">Filed</div>
+              <div class="mi-trust-band__fact-value">June 26, 2019</div>
+            </div>
+          </div>
+          <div class="mi-cluster" style="margin-top: var(--mi-sp-6);">
+            <a href="https://apps3.web.maine.gov/nei-sos-icrs/ICRS?CorpSumm=20197812DC" target="_blank" rel="noopener" class="mi-btn mi-btn--primary">
+              Verify on Maine SoS
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:14px;height:14px;margin-left:6px;vertical-align:-2px;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
+            <a href="business-credentials" class="mi-btn mi-btn--ghost">View full business credentials &rarr;</a>
+          </div>
+        </div>
+
+        {# ── Redrawn trust seal: shield outline + check + clean label below ── #}
+        <div class="mi-trust-band__badge">
+          <div class="mi-trust-seal">
+            <svg class="mi-trust-seal__shield" viewBox="0 0 100 110" fill="none" aria-hidden="true">
+              <path d="M50 5L92 19v36c0 26-18 47-42 50C26 102 8 81 8 55V19L50 5z"
+                    fill="rgba(4,55,242,0.04)" stroke="var(--mi-color-primary)" stroke-width="3"/>
+            </svg>
+            <svg class="mi-trust-seal__check" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+              <circle cx="20" cy="20" r="18" fill="var(--mi-color-success)" stroke="#FFFFFF" stroke-width="3"/>
+              {# Centred check: vertex at (17, 25), short arm reaches (11, 19), long arm reaches (29, 13).
+                 The 17,25 vertex sits visually centred ,  slightly below the circle center which is how
+                 a well-drawn check reads. Previous path had asymmetric arm lengths that made the tick
+                 lean left. #}
+              <path d="M11 19l6 6 12-12" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="mi-trust-seal__label">
+            <div class="mi-trust-seal__label-top">Verified</div>
+            <div class="mi-trust-seal__label-bot">U.S. LLC</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {# ═══ HOMEPAGE FAQ (NEW, Session 11) ═══════════════════════════════════════
+     Includes FAQPage JSON-LD schema for Google rich snippet eligibility. #}
+  <section class="mi-section" style="background: var(--mi-bg-soft); border-block: 1px solid var(--mi-border-subtle);">
+    <div class="mi-container">
+      <div class="mi-section-head">
+        <h2 class="mi-section-head__title">Frequently asked questions</h2>
+        <p class="mi-section-head__sub">Quick answers on payment, shipping, stock, and our business credentials. Need more detail? Our <a href="help-center">Help Center</a> covers the full picture.</p>
+      </div>
+
+      <div class="mi-home-faq" style="max-width: 880px; margin: var(--mi-sp-6) auto 0;">
+        <details class="mi-home-faq__item" style="background:#FFFFFF; border:1px solid var(--mi-border-subtle); border-radius:10px; padding:16px 20px; margin-bottom:10px;">
+          <summary style="font-weight: var(--mi-fw-semibold); font-size: var(--mi-fs-md); cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center;">
+            What payment methods do you accept?
+            <span class="mi-home-faq__icon" aria-hidden="true" style="color: var(--mi-color-primary); flex-shrink:0; margin-left:12px;">+</span>
+          </summary>
+          <div style="margin-top:12px; color: var(--mi-text-body); line-height:1.65;">
+            We accept cryptocurrency only. Accepted coins include Bitcoin (BTC), Ethereum (ETH), Tether (USDT), USDC,
+            Litecoin (LTC), Dogecoin (DOGE), and Kaspa (KAS). We do not accept bank wires, credit cards, or any fiat
+            payment method. <strong>Pay in BTC and save 3% on your order.</strong>
+          </div>
+        </details>
+
+        <details class="mi-home-faq__item" style="background:#FFFFFF; border:1px solid var(--mi-border-subtle); border-radius:10px; padding:16px 20px; margin-bottom:10px;">
+          <summary style="font-weight: var(--mi-fw-semibold); font-size: var(--mi-fs-md); cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center;">
+            Where do you ship from and how long does delivery take?
+            <span class="mi-home-faq__icon" aria-hidden="true" style="color: var(--mi-color-primary); flex-shrink:0; margin-left:12px;">+</span>
+          </summary>
+          <div style="margin-top:12px; color: var(--mi-text-body); line-height:1.65;">
+            All orders ship from our Hong Kong warehouse. Standard dispatch is within 24 to 72 hours of payment
+            confirmation. Shipping is DDP-paid, so all customs duties and import taxes are handled by us before your
+            unit arrives. <strong>Free DDP shipping on orders over $5,000.</strong>
+          </div>
+        </details>
+
+        <details class="mi-home-faq__item" style="background:#FFFFFF; border:1px solid var(--mi-border-subtle); border-radius:10px; padding:16px 20px; margin-bottom:10px;">
+          <summary style="font-weight: var(--mi-fw-semibold); font-size: var(--mi-fs-md); cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center;">
+            Are the miners in stock or are these pre-orders?
+            <span class="mi-home-faq__icon" aria-hidden="true" style="color: var(--mi-color-primary); flex-shrink:0; margin-left:12px;">+</span>
+          </summary>
+          <div style="margin-top:12px; color: var(--mi-text-body); line-height:1.65;">
+            Every miner listed on our site is physically in stock in our Hong Kong warehouse unless listed under the
+            <a href="preorder-miners">Pre-Orders</a> category. We do not list hardware we do not have.
+          </div>
+        </details>
+
+        <details class="mi-home-faq__item" style="background:#FFFFFF; border:1px solid var(--mi-border-subtle); border-radius:10px; padding:16px 20px; margin-bottom:10px;">
+          <summary style="font-weight: var(--mi-fw-semibold); font-size: var(--mi-fs-md); cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center;">
+            Is The Miner Island a legitimate registered business?
+            <span class="mi-home-faq__icon" aria-hidden="true" style="color: var(--mi-color-primary); flex-shrink:0; margin-left:12px;">+</span>
+          </summary>
+          <div style="margin-top:12px; color: var(--mi-text-body); line-height:1.65;">
+            Yes. The Miner Island Company LLC is a Maine-registered Limited Liability Company, Charter #20197812DC,
+            in Good Standing with the Maine Secretary of State. You can verify our status directly on the
+            <a href="https://apps3.web.maine.gov/nei-sos-icrs/ICRS?CorpSumm=20197812DC" target="_blank" rel="noopener">Maine SoS public registry</a>
+            or read the <a href="business-credentials">full corporate verification page</a>.
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  {# FAQPage JSON-LD (SEO, eligible for Google rich snippets) #}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What payment methods do you accept?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "We accept cryptocurrency only. Accepted coins include Bitcoin (BTC), Ethereum (ETH), Tether (USDT), USDC, Litecoin (LTC), Dogecoin (DOGE), and Kaspa (KAS). We do not accept bank wires, credit cards, or any fiat payment method. Pay in BTC and save 3% on your order."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Where do you ship from and how long does delivery take?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "All orders ship from our Hong Kong warehouse. Standard dispatch is within 24 to 72 hours of payment confirmation. Shipping is DDP-paid, so all customs duties and import taxes are handled by us before your unit arrives. Free DDP shipping on orders over $5,000."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are the miners in stock or are these pre-orders?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Every miner listed on our site is physically in stock in our Hong Kong warehouse unless listed under the Pre-Orders category. We do not list hardware we do not have."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is The Miner Island a legitimate registered business?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. The Miner Island Company LLC is a Maine-registered Limited Liability Company, Charter #20197812DC, in Good Standing with the Maine Secretary of State. You can verify our status directly on the Maine Secretary of State public registry."
+        }
+      }
+    ]
+  }
+  </script>
+
+  {# Organization JSON-LD (SEO, Knowledge Panel signal) #}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "The Miner Island Company LLC",
+    "alternateName": "The Miner Island",
+    "url": "https://theminerisland.com",
+    "logo": "https://theminerisland.com/catalog/view/theme/minerisland/image/logo.png",
+    "sameAs": [
+      "https://www.linkedin.com/company/133783973",
+      "https://www.crunchbase.com/organization/the-miner-island",
+      "https://x.com/theminerisland",
+      "https://t.me/TheMinerIsland"
+    ],
+    "description": "Crypto-native supplier of ASIC mining hardware. DDP-paid shipping from Hong Kong, BTC payment discount, 60-day replacement warranty. Verified Maine LLC, Charter #20197812DC.",
+    "foundingDate": "2019-06-26",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "2 Hemlock Road",
+      "addressLocality": "Cambridge",
+      "addressRegion": "MA",
+      "postalCode": "02138",
+      "addressCountry": "US"
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+1-617-300-8178",
+      "contactType": "sales",
+      "email": "sales@theminerisland.com",
+      "availableLanguage": "English"
+    },
+    "identifier": [
+      {
+        "@type": "PropertyValue",
+        "propertyID": "Maine Charter Number",
+        "value": "20197812DC"
+      },
+      {
+        "@type": "PropertyValue",
+        "propertyID": "DUNS",
+        "value": "14-502-4494"
+      }
+    ]
+  }
+  </script>
+
+  {# ═══ PRE-FOOTER CTA BAND ══════════════════════════════════════════════ #}
+  <section class="mi-cta-band">
+    <div class="mi-container">
+      <div class="mi-cta-band__inner">
+        <div>
+          <h2 class="mi-cta-band__title">Need bulk pricing or a custom quote?</h2>
+          <p class="mi-cta-band__sub">We supply mining farms, hosting facilities, and institutional buyers with structured bulk procurement. For orders of 5 or more units, message us on WhatsApp for priority pricing, staged payment options, and custom shipping arrangements. We respond 7 days a week.</p>
+        </div>
+        <div class="mi-cta-band__actions">
+          <a href="https://wa.me/16173008178" class="mi-btn mi-btn--whatsapp mi-btn--lg" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:18px;height:18px;margin-right:8px;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.074-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413"/></svg>
+            +1 617 300 8178
+          </a>
+          <a href="tel:+16173008178" class="mi-btn mi-btn--tel mi-btn--lg" data-mi-tel="1">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:18px;height:18px;margin-right:8px;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            Call us
+          </a>
+          <a href="index.php?route=information/contact" class="mi-btn mi-btn--ghost mi-btn--lg" style="color:#FFFFFF; border-color: rgba(255,255,255,0.3);">Send a message</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {{ content_bottom }}
+</div>
+
+{{ footer }}

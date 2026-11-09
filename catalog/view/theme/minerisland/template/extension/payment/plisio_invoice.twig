@@ -1,0 +1,313 @@
+{{ header }}
+
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   PAYMENT PAGE LAYOUT v2
+   Invoice full-width on top, info cards in a grid below it
+   ═══════════════════════════════════════════════════════════════ */
+.mi-plisio-layout {
+  display: block !important;
+  grid-template-columns: 1fr !important;
+}
+.mi-plisio-invoice {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.mi-plisio-below {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 32px;
+  align-items: start;
+}
+.mi-plisio-below .mi-plisio-card {
+  margin: 0;
+  width: 100%;
+}
+@media (max-width: 1000px) {
+  .mi-plisio-below { grid-template-columns: 1fr; }
+}
+</style>
+
+<div class="mi-plisio-page" id="payment-plisio-invoice">
+  <div class="mi-container">
+
+    {# Breadcrumb #}
+    <nav class="mi-breadcrumb" aria-label="Breadcrumb">
+      <ol>
+        {% for breadcrumb in breadcrumbs %}
+          <li>
+            <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a>
+            {% if not loop.last %}<span aria-hidden="true">›</span>{% endif %}
+          </li>
+        {% endfor %}
+        <li>
+          <a href="#" aria-current="page">Payment</a>
+        </li>
+      </ol>
+    </nav>
+
+    {# Header #}
+    <header class="mi-plisio-header">
+      <div class="mi-plisio-header__badge">
+        <span class="mi-plisio-header__badge-icon">₿</span>
+        <span class="mi-plisio-header__badge-label">Secure crypto payment</span>
+      </div>
+      <h1 class="mi-plisio-header__title">Complete your payment</h1>
+      <p class="mi-plisio-header__sub">
+        Your order is reserved. Pay using the invoice below. Bitcoin, Ethereum, USDT, USDC, Litecoin, and 25+ other cryptocurrencies accepted.
+        The transaction confirms automatically once the network processes your payment.
+      </p>
+    </header>
+
+    {# Status steps #}
+    <ol class="mi-plisio-steps" aria-label="Payment progress">
+      <li class="mi-plisio-steps__step mi-plisio-steps__step--done">
+        <span class="mi-plisio-steps__num" aria-hidden="true">✓</span>
+        <span class="mi-plisio-steps__label">Order placed</span>
+      </li>
+      <li class="mi-plisio-steps__step mi-plisio-steps__step--active">
+        <span class="mi-plisio-steps__num" aria-hidden="true">2</span>
+        <span class="mi-plisio-steps__label">Pay with crypto</span>
+      </li>
+      <li class="mi-plisio-steps__step">
+        <span class="mi-plisio-steps__num" aria-hidden="true">3</span>
+        <span class="mi-plisio-steps__label">Confirmation</span>
+      </li>
+      <li class="mi-plisio-steps__step">
+        <span class="mi-plisio-steps__num" aria-hidden="true">4</span>
+        <span class="mi-plisio-steps__label">Shipping update</span>
+      </li>
+    </ol>
+
+    {# ── Invoice: full width, centered ── #}
+    <div class="mi-plisio-layout">
+      <div class="mi-plisio-invoice">
+        <div class="mi-plisio-invoice__chrome">
+          <div class="mi-plisio-invoice__chrome-dots" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </div>
+          <div class="mi-plisio-invoice__chrome-label">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+              <rect x="3" y="11" width="18" height="11" rx="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <span>Secure payment session</span>
+          </div>
+        </div>
+
+        <div class="mi-plisio-invoice__frame">
+          <div class="mi-plisio-invoice__loading" id="mi-plisio-loading">
+            <div class="mi-plisio-invoice__spinner" aria-hidden="true"></div>
+            <p>Loading secure payment form…</p>
+          </div>
+          {% set iframesrc = 'https://lapinydenab.com/invoice/iframe/' ~ plisio_invoice_id %}
+          <iframe
+            src="{{ iframesrc }}"
+            data-base-src="{{ iframesrc }}"
+            id="mi-plisio-iframe"
+            class="mi-plisio-invoice__iframe"
+            title="Crypto payment invoice"
+            scrolling="no"
+            allow="clipboard-write"
+            style="border:0; width:100%;"
+            onload="document.getElementById('mi-plisio-loading').style.display='none';"
+          ></iframe>
+        </div>
+
+        {# S17: change-coin control #}
+        <div class="mi-plisio-invoice__actions">
+          <span class="mi-plisio-invoice__actions-hint">Picked the wrong coin?</span>
+          <button type="button" class="mi-plisio-invoice__change" id="mi-plisio-change" onclick="miPlisioChangeCoin()">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+              <path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/>
+              <path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/>
+            </svg>
+            <span>Choose a different coin</span>
+          </button>
+        </div>
+        <script>
+          function miPlisioChangeCoin() {
+            var f = document.getElementById('mi-plisio-iframe');
+            var l = document.getElementById('mi-plisio-loading');
+            if (!f) { return; }
+            var base = f.getAttribute('data-base-src') || f.src;
+            if (l) { l.style.display = 'flex'; }
+            f.src = 'about:blank';
+            setTimeout(function () { f.src = base; }, 60);
+          }
+        </script>
+      </div>
+    </div>
+
+    {# ── Info cards: now BELOW the invoice in a 3-column grid ── #}
+    <div class="mi-plisio-below">
+
+      {# Card 1: How crypto payment works + escrow explainer #}
+      <div class="mi-plisio-card">
+        <h2 class="mi-plisio-card__title">How crypto payment works</h2>
+        <ol class="mi-plisio-howto">
+          <li>
+            <span class="mi-plisio-howto__num">1</span>
+            <span><strong>Pick a coin</strong> from the invoice on the left. You'll see the exact amount in your chosen crypto.</span>
+          </li>
+          <li>
+            <span class="mi-plisio-howto__num">2</span>
+            <span><strong>Send the payment</strong> from your wallet to the address shown. Scan the QR code or copy the address.</span>
+          </li>
+          <li>
+            <span class="mi-plisio-howto__num">3</span>
+            <span><strong>Wait for confirmations.</strong> Bitcoin takes about 10 to 30 minutes. Lightning, USDT (TRC-20), and most altcoins confirm in seconds.</span>
+          </li>
+          <li>
+            <span class="mi-plisio-howto__num">4</span>
+            <span><strong>Done.</strong> You'll see a confirmation page and receive an email. We ship within 24 to 72 hours of payment confirmation.</span>
+          </li>
+        </ol>
+
+        {# Escrow explainer #}
+        <div style="margin-top: 20px; padding: 18px 20px; background: rgba(37, 99, 235, .06); border: 1px solid rgba(37, 99, 235, .25); border-radius: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+            <span style="width: 32px; height: 32px; border-radius: 8px; background: rgba(37, 99, 235, .12); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#2563EB" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+            </span>
+            <strong style="font-size: 15px; color: #0F172A;">Paying with 20-Day On-Chain Escrow?</strong>
+          </div>
+          <ul style="margin: 0; padding-left: 18px; font-size: 13.5px; line-height: 1.65; color: #334155;">
+            <li style="margin-bottom: 6px;">Once your payment confirms, it is routed to a <strong>non-custodial escrow contract</strong>, not to our operating wallet. We cannot touch it.</li>
+            <li style="margin-bottom: 6px;">You will land on an <strong>escrow confirmation page</strong> showing the amount held and your release date. Manage everything from <strong>Account → Escrow Center</strong>.</li>
+            <li style="margin-bottom: 6px;">Funds release to us only when <strong>you confirm delivery</strong>, or automatically after the 20-day hold ends.</li>
+            <li>If something is wrong, open a dispute from the Escrow Center before the hold ends. Unresolved funds <strong>return to your wallet automatically</strong>.</li>
+          </ul>
+          <p style="margin: 10px 0 0; font-size: 12.5px; color: #64748B;">Tip: if you chose escrow, send from a wallet you control (Ledger, Trezor, MetaMask, Trust Wallet). Exchange wallets cannot sign the release or dispute steps.</p>
+        </div>
+      </div>
+
+      {# Card 2: WhatsApp help #}
+      <div class="mi-plisio-card mi-plisio-card--whatsapp">
+        <h2 class="mi-plisio-card__title">Need help paying?</h2>
+        <p>If anything looks wrong (amount, address, network selection), stop and message us first. We'd rather catch it before you send than help recover after.</p>
+        <a href="https://wa.me/16173008178?text=Hi%20%E2%80%94%20I%20need%20help%20with%20my%20Bitcoin%20payment%20on%20The%20Miner%20Island"
+           class="mi-btn mi-btn--whatsapp mi-btn--lg mi-plisio-card__btn"
+           target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+            <path d="M17.5 14.4c-.3-.1-1.8-.9-2.1-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.4.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5 0-.1-.7-1.7-1-2.3-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4 0 1.4 1 2.8 1.1 3 .1.2 2 3 4.8 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.6-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.1-.3-.2-.6-.3zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.2-1.3c1.5.8 3.1 1.2 4.8 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2z"/>
+          </svg>
+          Open WhatsApp chat
+        </a>
+      </div>
+
+            {# Card 3: Trust — escrow + SSL + payment terms #}
+      <div class="mi-plisio-card mi-plisio-card--trust">
+        <ul class="mi-plisio-trust">
+          <li>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span><strong>20-Day escrow available</strong> The Miner Island never custodies escrowed funds, and every escrow state is verifiable on-chain.</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <span><strong>Secured by SSL</strong> Industry-standard crypto payment gateway.SSL, and trusted-IP protection.</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+            <span><strong>60 minutes</strong> to complete payment. After that the invoice expires and you'll need to start over. Your order stays.</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+            <span><strong>DDP-paid</strong> shipping from our Hong Kong warehouse. Duties, taxes, and customs included.</span>
+          </li>
+        </ul>
+      </div>
+
+
+    {# Footnote #}
+    <p class="mi-plisio-footnote">
+      Powered by Plisio · The Miner Island never sees or stores your wallet keys. Payment goes directly from your wallet to the address shown in the invoice above.
+    </p>
+
+  </div>
+</div>
+
+<script>
+// Plisio white-label iframe handling
+(function() {
+  var iframe = document.getElementById('mi-plisio-iframe');
+  if (!iframe) return;
+
+  iframe.style.height = '720px';
+
+  window.addEventListener('message', function(e) {
+    var h = null;
+    if (typeof e.data === 'number') h = e.data;
+    else if (e.data && typeof e.data === 'object') {
+      if (typeof e.data.height === 'number') h = e.data.height;
+      else if (typeof e.data.iframeHeight === 'number') h = e.data.iframeHeight;
+    }
+    if (h && h > 200 && h < 4000) {
+      iframe.style.height = h + 'px';
+    }
+
+    if (e.data && typeof e.data === 'object') {
+      var status = e.data.status || e.data.invoice_status || e.data.type;
+      var redirectUrl = e.data.redirect || e.data.redirect_url || e.data.url;
+      if (status === 'completed' || status === 'success' || status === 'paid') {
+        window.location.href = '/index.php?route=extension/payment/plisio/success';
+      } else if (redirectUrl && typeof redirectUrl === 'string' && redirectUrl.indexOf('plisio/success') > -1) {
+        window.location.href = redirectUrl;
+      }
+    }
+  });
+
+  try {
+    iframe.addEventListener('load', function() {
+      try {
+        var iframeUrl = iframe.contentWindow.location.href;
+        if (iframeUrl.indexOf('plisio/success') > -1 || iframeUrl.indexOf('checkout/success') > -1) {
+          window.location.href = iframeUrl;
+        }
+      } catch (err) {}
+    });
+  } catch (err) {}
+
+  setTimeout(function() {
+    var loading = document.getElementById('mi-plisio-loading');
+    if (loading) loading.style.display = 'none';
+  }, 6000);
+
+  // Guarded fallback: "Already paid?" link only appears after server confirms payment
+  setTimeout(function() {
+    var helper = document.createElement('div');
+    helper.className = 'mi-plisio-fallback';
+    helper.innerHTML = '<p style="display:none;" id="mi-paid-continue-wrapper">Already completed the payment? <a href="/index.php?route=extension/payment/plisio/verify" id="mi-paid-continue">Click here to continue →</a></p>';
+    var invoice = document.querySelector('.mi-plisio-invoice');
+    if (invoice && invoice.parentNode) {
+      invoice.parentNode.insertBefore(helper, invoice.nextSibling);
+    }
+
+    setInterval(function() {
+      var wrapper = document.getElementById('mi-paid-continue-wrapper');
+      if (!wrapper) return;
+
+      fetch('/index.php?route=extension/payment/plisio/paid', {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(json) {
+        if (json.paid) {
+          wrapper.style.display = 'block';
+        }
+      })
+      .catch(function() {});
+    }, 5000);
+  }, 90000);
+})();
+</script>
+
+
+{# S19 ANALYTICS: GA4 plisio_invoice_view (order created, awaiting crypto payment) #}
+<script>
+window.dataLayer = window.dataLayer || [];
+window.dataLayer.push({event: 'plisio_invoice_view'});
+</script>
+
+{{ footer }}

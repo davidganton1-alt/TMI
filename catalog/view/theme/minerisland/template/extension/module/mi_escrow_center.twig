@@ -1,0 +1,312 @@
+{{ header }}
+
+<div class="mi-container mi-section">
+  <div style="max-width: 900px; margin: 0 auto;">
+
+    {# ── Breadcrumbs ── #}
+    <ul class="breadcrumb">
+      {% for breadcrumb in breadcrumbs %}
+      <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+      {% endfor %}
+    </ul>
+
+    <div style="padding: 24px 0 12px;">
+      <h1 class="mi-h2">Escrow Center</h1>
+      <p style="color: var(--mi-text-secondary); font-size: var(--mi-fs-md);">Manage your escrow protection for order #{{ order_id }}</p>
+    </div>
+
+    {# ── PENDING STATE: Shows when payment hasn't been confirmed yet ── #}
+    {% if is_pending %}
+      <div style="background: var(--mi-bg-card); border: 1px solid var(--mi-border-subtle); border-radius: var(--mi-radius-xl); box-shadow: var(--mi-shadow-sm); padding: 40px 24px; margin-bottom: 20px; text-align: center;">
+        <div style="width: 60px; height: 60px; margin: 0 auto 16px; border-radius: 50%; background: var(--mi-color-warning-soft); display: flex; align-items: center; justify-content: center;">
+          <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="var(--mi-color-warning)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <h2 style="font-size: var(--mi-fs-lg); font-weight: var(--mi-fw-extra); color: var(--mi-text-headline); margin-bottom: 8px;">Awaiting Payment</h2>
+        <p style="color: var(--mi-text-secondary); font-size: var(--mi-fs-sm); max-width: 480px; margin: 0 auto 20px;">
+          We are waiting for your crypto payment to confirm on the blockchain. Once your payment is received, your 20-day escrow protection will activate automatically and the release/dispute options will appear here.
+        </p>
+        <a href="index.php?route=account/order" class="mi-btn mi-btn--primary">View Order History</a>
+      </div>
+
+    {# ── ACTIVE STATE: Shows when payment is confirmed and escrow is held/disputed/released ── #}
+    {% else %}
+      <div style="background: var(--mi-bg-card); border: 1px solid var(--mi-border-subtle); border-radius: var(--mi-radius-xl); box-shadow: var(--mi-shadow-sm); padding: 24px; margin-bottom: 20px;">
+
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 20px; flex-wrap: wrap;">
+          <div>
+            <div style="font-size: 12px; font-weight: var(--mi-fw-bold); text-transform: uppercase; letter-spacing: .05em; color: var(--mi-text-secondary); margin-bottom: 6px;">Escrow Status</div>
+            <div style="font-size: var(--mi-fs-xl); font-weight: var(--mi-fw-extra); color: var(--mi-text-headline); display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+              <span id="mi-escrow-status-text">
+                {% if escrow.status == 'released' %}Funds released
+                {% elseif escrow.status == 'disputed' %}Dispute under review
+                {% elseif escrow.status == 'partial' %}Partially Paid
+                {% else %}Funds held in Escrow{% endif %}
+              </span>
+              <span id="mi-escrow-status-pill" class="mi-pill
+                {% if escrow.status == 'released' %}mi-pill--success
+                {% elseif escrow.status == 'disputed' %}mi-pill--warning
+                {% elseif escrow.status == 'partial' %}mi-pill--warning
+                {% else %}mi-pill--primary{% endif %}">
+                {% if escrow.status == 'released' %}Completed
+                {% elseif escrow.status == 'disputed' %}Disputed
+                {% elseif escrow.status == 'partial' %}Partial
+                {% else %}Active{% endif %}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {# Countdown box #}
+        <div id="mi-escrow-countdown-box" style="background: var(--mi-color-warning-soft); border: 1px solid #FDE68A; border-radius: var(--mi-radius-md); padding: 14px 18px; margin-bottom: 20px; {% if escrow.status != 'held' %}display: none;{% endif %}">
+          <div style="font-size: 13px; font-weight: var(--mi-fw-bold); color: var(--mi-color-warning); margin-bottom: 4px;">Funds auto-release on</div>
+          <div class="mi-mono" style="font-size: var(--mi-fs-lg); font-weight: var(--mi-fw-bold); color: var(--mi-text-headline);">{{ release_date }}</div>
+        </div>
+
+        {# Partial Payment Alert #}
+        {% if escrow.status == 'partial' %}
+        <div class="mi-alert mi-alert--warning" style="margin-bottom: 20px;">
+          <strong>Partial Payment Received:</strong> We have received a partial payment for this order. The 20-day escrow protection period will begin automatically once the full payment amount is confirmed on the blockchain.
+        </div>
+        {% endif %}
+
+        {# Details grid #}
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px;">
+          <div style="background: var(--mi-bg-soft); border-radius: var(--mi-radius-md); padding: 14px 16px;">
+            <div style="font-size: 12px; font-weight: var(--mi-fw-bold); text-transform: uppercase; letter-spacing: .04em; color: var(--mi-text-secondary); margin-bottom: 4px;">Order Number</div>
+            <div class="mi-mono" style="font-size: var(--mi-fs-sm); font-weight: var(--mi-fw-bold); color: var(--mi-text-headline);">#{{ order_id }}</div>
+          </div>
+          <div style="background: var(--mi-bg-soft); border-radius: var(--mi-radius-md); padding: 14px 16px;">
+            <div style="font-size: 12px; font-weight: var(--mi-fw-bold); text-transform: uppercase; letter-spacing: .04em; color: var(--mi-text-secondary); margin-bottom: 4px;">Amount Held</div>
+            <div style="font-size: var(--mi-fs-sm); font-weight: var(--mi-fw-bold); color: var(--mi-text-headline);">{{ total }}</div>
+          </div>
+          <div style="background: var(--mi-bg-soft); border-radius: var(--mi-radius-md); padding: 14px 16px;">
+            <div style="font-size: 12px; font-weight: var(--mi-fw-bold); text-transform: uppercase; letter-spacing: .04em; color: var(--mi-text-secondary); margin-bottom: 4px;">Protection Period</div>
+            <div style="font-size: var(--mi-fs-sm); font-weight: var(--mi-fw-bold); color: var(--mi-text-headline);">20 days</div>
+          </div>
+        </div>
+
+        {# ── Action buttons ────────────────────────────────────────────────── #}
+        {% if escrow.status == 'held' or escrow.status == 'disputed' or escrow.status == 'partial' %}
+        <div id="mi-escrow-actions" style="display: flex; gap: 12px; flex-wrap: wrap; margin: 24px 0;">
+          {% if escrow.status == 'held' or escrow.status == 'disputed' %}
+          <button class="mi-btn mi-btn--success" style="flex: 1; min-width: 200px;" onclick="miShowReleaseModal()">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px;"><polyline points="20 6 9 17 4 12"/></svg>
+            Release funds to The Miner Island
+          </button>
+          {% endif %}
+
+          {% if escrow.status == 'held' or escrow.status == 'partial' %}
+          <button class="mi-btn" style="flex: 1; min-width: 200px; background: var(--mi-bg-card); color: var(--mi-text-headline); border: 2px solid var(--mi-border-defined);" onclick="miShowDisputeModal()">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Open a dispute
+          </button>
+          {% endif %}
+        </div>
+        {% endif %}
+
+        {# ── Status message (shown when released or disputed) ─────────────── #}
+        <div id="mi-escrow-status-msg" class="mi-alert
+          {% if escrow.status == 'released' %}mi-alert--success
+          {% elseif escrow.status == 'disputed' %}mi-alert--warning
+          {% endif %}"
+          style="{% if escrow.status == 'held' or escrow.status == 'partial' %}display: none;{% endif %}">
+          {% if escrow.status == 'released' %}
+            Funds have been released to The Miner Island. Thank you for your order!
+          {% elseif escrow.status == 'disputed' %}
+            Your dispute has been emailed to our team and is under review. The escrow countdown is paused. If your issue is resolved, you can still release the funds to The Miner Island using the button above.
+          {% endif %}
+        </div>
+
+        <div class="mi-alert mi-alert--info" style="margin-top: 20px;">
+          The dispute window closes at day 20, one week after delivery. Once your order ships with tracking, you have 7 days to file a dispute. This prevents the "settle-and-dispute" exploit while still protecting you during the hold period.
+        </div>
+        <div class="mi-alert mi-alert--info" style="margin-top: 20px;">
+          Your escrow terms and release instructions were sent to your registered email. Keep your order number for support.
+        </div>
+        <div class="mi-alert mi-alert--info" style="margin-top: 20px;">
+          Your funds are now held in an On-Chain Escrow smart contract and will be released after 20 days if not disputed. If an order is disputed, the funds will be released back to the buyer in 7 days to the same address from which the buyer made payment.
+        </div>
+        
+      </div>
+    {% endif %}
+
+  </div>
+</div>
+
+{# ── Release Confirmation Modal ── #}
+<div id="mi-release-modal" style="display: none; position: fixed; inset: 0; background: rgba(15,23,42,.6); z-index: 1000; align-items: center; justify-content: center; padding: 20px;">
+  <div style="background: var(--mi-bg-card); border-radius: var(--mi-radius-xl); max-width: 500px; width: 100%; box-shadow: var(--mi-shadow-xl); overflow: hidden;">
+    <div style="padding: 20px 24px; border-bottom: 1px solid var(--mi-border-subtle); background: var(--mi-bg-soft);">
+      <h2 style="font-size: var(--mi-fs-lg); font-weight: var(--mi-fw-extra); color: var(--mi-text-headline);">Confirm fund release</h2>
+    </div>
+    <div style="padding: 24px;">
+      <p style="font-size: var(--mi-fs-sm); color: var(--mi-text-body); margin-bottom: 16px; line-height: 1.7;">You're about to release <strong>{{ total }}</strong> from escrow to The Miner Island.</p>
+      <div style="background: var(--mi-color-warning-soft); border: 1px solid #FDE68A; border-radius: var(--mi-radius-md); padding: 14px 16px; font-size: 13px; color: var(--mi-text-headline); margin-bottom: 20px;">
+        <strong style="color: var(--mi-color-warning);">This action is final.</strong> Once released, funds cannot be recalled or refunded. Only confirm if you've received your order as described.
+      </div>
+      
+      {% if escrow.status == 'disputed' %}
+      <div style="background: var(--mi-color-info-soft); border: 1px solid var(--mi-color-info); border-radius: var(--mi-radius-md); padding: 12px 14px; font-size: 13px; color: var(--mi-text-headline); margin-bottom: 20px;">
+        <strong>Note:</strong> You currently have an open dispute on this order. Releasing the funds will close the dispute and send the payment to The Miner Island.
+      </div>
+      {% endif %}
+      
+      <div style="display: flex; gap: 10px; justify-content: flex-end;">
+        <button class="mi-btn" style="background: var(--mi-bg-muted); color: var(--mi-text-headline);" onclick="miCloseModals()">Cancel</button>
+        <button class="mi-btn mi-btn--success" id="mi-release-confirm-btn" onclick="miReleaseFunds()">Release funds</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{# ── Dispute Modal ── #}
+<div id="mi-dispute-modal" style="display: none; position: fixed; inset: 0; background: rgba(15,23,42,.6); z-index: 1000; align-items: center; justify-content: center; padding: 20px;">
+  <div style="background: var(--mi-bg-card); border-radius: var(--mi-radius-xl); max-width: 500px; width: 100%; box-shadow: var(--mi-shadow-xl); overflow: hidden;">
+    <div style="padding: 20px 24px; border-bottom: 1px solid var(--mi-border-subtle); background: var(--mi-bg-soft);">
+      <h2 style="font-size: var(--mi-fs-lg); font-weight: var(--mi-fw-extra); color: var(--mi-text-headline);">Open a dispute</h2>
+    </div>
+    <div style="padding: 24px;">
+      <p style="font-size: var(--mi-fs-sm); color: var(--mi-text-body); margin-bottom: 16px; line-height: 1.7;">Tell us what went wrong. Submitting this will automatically email our support team and pause the escrow countdown until the issue is resolved.</p>
+
+      <div style="margin-bottom: 16px;">
+        <label style="display: block; font-size: 13px; font-weight: var(--mi-fw-bold); color: var(--mi-text-headline); margin-bottom: 6px;">Reason for dispute</label>
+        <select id="mi-dispute-reason" class="form-control" style="width: 100%; padding: 10px 12px; border: 1px solid var(--mi-border-defined); border-radius: var(--mi-radius-md); font-size: var(--mi-fs-sm);">
+          <option value="">Select a reason...</option>
+          <option value="Order not delivered">Order not delivered</option>
+          <option value="Item not as described">Item not as described</option>
+          <option value="Item arrived damaged">Item arrived damaged</option>
+          <option value="Wrong item received">Wrong item received</option>
+          <option value="Other issue">Other issue</option>
+        </select>
+      </div>
+
+      <div style="margin-bottom: 16px;">
+        <label style="display: block; font-size: 13px; font-weight: var(--mi-fw-bold); color: var(--mi-text-headline); margin-bottom: 6px;">Describe the issue</label>
+        <textarea id="mi-dispute-details" class="form-control" style="width: 100%; min-height: 100px; padding: 10px 12px; border: 1px solid var(--mi-border-defined); border-radius: var(--mi-radius-md); font-size: var(--mi-fs-sm); resize: vertical;" placeholder="Please provide details about your issue..."></textarea>
+      </div>
+
+      <div style="display: flex; gap: 10px; justify-content: flex-end;">
+        <button class="mi-btn" style="background: var(--mi-bg-muted); color: var(--mi-text-headline);" onclick="miCloseModals()">Cancel</button>
+        <button class="mi-btn" style="background: var(--mi-color-warning); color: #fff;" id="mi-dispute-submit-btn" onclick="miSubmitDispute()">Submit dispute</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var miOrderId = {{ order_id }};
+var miReleaseUrl = '{{ action_release }}';
+var miDisputeUrl = '{{ action_dispute }}';
+
+function miShowReleaseModal() {
+  document.getElementById('mi-release-modal').style.display = 'flex';
+}
+function miShowDisputeModal() {
+  document.getElementById('mi-dispute-modal').style.display = 'flex';
+}
+function miCloseModals() {
+  document.getElementById('mi-release-modal').style.display = 'none';
+  document.getElementById('mi-dispute-modal').style.display = 'none';
+}
+
+function miReleaseFunds() {
+  var btn = document.getElementById('mi-release-confirm-btn');
+  btn.disabled = true;
+  btn.textContent = 'Releasing...';
+
+  fetch(miReleaseUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest' },
+    body: 'order_id=' + miOrderId
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(json) {
+    if (json.success) {
+      miCloseModals();
+      document.getElementById('mi-escrow-status-text').textContent = 'Funds released';
+      document.getElementById('mi-escrow-status-pill').textContent = 'Completed';
+      document.getElementById('mi-escrow-status-pill').className = 'mi-pill mi-pill--success';
+      document.getElementById('mi-escrow-countdown-box').style.display = 'none';
+      document.getElementById('mi-escrow-actions').style.display = 'none';
+      var msg = document.getElementById('mi-escrow-status-msg');
+      msg.style.display = 'block';
+      msg.className = 'mi-alert mi-alert--success';
+      msg.textContent = 'Funds have been released to The Miner Island. Thank you for your order!';
+    } else {
+      alert(json.error || 'Something went wrong. Please contact support.');
+      btn.disabled = false;
+      btn.textContent = 'Release funds';
+    }
+  })
+  .catch(function() {
+    alert('Connection error. Please try again.');
+    btn.disabled = false;
+    btn.textContent = 'Release funds';
+  });
+}
+
+function miSubmitDispute() {
+  var reason = document.getElementById('mi-dispute-reason').value;
+  var details = document.getElementById('mi-dispute-details').value;
+  var btn = document.getElementById('mi-dispute-submit-btn');
+
+  if (!reason) {
+    alert('Please select a reason for the dispute.');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Submitting...';
+
+  fetch(miDisputeUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest' },
+    body: 'order_id=' + miOrderId + '&reason=' + encodeURIComponent(reason) + '&details=' + encodeURIComponent(details)
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(json) {
+    if (json.success) {
+      miCloseModals();
+      document.getElementById('mi-escrow-status-text').textContent = 'Dispute under review';
+      document.getElementById('mi-escrow-status-pill').textContent = 'Disputed';
+      document.getElementById('mi-escrow-status-pill').className = 'mi-pill mi-pill--warning';
+      document.getElementById('mi-escrow-countdown-box').style.display = 'none';
+      document.getElementById('mi-escrow-actions').style.display = 'none';
+      var msg = document.getElementById('mi-escrow-status-msg');
+      msg.style.display = 'block';
+      msg.className = 'mi-alert mi-alert--warning';
+      msg.textContent = 'Your dispute has been emailed to our team. The escrow countdown is paused. We will contact you within 24 hours.';
+    } else {
+      alert(json.error || 'Something went wrong. Please contact support.');
+      btn.disabled = false;
+      btn.textContent = 'Submit dispute';
+    }
+  })
+  .catch(function() {
+    alert('Connection error. Please try again.');
+    btn.disabled = false;
+    btn.textContent = 'Submit dispute';
+  });
+}
+
+// Close modals when clicking the overlay
+document.getElementById('mi-release-modal').addEventListener('click', function(e) {
+  if (e.target === this) miCloseModals();
+});
+document.getElementById('mi-dispute-modal').addEventListener('click', function(e) {
+  if (e.target === this) miCloseModals();
+});
+</script>
+
+<style>
+.mi-pill { display: inline-block; font-size: 12px; font-weight: var(--mi-fw-bold); border-radius: var(--mi-radius-full); padding: 4px 12px; }
+.mi-pill--primary { background: var(--mi-color-primary-soft); color: var(--mi-color-primary); }
+.mi-pill--success { background: var(--mi-color-success-soft); color: var(--mi-color-success); }
+.mi-pill--warning { background: var(--mi-color-warning-soft); color: var(--mi-color-warning); }
+@media (max-width: 600px) {
+  #mi-escrow-actions { flex-direction: column; }
+  #mi-escrow-actions .mi-btn { width: 100%; }
+}
+</style>
+
+{{ footer }}

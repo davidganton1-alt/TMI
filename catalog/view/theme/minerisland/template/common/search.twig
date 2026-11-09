@@ -1,0 +1,23 @@
+{# Search input, rendered into header.twig at {{ search }} #}
+{# IMPORTANT: outer wrapper MUST have id="search" so OpenCart's common.js
+   binds the click handler ($('#search input[name=\'search\']').parent()
+   .find('button').on('click', ...)) and the Enter-key handler.
+   We layer .mi-search on top for styling. #}
+<div id="search" class="mi-search" role="search">
+  <label class="mi-sr-only" for="mi-search-input">{{ text_search }}</label>
+  <input
+    type="text"
+    name="search"
+    id="mi-search-input"
+    value="{{ search }}"
+    placeholder="Search miners, models, hashrates…"
+    autocomplete="off"
+    class="mi-search__input form-control"
+  />
+  <button type="button" class="mi-search__btn" aria-label="{{ text_search }}">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="11" cy="11" r="8"/>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+  </button>
+</div>

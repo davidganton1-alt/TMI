@@ -1,0 +1,215 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form-factory-update" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+      </div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_form }}</h3>
+      </div>
+      <div class="panel-body">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-factory-update" class="form-horizontal">
+          <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab-general" data-toggle="tab">{{ tab_general }}</a></li>
+            <li><a href="#tab-seo"     data-toggle="tab">{{ tab_seo }}</a></li>
+            <li><a href="#tab-data"    data-toggle="tab">{{ tab_data }}</a></li>
+          </ul>
+          <div class="tab-content">
+
+            {# ============= GENERAL ============= #}
+            <div class="tab-pane active" id="tab-general">
+
+              <div class="form-group required">
+                <label class="col-sm-2 control-label" for="input-title">{{ entry_title }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="title" value="{{ title }}" placeholder="{{ entry_title }}" id="input-title" class="form-control" maxlength="200" />
+                  {% if error_title %}<div class="text-danger">{{ error_title }}</div>{% endif %}
+                </div>
+              </div>
+
+              <div class="form-group required">
+                <label class="col-sm-2 control-label" for="input-slug"><span data-toggle="tooltip" title="{{ help_slug }}">{{ entry_slug }}</span></label>
+                <div class="col-sm-10">
+                  <input type="text" name="slug" value="{{ slug }}" placeholder="auto-generated-from-title" id="input-slug" class="form-control" maxlength="160" />
+                  {% if error_slug %}<div class="text-danger">{{ error_slug }}</div>{% endif %}
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-excerpt"><span data-toggle="tooltip" title="{{ help_excerpt }}">{{ entry_excerpt }}</span></label>
+                <div class="col-sm-10">
+                  <textarea name="excerpt" rows="2" placeholder="{{ entry_excerpt }}" id="input-excerpt" class="form-control" maxlength="280">{{ excerpt }}</textarea>
+                  {% if error_excerpt %}<div class="text-danger">{{ error_excerpt }}</div>{% endif %}
+                </div>
+              </div>
+
+              <div class="form-group required">
+                <label class="col-sm-2 control-label" for="input-body"><span data-toggle="tooltip" title="{{ help_body }}">{{ entry_body }}</span></label>
+                <div class="col-sm-10">
+                  <textarea name="body_html" placeholder="{{ entry_body }}" id="input-body" data-toggle="summernote" class="form-control">{{ body_html }}</textarea>
+                  {% if error_body %}<div class="text-danger">{{ error_body }}</div>{% endif %}
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="{{ help_hero_image }}">{{ entry_hero_image }}</span></label>
+                <div class="col-sm-10">
+                  <a href="" id="thumb-image" data-toggle="image" class="img-thumbnail"><img src="{{ thumb }}" alt="" title="" data-placeholder="{{ placeholder }}" /></a>
+                  <input type="hidden" name="hero_image_url" value="{{ hero_image_url }}" id="input-image" />
+                  {% if error_hero_image %}<div class="text-danger">{{ error_hero_image }}</div>{% endif %}
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-video-embed"><span data-toggle="tooltip" title="{{ help_video_embed }}">{{ entry_video_embed }}</span></label>
+                <div class="col-sm-10">
+                  <textarea name="video_embed" rows="3" placeholder='<iframe src="..."></iframe>' id="input-video-embed" class="form-control">{{ video_embed }}</textarea>
+                </div>
+              </div>
+
+            </div>{# /tab-general #}
+
+            {# ============= SEO ============= #}
+            <div class="tab-pane" id="tab-seo">
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-meta-title"><span data-toggle="tooltip" title="{{ help_meta_title }}">{{ entry_meta_title }}</span></label>
+                <div class="col-sm-10">
+                  <input type="text" name="meta_title" value="{{ meta_title }}" placeholder="{{ entry_meta_title }}" id="input-meta-title" class="form-control" maxlength="255" />
+                  {% if error_meta_title %}<div class="text-danger">{{ error_meta_title }}</div>{% endif %}
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-meta-description"><span data-toggle="tooltip" title="{{ help_meta_description }}">{{ entry_meta_description }}</span></label>
+                <div class="col-sm-10">
+                  <textarea name="meta_description" rows="3" placeholder="{{ entry_meta_description }}" id="input-meta-description" class="form-control" maxlength="255">{{ meta_description }}</textarea>
+                  {% if error_meta_description %}<div class="text-danger">{{ error_meta_description }}</div>{% endif %}
+                </div>
+              </div>
+
+            </div>{# /tab-seo #}
+
+            {# ============= DATA ============= #}
+            <div class="tab-pane" id="tab-data">
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-author">{{ entry_author }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="author_name" value="{{ author_name }}" placeholder="The Miner Island team" id="input-author" class="form-control" maxlength="100" />
+                  {% if error_author %}<div class="text-danger">{{ error_author }}</div>{% endif %}
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-published-at"><span data-toggle="tooltip" title="{{ help_published_at }}">{{ entry_published_at }}</span></label>
+                <div class="col-sm-10">
+                  <div class="input-group datetime">
+                    <input type="text" name="published_at" value="{{ published_at }}" placeholder="YYYY-MM-DD HH:MM:SS" data-date-format="YYYY-MM-DD HH:mm:ss" id="input-published-at" class="form-control" />
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+                    </span>
+                  </div>
+                  {% if error_published_at %}<div class="text-danger">{{ error_published_at }}</div>{% endif %}
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+                <div class="col-sm-10">
+                  <select name="status" id="input-status" class="form-control">
+                    {% if status %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-sort-order">{{ entry_sort_order }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="sort_order" value="{{ sort_order }}" placeholder="0" id="input-sort-order" class="form-control" />
+                </div>
+              </div>
+
+            </div>{# /tab-data #}
+
+          </div>{# /tab-content #}
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<link href="view/javascript/codemirror/lib/codemirror.css" rel="stylesheet" />
+<link href="view/javascript/codemirror/theme/monokai.css" rel="stylesheet" />
+<script type="text/javascript" src="view/javascript/codemirror/lib/codemirror.js"></script>
+<script type="text/javascript" src="view/javascript/codemirror/lib/xml.js"></script>
+<script type="text/javascript" src="view/javascript/codemirror/lib/formatting.js"></script>
+<script type="text/javascript" src="view/javascript/summernote/summernote.js"></script>
+<link href="view/javascript/summernote/summernote.css" rel="stylesheet" />
+<script type="text/javascript" src="view/javascript/summernote/summernote-image-attributes.js"></script>
+<script type="text/javascript" src="view/javascript/summernote/opencart.js"></script>
+
+<script type="text/javascript"><!--
+// Auto-slugify the title into the slug field when slug is empty or
+// when the slug field is "linked" (matches the slugified title so far).
+$(function() {
+    function slugify(str) {
+        return (str || '')
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/-+/g, '-')
+            .replace(/^-|-$/g, '');
+    }
+
+    var $title = $('#input-title');
+    var $slug  = $('#input-slug');
+
+    // Track whether the user has manually edited the slug. If they have,
+    // we stop auto-syncing from the title to avoid clobbering their edit.
+    var manualEdit = $slug.val() !== '' && $slug.val() !== slugify($title.val());
+
+    $slug.on('input', function() {
+        // If the user types in the slug, mark it manual unless they cleared it.
+        manualEdit = ($slug.val() !== '');
+    });
+
+    $title.on('input blur', function() {
+        if (!manualEdit) {
+            $slug.val(slugify($title.val()));
+        }
+    });
+
+    // Initialize the datetime picker (.datetime → both date + time).
+    if ($('.datetime').length) {
+        $('.datetime').datetimepicker({
+            language: '{{ datepicker }}',
+            pickDate: true,
+            pickTime: true
+        });
+    }
+});
+//--></script>
+{{ footer }}

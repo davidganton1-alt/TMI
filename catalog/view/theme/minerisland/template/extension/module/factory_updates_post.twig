@@ -1,0 +1,430 @@
+{#
+   Factory Updates, single post template (Step 3)
+
+   Replaces the Step 2 yellow stub. Renders one blog post in full:
+     • Breadcrumb trail
+     • Hero image (placeholder if file missing)
+     • Title + author + date meta
+     • Body HTML wrapped in .mi-prose for typography
+     • Optional video embed
+     • Share buttons (X, LinkedIn, copy-link, WhatsApp)
+     • Prev/next post navigation
+     • Back-to-list link
+     • CTA strip at the bottom (browse miners + WhatsApp)
+     • JSON-LD BlogPosting structured data
+
+   Inline <style> scoped to .mi-blog-post for the post-specific tokens.
+   Step 5 will lift these into stylesheet.css.
+
+   Variables expected from controller:
+     post              : {title, body_html, hero_image, date, date_iso, author, video_embed}
+     breadcrumbs       : array of {text, href}
+     prev_post         : {title, href} | null
+     next_post         : {title, href} | null
+     list_href         : URL of the listing page
+     jsonld            : pre-serialized BlogPosting JSON-LD string
+#}
+{{ header }}
+
+<style>
+.mi-blog-post { padding: var(--mi-sp-8) 0 var(--mi-sp-16); }
+
+.mi-blog-post__hero {
+  width: 100%;
+  aspect-ratio: 21/9;
+  border-radius: var(--mi-radius-lg);
+  background: #F1F5F9;
+  object-fit: cover;
+  display: block;
+  margin: var(--mi-sp-6) 0 var(--mi-sp-8);
+}
+@media (max-width: 640px) {
+  .mi-blog-post__hero { aspect-ratio: 16/9; margin: var(--mi-sp-4) 0 var(--mi-sp-6); }
+}
+
+.mi-blog-post__article {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.mi-blog-post__eyebrow {
+  display: inline-flex; align-items: center;
+  gap: 6px;
+  color: var(--mi-color-primary);
+  font-size: var(--mi-fs-sm);
+  font-weight: var(--mi-fw-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--mi-letter-wider);
+  margin-bottom: var(--mi-sp-3);
+  text-decoration: none;
+}
+.mi-blog-post__eyebrow:hover { color: var(--mi-color-primary-dark); text-decoration: none; }
+
+.mi-blog-post__title {
+  font-size: var(--mi-fs-4xl);
+  font-weight: var(--mi-fw-bold);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin: 0 0 var(--mi-sp-5);
+  color: var(--mi-text-headline);
+}
+@media (max-width: 640px) { .mi-blog-post__title { font-size: var(--mi-fs-2xl); } }
+
+.mi-blog-post__meta {
+  display: flex; flex-wrap: wrap;
+  gap: var(--mi-sp-3);
+  align-items: center;
+  padding-bottom: var(--mi-sp-6);
+  border-bottom: 1px solid var(--mi-border-subtle);
+  margin-bottom: var(--mi-sp-8);
+  color: var(--mi-text-muted);
+  font-size: var(--mi-fs-sm);
+}
+.mi-blog-post__meta-item { display: inline-flex; align-items: center; gap: 6px; }
+.mi-blog-post__meta-item svg { width: 14px; height: 14px; opacity: 0.7; }
+.mi-blog-post__meta-sep { color: var(--mi-border-defined); }
+
+.mi-blog-post__body {
+  font-size: var(--mi-fs-md);
+  line-height: var(--mi-lh-relaxed);
+  color: var(--mi-text-body);
+}
+.mi-blog-post__body h2 { font-size: var(--mi-fs-2xl); margin: var(--mi-sp-10) 0 var(--mi-sp-4); color: var(--mi-text-headline); }
+.mi-blog-post__body h3 { font-size: var(--mi-fs-xl); margin: var(--mi-sp-8) 0 var(--mi-sp-3); color: var(--mi-text-headline); font-weight: var(--mi-fw-bold); }
+.mi-blog-post__body h4 { font-size: var(--mi-fs-lg); margin: var(--mi-sp-6) 0 var(--mi-sp-2); color: var(--mi-text-headline); font-weight: var(--mi-fw-semibold); }
+.mi-blog-post__body p { margin: 0 0 var(--mi-sp-5); }
+.mi-blog-post__body ul, .mi-blog-post__body ol {
+  margin: 0 0 var(--mi-sp-5);
+  padding-left: 1.5em;
+  list-style: revert;
+}
+.mi-blog-post__body li { margin-bottom: var(--mi-sp-2); }
+.mi-blog-post__body strong { color: var(--mi-text-headline); font-weight: var(--mi-fw-semibold); }
+.mi-blog-post__body a {
+  color: var(--mi-color-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.mi-blog-post__body a:hover { color: var(--mi-color-primary-dark); }
+.mi-blog-post__body code {
+  font-family: var(--mi-font-mono);
+  background: var(--mi-bg-soft);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+.mi-blog-post__body em { font-style: italic; }
+.mi-blog-post__body blockquote {
+  border-left: 3px solid var(--mi-color-primary);
+  padding: var(--mi-sp-2) 0 var(--mi-sp-2) var(--mi-sp-5);
+  margin: var(--mi-sp-6) 0;
+  color: var(--mi-text-headline);
+  font-style: italic;
+}
+
+.mi-blog-post__video {
+  margin: var(--mi-sp-8) 0;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: var(--mi-radius-lg);
+  overflow: hidden;
+  background: #000;
+}
+.mi-blog-post__video iframe,
+.mi-blog-post__video video {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  border: 0;
+}
+
+/* Share + nav */
+.mi-blog-post__share {
+  display: flex; align-items: center;
+  gap: var(--mi-sp-3);
+  flex-wrap: wrap;
+  padding: var(--mi-sp-6) 0;
+  border-top: 1px solid var(--mi-border-subtle);
+  border-bottom: 1px solid var(--mi-border-subtle);
+  margin: var(--mi-sp-10) 0 var(--mi-sp-8);
+}
+.mi-blog-post__share-label {
+  font-size: var(--mi-fs-sm);
+  font-weight: var(--mi-fw-semibold);
+  color: var(--mi-text-muted);
+  text-transform: uppercase;
+  letter-spacing: var(--mi-letter-wider);
+}
+.mi-blog-post__share-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: var(--mi-bg-soft);
+  border: 1px solid var(--mi-border-subtle);
+  color: var(--mi-text-headline);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all .15s ease;
+}
+.mi-blog-post__share-btn:hover {
+  background: var(--mi-color-primary);
+  color: #FFFFFF;
+  border-color: var(--mi-color-primary);
+  text-decoration: none;
+}
+.mi-blog-post__share-btn svg { width: 16px; height: 16px; }
+
+.mi-blog-post__nav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--mi-sp-4);
+  margin-top: var(--mi-sp-6);
+}
+@media (max-width: 640px) { .mi-blog-post__nav { grid-template-columns: 1fr; } }
+.mi-blog-post__nav-card {
+  display: block;
+  padding: var(--mi-sp-5);
+  border: 1px solid var(--mi-border-subtle);
+  border-radius: var(--mi-radius-md);
+  text-decoration: none;
+  color: inherit;
+  transition: all .15s ease;
+}
+.mi-blog-post__nav-card:hover {
+  border-color: var(--mi-color-primary);
+  transform: translateY(-1px);
+  text-decoration: none;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+}
+.mi-blog-post__nav-card--next { text-align: right; }
+.mi-blog-post__nav-direction {
+  display: inline-flex; align-items: center;
+  gap: 6px;
+  font-size: var(--mi-fs-xs);
+  font-weight: var(--mi-fw-semibold);
+  color: var(--mi-color-primary);
+  text-transform: uppercase;
+  letter-spacing: var(--mi-letter-wider);
+  margin-bottom: var(--mi-sp-2);
+}
+.mi-blog-post__nav-title {
+  font-size: var(--mi-fs-md);
+  font-weight: var(--mi-fw-semibold);
+  color: var(--mi-text-headline);
+  line-height: 1.4;
+}
+
+/* Bottom CTA strip */
+.mi-blog-post__cta {
+  margin-top: var(--mi-sp-12);
+  padding: var(--mi-sp-8) var(--mi-sp-6);
+  background: var(--mi-bg-soft);
+  border-radius: var(--mi-radius-lg);
+  text-align: center;
+}
+.mi-blog-post__cta-title {
+  font-size: var(--mi-fs-xl);
+  font-weight: var(--mi-fw-bold);
+  margin: 0 0 var(--mi-sp-2);
+  color: var(--mi-text-headline);
+}
+.mi-blog-post__cta-text {
+  margin: 0 0 var(--mi-sp-5);
+  color: var(--mi-text-body);
+  font-size: var(--mi-fs-md);
+}
+.mi-blog-post__cta-actions {
+  display: inline-flex; gap: var(--mi-sp-3); flex-wrap: wrap; justify-content: center;
+}
+.mi-blog-post__cta-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 24px;
+  border-radius: var(--mi-radius-md);
+  font-weight: var(--mi-fw-semibold);
+  font-size: var(--mi-fs-sm);
+  text-decoration: none;
+  transition: all .15s ease;
+}
+.mi-blog-post__cta-btn--primary {
+  background: var(--mi-color-primary); color: #FFFFFF;
+}
+.mi-blog-post__cta-btn--primary:hover { background: var(--mi-color-primary-dark); color: #FFFFFF; text-decoration: none; }
+.mi-blog-post__cta-btn--wa {
+  background: #25D366; color: #FFFFFF;
+}
+.mi-blog-post__cta-btn--wa:hover { background: #1FB855; color: #FFFFFF; text-decoration: none; }
+.mi-blog-post__cta-btn svg { width: 16px; height: 16px; }
+</style>
+
+<div class="mi-container mi-blog-post">
+
+  {# ── Breadcrumbs ──────────────────────────────────────────────────── #}
+  <ul class="breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+      <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+    {% endfor %}
+  </ul>
+
+  <article class="mi-blog-post__article">
+
+    {# ── Eyebrow (back-to-list link) ───────────────────────────────── #}
+    <a href="{{ list_href }}" class="mi-blog-post__eyebrow">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+      All Factory Updates
+    </a>
+
+    {# ── Title ────────────────────────────────────────────────────── #}
+    <h1 class="mi-blog-post__title">{{ post.title }}</h1>
+
+    {# ── Meta row ─────────────────────────────────────────────────── #}
+    <div class="mi-blog-post__meta">
+      <span class="mi-blog-post__meta-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <time datetime="{{ post.date_iso }}">{{ post.date }}</time>
+      </span>
+      <span class="mi-blog-post__meta-sep" aria-hidden="true">·</span>
+      <span class="mi-blog-post__meta-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        {{ post.author }}
+      </span>
+    </div>
+
+    {# ── Hero image ───────────────────────────────────────────────── #}
+    <img src="{{ post.hero_image }}" alt="{{ post.title }}" class="mi-blog-post__hero" />
+
+    {# ── Body ─────────────────────────────────────────────────────── #}
+    <div class="mi-blog-post__body">
+      {{ post.body_html|raw }}
+    </div>
+
+    {# ── Optional video embed ─────────────────────────────────────── #}
+    {% if post.video_embed %}
+      <div class="mi-blog-post__video">
+        {{ post.video_embed|raw }}
+      </div>
+    {% endif %}
+
+    {# ── Share buttons ────────────────────────────────────────────── #}
+    <div class="mi-blog-post__share">
+      <span class="mi-blog-post__share-label">Share</span>
+      <a href="https://twitter.com/intent/tweet?url={{ share_url|url_encode }}&text={{ post.title|url_encode }}"
+         target="_blank" rel="noopener" class="mi-blog-post__share-btn" aria-label="Share on X">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ share_url|url_encode }}"
+         target="_blank" rel="noopener" class="mi-blog-post__share-btn" aria-label="Share on LinkedIn">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.063 2.063 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      </a>
+      <a href="https://wa.me/?text={{ post.title|url_encode }}%20{{ share_url|url_encode }}"
+         target="_blank" rel="noopener" class="mi-blog-post__share-btn" aria-label="Share on WhatsApp">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.074-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884"/></svg>
+      </a>
+      <button type="button" class="mi-blog-post__share-btn" aria-label="Copy link" id="mi-blog-copy-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </button>
+    </div>
+
+    {# ── Prev/next nav ────────────────────────────────────────────── #}
+    {% if prev_post or next_post %}
+      <nav class="mi-blog-post__nav" aria-label="More posts">
+        {% if prev_post %}
+          <a href="{{ prev_post.href }}" class="mi-blog-post__nav-card">
+            <div class="mi-blog-post__nav-direction">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:12px;height:12px"><polyline points="15 18 9 12 15 6"/></svg>
+              Previous post
+            </div>
+            <div class="mi-blog-post__nav-title">{{ prev_post.title }}</div>
+          </a>
+        {% else %}
+          <div></div>
+        {% endif %}
+        {% if next_post %}
+          <a href="{{ next_post.href }}" class="mi-blog-post__nav-card mi-blog-post__nav-card--next">
+            <div class="mi-blog-post__nav-direction" style="justify-content:flex-end">
+              Next post
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:12px;height:12px"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+            <div class="mi-blog-post__nav-title">{{ next_post.title }}</div>
+          </a>
+        {% else %}
+          <div></div>
+        {% endif %}
+      </nav>
+    {% endif %}
+
+    {# ── Bottom CTA strip ─────────────────────────────────────────── #}
+    <div class="mi-blog-post__cta">
+      <div class="mi-blog-post__cta-title">Sizing up a deployment?</div>
+      <p class="mi-blog-post__cta-text">Talk to us about hardware selection, ROI projections at your power rate, or a written quote for bulk pricing.</p>
+      <div class="mi-blog-post__cta-actions">
+        <a href="{{ list_href }}" class="mi-blog-post__cta-btn mi-blog-post__cta-btn--primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          Read more updates
+        </a>
+        <a href="https://wa.me/16173008178" target="_blank" rel="noopener" class="mi-blog-post__cta-btn mi-blog-post__cta-btn--wa">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.074-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884"/></svg>
+          Message on WhatsApp
+        </a>
+      </div>
+    </div>
+
+  </article>
+
+</div>
+
+{# ── Copy-to-clipboard handler ──────────────────────────────────────── #}
+<script>
+(function () {
+  var btn = document.getElementById('mi-blog-copy-btn');
+  if (!btn) return;
+  btn.addEventListener('click', function () {
+    var url = window.location.href;
+    var done = function () {
+      var original = btn.innerHTML;
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:16px;height:16px"><polyline points="20 6 9 17 4 12"/></svg>';
+      btn.setAttribute('aria-label', 'Link copied!');
+      setTimeout(function () {
+        btn.innerHTML = original;
+        btn.setAttribute('aria-label', 'Copy link');
+      }, 1500);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(done, function () { /* silent */ });
+    } else {
+      // Fallback for older browsers
+      var ta = document.createElement('textarea');
+      ta.value = url;
+      ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); done(); } catch (e) {}
+      document.body.removeChild(ta);
+    }
+  });
+})();
+</script>
+
+{# ── JSON-LD structured data (BlogPosting schema) ───────────────────── #}
+<script type="application/ld+json">{{ jsonld|raw }}</script>
+
+{# B12 BreadcrumbList JSON-LD (Session 17, additive; mirrors the product and category B6 pattern). Uses the in-scope breadcrumbs array so the markup matches the visible trail. #}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {%- for breadcrumb in breadcrumbs %}
+    {%- set crumb_name = breadcrumb.text|striptags|trim %}
+    {%- if crumb_name is empty %}{% set crumb_name = 'Home' %}{% endif %}
+    {
+      "@type": "ListItem",
+      "position": {{ loop.index }},
+      "name": {{ crumb_name|json_encode|raw }},
+      "item": {{ breadcrumb.href|replace({'&amp;': '&'})|json_encode|raw }}
+    }{% if not loop.last %},{% endif %}
+    {%- endfor %}
+  ]
+}
+</script>
+
+{{ footer }}

@@ -1,0 +1,147 @@
+# robots.txt for The Miner Island
+# Updated: June 2026
+# Goals:
+#   1. Full Google crawl and render access (search, Merchant Center, and Ads).
+#   2. Explicit welcome to AI and LLM crawlers for maximum AI-search reach.
+#   3. Clean exclusion of admin/system internals and parametric duplicates.
+# AdsBot is granted full access so Google Ads can verify every landing page.
+
+# ----------------------------------------------------------------------
+# Default rules: Googlebot, Bingbot, and all other unnamed crawlers.
+# ----------------------------------------------------------------------
+User-agent: *
+
+# Allow asset directories explicitly (rendering + image SEO + Merchant Center)
+Allow: /image/
+Allow: /catalog/view/
+Allow: /*.css$
+Allow: /*.js$
+
+# Block OpenCart admin + system internals
+Disallow: /admin/
+Disallow: /system/
+Disallow: /vqmod/
+
+# Block account, checkout, cart flow (no SEO value, may leak session data)
+Disallow: /index.php?route=account/
+Disallow: /index.php?route=checkout/
+Disallow: /index.php?route=common/cart/
+Disallow: /index.php?route=common/wishlist/
+Disallow: /index.php?route=product/compare
+Disallow: /index.php?route=product/search
+
+# Block parametric duplicates of product/category pages
+Disallow: /*?page=
+Disallow: /*&page=
+Disallow: /*?sort=
+Disallow: /*&sort=
+Disallow: /*?order=
+Disallow: /*&order=
+Disallow: /*?limit=
+Disallow: /*&limit=
+Disallow: /*?filter_name=
+Disallow: /*&filter_name=
+Disallow: /*?filter_sub_category=
+Disallow: /*&filter_sub_category=
+Disallow: /*?filter_description=
+Disallow: /*&filter_description=
+Disallow: /*?tracking=
+Disallow: /*&tracking=
+
+# Block legacy route-based URLs (we want SEO-friendly slug versions instead)
+Disallow: /index.php?route=product/product&*
+Disallow: /index.php?route=product/category&*
+Disallow: /index.php?route=product/manufacturer/info&*
+Disallow: /index.php?route=information/information&*
+
+# ----------------------------------------------------------------------
+# Google Ads crawlers. AdsBot must reach every landing page to verify ad
+# quality and destination. Grant full access; restricting it would lower
+# ad approvals and Quality Scores. AdsBot ignores the wildcard group by
+# design, so it is listed explicitly here.
+# ----------------------------------------------------------------------
+User-agent: AdsBot-Google
+User-agent: AdsBot-Google-Mobile
+Allow: /
+
+# ----------------------------------------------------------------------
+# AI and LLM crawlers: explicitly welcomed for maximum AI-search reach.
+# These bots get the same content boundaries as the default crawler:
+# full access to public content, with internals and duplicates excluded.
+# Disallow rules are listed first, then a final Allow so the group behaves
+# correctly under both longest-match and first-match robots parsers.
+# ----------------------------------------------------------------------
+# OpenAI (ChatGPT, SearchGPT)
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+# Anthropic (Claude)
+User-agent: ClaudeBot
+User-agent: Claude-User
+User-agent: Claude-SearchBot
+User-agent: anthropic-ai
+# Perplexity
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+# Google AI (Gemini and Vertex training opt-in)
+User-agent: Google-Extended
+# Apple Intelligence
+User-agent: Applebot-Extended
+# Common Crawl (feeds many open models)
+User-agent: CCBot
+# ByteDance (Doubao and TikTok AI)
+User-agent: Bytespider
+# Amazon
+User-agent: Amazonbot
+# Meta AI
+User-agent: Meta-ExternalAgent
+User-agent: meta-externalfetcher
+# Cohere
+User-agent: cohere-ai
+User-agent: cohere-training-data-crawler
+# You.com
+User-agent: YouBot
+# DuckDuckGo AI
+User-agent: DuckAssistBot
+# Allen Institute for AI
+User-agent: AI2Bot
+# Diffbot knowledge graph
+User-agent: Diffbot
+# Timpi
+User-agent: Timpibot
+# Webz.io
+User-agent: Omgilibot
+User-agent: Webzio-Extended
+Disallow: /admin/
+Disallow: /system/
+Disallow: /vqmod/
+Disallow: /index.php?route=account/
+Disallow: /index.php?route=checkout/
+Disallow: /index.php?route=common/cart/
+Disallow: /index.php?route=common/wishlist/
+Disallow: /index.php?route=product/compare
+Disallow: /index.php?route=product/search
+Disallow: /*?page=
+Disallow: /*&page=
+Disallow: /*?sort=
+Disallow: /*&sort=
+Disallow: /*?order=
+Disallow: /*&order=
+Disallow: /*?limit=
+Disallow: /*&limit=
+Disallow: /*?filter_name=
+Disallow: /*&filter_name=
+Disallow: /*?filter_sub_category=
+Disallow: /*&filter_sub_category=
+Disallow: /*?filter_description=
+Disallow: /*&filter_description=
+Disallow: /*?tracking=
+Disallow: /*&tracking=
+Disallow: /index.php?route=product/product&*
+Disallow: /index.php?route=product/category&*
+Disallow: /index.php?route=product/manufacturer/info&*
+Disallow: /index.php?route=information/information&*
+Allow: /
+
+# Sitemap (applies to all crawlers)
+Sitemap: https://theminerisland.com/sitemap.xml

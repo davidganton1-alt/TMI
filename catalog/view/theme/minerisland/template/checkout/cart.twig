@@ -1,0 +1,333 @@
+{{ header }}
+
+<div class="mi-cart-page" id="checkout-cart">
+  <div class="mi-container">
+
+    {# Breadcrumb #}
+    <nav class="mi-breadcrumb" aria-label="Breadcrumb">
+      <ol>
+        {% for breadcrumb in breadcrumbs %}
+          <li>
+            <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a>
+            {% if not loop.last %}<span aria-hidden="true">›</span>{% endif %}
+          </li>
+        {% endfor %}
+      </ol>
+    </nav>
+
+    <header class="mi-cart-header">
+      <h1>{{ heading_title }}{% if weight %} <span class="mi-cart-header__weight">{{ weight }}</span>{% endif %}</h1>
+      <p class="mi-cart-header__sub">Review your order. Pay with crypto for an automatic 3% discount, or message us on WhatsApp for bulk-quantity pricing.</p>
+    </header>
+
+    {# Alerts #}
+    {% if attention %}
+      <div class="mi-alert mi-alert--info">{{ attention }}</div>
+    {% endif %}
+    {% if success %}
+      <div class="mi-alert mi-alert--success">{{ success }}</div>
+    {% endif %}
+    {% if error_warning %}
+      <div class="mi-alert mi-alert--error">{{ error_warning }}</div>
+    {% endif %}
+
+    {% if products or vouchers %}
+
+      <div class="mi-cart-layout">
+
+        {# ── Left column: line items ───────────────────────── #}
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" class="mi-cart-items">
+
+          {% for product in products %}
+            <article class="mi-cart-item">
+              <a class="mi-cart-item__image" href="{{ product.href }}">
+                {% if product.thumb %}
+                  <img src="{{ product.thumb }}" alt="{{ product.name }}">
+                {% else %}
+                  <span class="mi-cart-item__placeholder" aria-hidden="true">⛏</span>
+                {% endif %}
+              </a>
+
+              <div class="mi-cart-item__body">
+                <h2 class="mi-cart-item__name">
+                  <a href="{{ product.href }}">{{ product.name }}</a>
+                </h2>
+
+                <dl class="mi-cart-item__meta">
+                  {% if product.model %}
+                    <dt>Model</dt><dd>{{ product.model }}</dd>
+                  {% endif %}
+                  {% if product.option %}
+                    {% for option in product.option %}
+                      <dt>{{ option.name }}</dt><dd>{{ option.value }}</dd>
+                    {% endfor %}
+                  {% endif %}
+                  {% if product.recurring %}
+                    <dt>{{ text_recurring_item }}</dt><dd>{{ product.recurring }}</dd>
+                  {% endif %}
+                </dl>
+
+                {% if not product.stock %}
+                  <p class="mi-cart-item__stock-warning">⚠ Out of stock. Message us on WhatsApp for backorder availability.</p>
+                {% endif %}
+              </div>
+
+              <div class="mi-cart-item__qty">
+                <label class="mi-cart-item__qty-label">Qty</label>
+                <div class="mi-qty">
+                  <button type="button" class="mi-qty__btn" data-step="-1" data-target="qty-{{ product.cart_id }}" aria-label="Decrease">−</button>
+                  <input type="text"
+                         name="quantity[{{ product.cart_id }}]"
+                         value="{{ product.quantity }}"
+                         id="qty-{{ product.cart_id }}"
+                         class="mi-qty__input"
+                         data-cart-id="{{ product.cart_id }}"
+                         inputmode="numeric">
+                  <button type="button" class="mi-qty__btn" data-step="1" data-target="qty-{{ product.cart_id }}" aria-label="Increase">+</button>
+                </div>
+                <div class="mi-cart-item__qty-actions">
+                  <button type="button" class="mi-cart-item__remove" onclick="cart.remove('{{ product.cart_id }}');" title="Remove from cart">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="vertical-align:-2px;margin-right:4px;"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+                    Remove
+                  </button>
+                </div>
+              </div>
+
+              <div class="mi-cart-item__price">
+                <div class="mi-cart-item__total">{{ product.total }}</div>
+                {% if product.quantity > 1 %}
+                  <div class="mi-cart-item__unit">{{ product.price }} each</div>
+                {% endif %}
+              </div>
+            </article>
+          {% endfor %}
+
+          {% for voucher in vouchers %}
+            <article class="mi-cart-item mi-cart-item--voucher">
+              <div class="mi-cart-item__image">
+                <span class="mi-cart-item__placeholder" aria-hidden="true">🎁</span>
+              </div>
+              <div class="mi-cart-item__body">
+                <h2 class="mi-cart-item__name">{{ voucher.description }}</h2>
+                <p class="mi-cart-item__meta">Gift voucher</p>
+              </div>
+              <div class="mi-cart-item__qty">
+                <button type="button" class="mi-cart-item__remove" onclick="voucher.remove('{{ voucher.key }}');">Remove</button>
+              </div>
+              <div class="mi-cart-item__price">
+                <div class="mi-cart-item__total">{{ voucher.amount }}</div>
+              </div>
+            </article>
+          {% endfor %}
+
+        </form>
+
+        {# ── Right column: totals + checkout ───────────────── #}
+        <aside class="mi-cart-summary">
+
+          {# Coupon / shipping estimator modules #}
+          {% if modules %}
+            <div class="mi-cart-summary__modules">
+              <h3>{{ text_next }}</h3>
+              <p>{{ text_next_choice }}</p>
+              <div id="accordion" class="mi-cart-modules">
+                {% for module in modules %}
+                  {{ module }}
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+
+          {# Totals breakdown #}
+          <div class="mi-cart-summary__totals">
+            <h3>Order summary</h3>
+            <dl>
+              {% for total in totals %}
+                <div class="mi-cart-summary__row{% if loop.last %} mi-cart-summary__row--grand{% endif %}">
+                  <dt>{{ total.title }}</dt>
+                  <dd>{{ total.text }}</dd>
+                </div>
+              {% endfor %}
+            </dl>
+
+            <div class="mi-cart-summary__btc">
+              <span class="mi-cart-summary__btc-icon">₿</span>
+              <span><strong>Pay in BTC, save 3%</strong> automatically at checkout. Discount applies on the next step when you select Plisio.</span>
+            </div>
+
+            <a href="{{ checkout }}" class="mi-btn mi-btn--primary mi-btn--lg mi-cart-summary__checkout">
+              Proceed to checkout
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: 6px;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg>
+            </a>
+
+            <a href="{{ continue }}" class="mi-btn mi-btn--ghost mi-btn--lg mi-cart-summary__continue">
+              Continue shopping
+            </a>
+
+            <a href="https://wa.me/16173008178?text=Hi%20%E2%80%94%20I%20have%20a%20cart%20I%27d%20like%20to%20discuss%20bulk%20pricing%20on."
+               class="mi-cart-summary__whatsapp"
+               target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.8-.9-2.1-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.4.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5 0-.1-.7-1.7-1-2.3-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4 0 1.4 1 2.8 1.1 3 .1.2 2 3 4.8 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.6-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.1-.3-.2-.6-.3zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.2-1.3c1.5.8 3.1 1.2 4.8 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>
+              Bulk pricing on WhatsApp
+            </a>
+          </div>
+
+          {# Trust strip #}
+          <ul class="mi-cart-summary__trust">
+            <li><strong>DDP-paid</strong> from our Hong Kong warehouse on orders over $5,000</li>
+            <li><strong>60-day warranty</strong> + DOA replacement</li>
+            <li><strong>Tested before dispatch.</strong> Every unit hashrate-verified.</li>
+          </ul>
+
+        </aside>
+
+      </div>
+
+      {# ── Cart-page socials (Phase 7.3 Step 2) ── #}
+      {% if social_locations.cart_page is defined and social_locations.cart_page|length > 0 %}
+      <div class="mi-social-section mi-social-section--cart">
+        <p class="mi-socials-heading">Questions about your order? Reach us on:</p>
+        <div class="mi-socials">
+          {% for s in social_locations.cart_page %}
+          <a class="mi-social mi-social--{{ s.platform }}"
+             {% if s.has_qr or s.platform == 'wechat' %}href="#" data-mi-qr="{{ s.id }}"{% else %}href="{{ s.url }}" target="_blank" rel="noopener noreferrer"{% endif %}
+             aria-label="{{ s.name }}">
+            <span class="mi-social-ico"></span>
+            <span class="mi-social-label">{{ s.name }}</span>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+    {% else %}
+      {# Empty cart state #}
+      <div class="mi-cart-empty">
+        <div class="mi-cart-empty__icon" aria-hidden="true">🛒</div>
+        <h2>Your cart is empty</h2>
+        <p>Add a miner to get started, or message us on WhatsApp if you need help picking the right unit.</p>
+        <div class="mi-cart-empty__actions">
+          <a href="/bitcoin-miners-shop" class="mi-btn mi-btn--primary mi-btn--lg">Browse Bitcoin miners</a>
+          <a href="/altcoin-mining-rigs" class="mi-btn mi-btn--ghost mi-btn--lg">Browse altcoin rigs</a>
+        </div>
+      </div>
+    {% endif %}
+
+    {{ content_bottom }}
+  </div>
+</div>
+
+<script>
+/* ── Cart-page quantity auto-update ──────────────────────────────────────
+   No "Update" button, clicking +/− or editing the qty number triggers a
+   debounced submission of the surrounding <form> directly to OpenCart's
+   checkout/cart/edit endpoint. The controller redirects back to /cart on
+   success, so the page reloads with fresh line totals + grand totals.
+
+   Why submit the form (not AJAX): OpenCart 3's checkout/cart/edit expects
+   $_POST['quantity'] to be a keyed array (quantity[cart_id] = N). The
+   bundled cart.update() in common.js sends a flat key+quantity pair which
+   the controller chokes on (foreach over a scalar = PHP Warning, then
+   the JSON parser fails on the HTML warning output). Submitting the form
+   sends the right shape and lets the standard 302 redirect handle the
+   reload. No PHP changes, no controller patches.
+   ─────────────────────────────────────────────────────────────────────── */
+(function () {
+  var DEBOUNCE_MS = 450;
+  var form = document.querySelector('.mi-cart-page form.mi-cart-items');
+  if (!form) return;
+
+  // OpenCart's cart edit endpoint always lives at index.php?route=checkout/cart/edit
+  form.setAttribute('action', 'index.php?route=checkout/cart/edit');
+  form.setAttribute('method', 'post');
+
+  var commitTimer = null;
+  var submitting = false;
+
+  function commit() {
+    if (submitting) return;
+    // Sanitize: any qty < 1 becomes 1 just before submit (server uses 0 = remove,
+    // but we don't want accidental wipes via debounce, Remove button is explicit)
+    form.querySelectorAll('.mi-qty__input').forEach(function (i) {
+      var n = parseInt(i.value, 10);
+      if (isNaN(n) || n < 1) i.value = 1;
+    });
+    submitting = true;
+    form.submit();
+  }
+
+  function scheduleCommit() {
+    if (commitTimer) clearTimeout(commitTimer);
+    commitTimer = setTimeout(commit, DEBOUNCE_MS);
+  }
+
+  // +/− steppers
+  document.querySelectorAll('.mi-cart-page .mi-qty__btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var target = document.getElementById(btn.dataset.target);
+      if (!target) return;
+      var step = parseInt(btn.dataset.step, 10);
+      var current = parseInt(target.value, 10) || 1;
+      var next = Math.max(1, current + step);
+      target.value = next;
+      target.classList.add('mi-qty__input--pending');
+      scheduleCommit();
+    });
+  });
+
+  // Typed input
+  document.querySelectorAll('.mi-cart-page .mi-qty__input').forEach(function (input) {
+    // Remember the value the page loaded with, so blur doesn't fire a no-op
+    // commit when the user just tabs through without changing anything.
+    input.setAttribute('data-original-value', input.value);
+
+    input.addEventListener('input', function () {
+      input.classList.add('mi-qty__input--pending');
+      scheduleCommit();
+    });
+    input.addEventListener('blur', function () {
+      var n = parseInt(input.value, 10);
+      if (isNaN(n) || n < 1) {
+        input.value = 1;
+        n = 1;
+      }
+      var original = parseInt(input.getAttribute('data-original-value'), 10);
+      // No-op if the value didn't actually change (no pending debounce either)
+      if (!commitTimer && n === original) return;
+      // Commit immediately on blur (no debounce wait)
+      if (commitTimer) { clearTimeout(commitTimer); commitTimer = null; }
+      commit();
+    });
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        input.blur();
+      }
+    });
+  });
+})();
+</script>
+
+{# ═══ S19 ANALYTICS: GA4 view_cart ══════════════════════════════════════════ #}
+{% if products %}
+<script>
+(function(){
+  window.dataLayer = window.dataLayer || [];
+  function num(s){ return parseFloat(String(s).replace(/[^0-9.]/g, '')) || 0; }
+  var items = [
+    {%- for product in products %}
+    {item_name: {{ product.name|json_encode|raw }}, quantity: {{ product.quantity }}, price: num({{ product.price|json_encode|raw }})}{% if not loop.last %},{% endif %}
+    {%- endfor %}
+  ];
+  var value = 0;
+  for (var i = 0; i < items.length; i++) { value += items[i].price * items[i].quantity; }
+  window.dataLayer.push({ecommerce: null});
+  window.dataLayer.push({
+    event: 'view_cart',
+    ecommerce: { currency: 'USD', value: Math.round(value * 100) / 100, items: items }
+  });
+})();
+</script>
+{% endif %}
+
+{{ footer }}

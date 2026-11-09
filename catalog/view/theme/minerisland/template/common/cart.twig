@@ -1,0 +1,122 @@
+{# Cart dropdown, rendered into header.twig at {{ cart }} #}
+{#
+   IMPORTANT DOM CONTRACT WITH OPENCART common.js:
+   - Wrapper id="cart"; trigger is a single <button> child of #cart.
+   - Button contains a <span id="cart-total">…</span> (overwritten by JS on add/remove/edit).
+   - Panel is a <ul> child of #cart (common.js does `.load('…', 'ul li')`).
+   - Remove buttons MUST keep onclick="cart.remove('{{ product.cart_id }}')".
+   The shim in footer.twig re-injects the cart icon after each AJAX overwrite.
+#}
+
+<div id="cart" class="mi-cart btn-group">
+
+  <button
+    type="button"
+    data-toggle="dropdown"
+    data-loading-text="{{ text_loading }}"
+    class="mi-icon-btn mi-cart__trigger dropdown-toggle"
+    aria-label="{{ text_shopping_cart }}"
+    aria-haspopup="true"
+    aria-expanded="false"
+  >
+    <span class="mi-cart__icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="9" cy="21" r="1"/>
+        <circle cx="20" cy="21" r="1"/>
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+      </svg>
+    </span>
+    <span class="mi-icon-btn__badge" id="cart-total">{{ text_items }}</span>
+  </button>
+
+  <ul class="mi-cart__panel dropdown-menu dropdown-menu-right">
+    {% if products or vouchers %}
+
+      <li>
+        <div class="mi-cart__items">
+          {% for product in products %}
+            <div class="mi-cart__item">
+              <a href="{{ product.href }}" class="mi-cart__thumb">
+                {% if product.thumb %}<img src="{{ product.thumb }}" alt="{{ product.name }}" />{% endif %}
+              </a>
+              <div class="mi-cart__body">
+                <a href="{{ product.href }}" class="mi-cart__name">{{ product.name }}</a>
+                {% if product.option %}
+                  <div class="mi-cart__options">
+                    {% for option in product.option %}<small>{{ option.name }}: {{ option.value }}</small>{% endfor %}
+                  </div>
+                {% endif %}
+                {% if product.recurring %}<div class="mi-cart__options"><small>{{ text_recurring }} {{ product.recurring }}</small></div>{% endif %}
+                <div class="mi-cart__meta">
+                  <span class="mi-cart__qty">×&nbsp;{{ product.quantity }}</span>
+                  <span class="mi-cart__price">{{ product.total }}</span>
+                </div>
+              </div>
+              <button
+                type="button"
+                onclick="cart.remove('{{ product.cart_id }}');"
+                title="{{ button_remove }}"
+                class="mi-cart__remove"
+                aria-label="{{ button_remove }}"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+          {% endfor %}
+
+          {% for voucher in vouchers %}
+            <div class="mi-cart__item">
+              <div class="mi-cart__body" style="grid-column: 1 / span 2;">
+                <span class="mi-cart__name">{{ voucher.description }}</span>
+                <div class="mi-cart__meta">
+                  <span class="mi-cart__qty">×&nbsp;1</span>
+                  <span class="mi-cart__price">{{ voucher.amount }}</span>
+                </div>
+              </div>
+              <button
+                type="button"
+                onclick="voucher.remove('{{ voucher.key }}');"
+                title="{{ button_remove }}"
+                class="mi-cart__remove"
+                aria-label="{{ button_remove }}"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+          {% endfor %}
+        </div>
+      </li>
+
+      <li>
+        <div class="mi-cart__totals">
+          {% for total in totals %}
+            <div class="mi-cart__total-row">
+              <span class="mi-cart__total-label">{{ total.title }}</span>
+              <span class="mi-cart__total-value">{{ total.text }}</span>
+            </div>
+          {% endfor %}
+        </div>
+        <div class="mi-cart__actions">
+          <a href="{{ cart }}" class="mi-btn mi-btn--secondary mi-btn--block">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:16px;height:16px;margin-right:6px;vertical-align:-3px;"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            {{ text_cart }}
+          </a>
+          <a href="{{ checkout }}" class="mi-btn mi-btn--orange mi-btn--block">
+            {{ text_checkout }}
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:16px;height:16px;margin-left:6px;vertical-align:-3px;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+      </li>
+
+    {% else %}
+
+      <li>
+        <div class="mi-cart__empty">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          <p>{{ text_empty }}</p>
+        </div>
+      </li>
+
+    {% endif %}
+  </ul>
+</div>
